@@ -1,1 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0D0D0D">
+<title>TRVL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0D0D0D;
+  --surface: #161616;
+  --surface2: #1E1E1E;
+  --surface3: #272727;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #F0F0F0;
+  --text2: #A0A0A0;
+  --text3: #606060;
+  --accent: #E8FF47;
+  --accent-dim: rgba(232,255,71,0.12);
+  --accent-dim2: rgba(232,255,71,0.06);
+  --red: #FF4545;
+  --green: #3DFF9A;
+  --track: rgba(255,255,255,0.06);
+  --home-color: #E8FF47;
+  --site-color: #3DFF9A;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+}
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+input, select, textarea, button { font-family: inherit; }
+button { cursor: pointer; border: none; background: none; }
+input, select { border: none; outline: none; background: none; color: var(--text); }
+
+/* ── Layout ── */
+#app { min-height: 100vh; display: flex; flex-direction: column; }
+.screen { display: none; flex-direction: column; min-height: 100vh; }
+.screen.active { display: flex; }
+
+/* ── Auth Screen ── */
+#auth-screen {
+  align-items: center; justify-content: center;
+  padding: 2rem 1.5rem;
+  background: var(--bg);
+}
+.auth-box {
+  width: 100%; max-width: 360px;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.auth-wordmark {
+  font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em;
+  color: var(--accent); text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.auth-sub { text-align: center; color: var(--text2); font-size: 0.82rem; font-weight: 500; margin-top: -1rem; }
+.auth-fields { display: flex; flex-direction: column; gap: 0.65rem; }
+.auth-field {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.85rem 1rem;
+  font-size: 0.9rem; color: var(--text); width: 100%;
+  transition: border-color 0.15s;
+}
+.auth-field:focus { border-color: var(--accent); }
+.auth-field::placeholder { color: var(--text3); }
+.btn-primary {
+  background: var(--accent); color: #0D0D0D;
+  font-weight: 700; font-size: 0.9rem; letter-spacing: 0.01em;
+  padding: 0.9rem; border-radius: var(--radius-sm);
+  border: none; transition: opacity 0.15s, transform 0.1s;
+}
+.btn-primary:active { transform: scale(0.97); opacity: 0.85; }
+.auth-error { color: var(--red); font-size: 0.78rem; text-align: center; min-height: 1rem; }
+
+/* ── App Shell ── */
+#main-screen { background: var(--bg); }
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  padding: calc(env(safe-area-inset-top) + 0.75rem) 1rem 0.75rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+}
+.topbar-wordmark { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.04em; color: var(--accent); }
+.topbar-date { font-size: 0.78rem; font-weight: 600; color: var(--text2); cursor: pointer; padding: 0.4rem 0.75rem; background: var(--surface); border-radius: 20px; border: 1px solid var(--border); }
+.topbar-date:hover { border-color: var(--border2); }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.icon-btn:hover { background: var(--surface2); border-color: var(--border2); }
+.icon-btn svg { display: block; }
+
+/* ── Nav tabs ── */
+.nav-tabs {
+  display: flex; background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 1rem;
+}
+.nav-tab {
+  flex: 1; padding: 0.75rem 0.5rem; text-align: center;
+  font-size: 0.75rem; font-weight: 600; color: var(--text3);
+  letter-spacing: 0.05em; text-transform: uppercase;
+  border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s;
+}
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── Day View ── */
+.day-content { flex: 1; overflow-y: auto; padding: 1.25rem 1rem 7rem; display: flex; flex-direction: column; gap: 1.25rem; }
+
+/* Train journey */
+.journey-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.journey-stop { display: flex; align-items: center; gap: 1rem; width: 100%; padding: 0 0.5rem; }
+.stop-dot-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.stop-dot {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 700; flex-shrink: 0;
+  border: 2.5px solid;
+}
+.stop-dot.home { background: rgba(232,255,71,0.1); border-color: var(--home-color); color: var(--home-color); }
+.stop-dot.site { background: rgba(61,255,154,0.1); border-color: var(--site-color); color: var(--site-color); }
+.stop-dot.custom { background: rgba(255,255,255,0.06); border-color: var(--border2); color: var(--text2); }
+.stop-line {
+  width: 2px; min-height: 48px; background: var(--border2);
+  position: relative; display: flex; align-items: center; justify-content: center;
+  margin: 4px 0;
+}
+.stop-line-inner { position: relative; height: 100%; width: 100%; }
+.stop-line-track {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 100%;
+  background: linear-gradient(180deg, var(--border2) 0%, var(--accent) 50%, var(--border2) 100%);
+  opacity: 0.5;
+}
+.miles-badge {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--surface2); border: 1.5px solid var(--border2);
+  border-radius: 20px; padding: 0.25rem 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; font-weight: 600; color: var(--accent);
+  white-space: nowrap; z-index: 2;
+}
+.miles-badge.loading { color: var(--text3); }
+.stop-info { flex: 1; min-width: 0; }
+.stop-name { font-size: 0.95rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.stop-time { font-size: 0.72rem; color: var(--text2); font-weight: 500; margin-top: 2px; }
+.stop-remove {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--surface); display: flex; align-items: center; justify-content: center;
+  color: var(--text3); font-size: 0.9rem; flex-shrink: 0;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.stop-remove:hover { background: rgba(255,69,69,0.12); border-color: var(--red); color: var(--red); }
+
+/* Add stop button */
+.add-stop-row { display: flex; align-items: center; gap: 1rem; width: 100%; padding: 0 0.5rem; }
+.add-stop-dot {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--surface2); border: 2px dashed var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); font-size: 1.3rem; flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.add-stop-row:hover .add-stop-dot { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.add-stop-label { font-size: 0.82rem; font-weight: 600; color: var(--text3); }
+.add-stop-row:hover .add-stop-label { color: var(--accent); }
+
+/* Site selector */
+.site-selector-wrap {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.site-search-row {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+}
+.site-search-input {
+  flex: 1; font-size: 0.88rem; color: var(--text); background: none;
+  font-weight: 500;
+}
+.site-search-input::placeholder { color: var(--text3); }
+.site-list { max-height: 240px; overflow-y: auto; }
+.site-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background 0.12s;
+}
+.site-item:last-child { border-bottom: none; }
+.site-item:hover { background: var(--surface2); }
+.site-item-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--site-color); flex-shrink: 0; }
+.site-item-name { font-size: 0.85rem; font-weight: 600; color: var(--text); flex: 1; }
+.site-item-miles {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--text2); font-weight: 500;
+}
+.site-item-add { font-size: 0.72rem; color: var(--accent); font-weight: 700; }
+
+/* Stats bar */
+.stats-bar {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 1rem;
+  display: flex; align-items: center; gap: 0;
+}
+.stat-item { flex: 1; text-align: center; }
+.stat-item + .stat-item { border-left: 1px solid var(--border); }
+.stat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.4rem; font-weight: 600; color: var(--accent); letter-spacing: -0.02em;
+}
+.stat-lbl { font-size: 0.62rem; font-weight: 600; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+
+/* Notes */
+.notes-field {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 0.9rem 1rem;
+  font-size: 0.85rem; color: var(--text); resize: none; width: 100%;
+  min-height: 80px; line-height: 1.55; transition: border-color 0.15s;
+}
+.notes-field::placeholder { color: var(--text3); }
+.notes-field:focus { border-color: var(--border2); outline: none; }
+
+/* Save row */
+.save-row {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+  display: flex; gap: 0.75rem; z-index: 40;
+}
+.btn-save {
+  flex: 1; background: var(--accent); color: #0D0D0D;
+  font-weight: 700; font-size: 0.9rem; border-radius: var(--radius-sm);
+  padding: 0.9rem; border: none; transition: opacity 0.15s, transform 0.1s;
+}
+.btn-save:active { transform: scale(0.97); opacity: 0.85; }
+.btn-save:disabled { opacity: 0.35; pointer-events: none; }
+.btn-secondary {
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--text2); font-weight: 600; font-size: 0.85rem;
+  border-radius: var(--radius-sm); padding: 0.9rem 1.2rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-secondary:hover { background: var(--surface2); }
+
+/* ── Calendar/Log View ── */
+.log-content { flex: 1; overflow-y: auto; padding: 1rem 1rem 5rem; }
+.month-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem 0 1rem; gap: 0.5rem;
+}
+.month-label { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.month-nav { display: flex; gap: 0.4rem; }
+.month-nav-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text2); transition: background 0.12s;
+}
+.month-nav-btn:hover { background: var(--surface2); color: var(--text); }
+
+.log-day {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 0.75rem; overflow: hidden;
+  transition: border-color 0.15s;
+}
+.log-day:hover { border-color: var(--border2); }
+.log-day-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem; cursor: pointer;
+}
+.log-day-date { font-size: 0.78rem; font-weight: 700; color: var(--text2); letter-spacing: 0.04em; text-transform: uppercase; }
+.log-day-miles {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem; font-weight: 600; color: var(--accent);
+}
+.log-day-body { padding: 0 1rem 1rem; border-top: 1px solid var(--border); }
+.log-stop-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+.log-stop-row:last-child { border-bottom: none; }
+.log-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.log-dot.home { background: var(--home-color); }
+.log-dot.site { background: var(--site-color); }
+.log-stop-name { font-size: 0.82rem; font-weight: 600; color: var(--text); flex: 1; }
+.log-stop-miles { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text2); }
+.log-day-actions { display: flex; gap: 0.5rem; padding-top: 0.75rem; }
+.log-action-btn {
+  font-size: 0.72rem; font-weight: 600; color: var(--text2);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-xs); padding: 0.4rem 0.75rem;
+  transition: background 0.12s, color 0.12s;
+}
+.log-action-btn:hover { color: var(--text); border-color: var(--border2); }
+.log-action-btn.danger:hover { color: var(--red); border-color: var(--red); }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--text3); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.empty-text { font-size: 0.85rem; font-weight: 500; }
+
+/* ── Export View ── */
+.export-content { flex: 1; overflow-y: auto; padding: 1.25rem 1rem 5rem; display: flex; flex-direction: column; gap: 1rem; }
+.export-section { display: flex; flex-direction: column; gap: 0.5rem; }
+.export-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0 0.1rem; }
+.export-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 1rem; display: flex; align-items: center; gap: 1rem; cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.export-card:hover { background: var(--surface2); border-color: var(--border2); }
+.export-icon {
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;
+}
+.export-card-text { flex: 1; }
+.export-card-title { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+.export-card-sub { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
+.export-summary {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 1rem;
+}
+.export-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+.export-summary-row:last-child { border-bottom: none; }
+.export-summary-lbl { font-size: 0.8rem; color: var(--text2); font-weight: 500; }
+.export-summary-val { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; font-weight: 600; color: var(--accent); }
+
+/* ── Settings View ── */
+.settings-content { flex: 1; overflow-y: auto; padding: 1.25rem 1rem 5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.settings-section { display: flex; flex-direction: column; gap: 0.5rem; }
+.settings-section-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0 0.1rem; }
+.settings-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.settings-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.85rem 1rem; border-bottom: 1px solid var(--border);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-row-icon { width: 32px; height: 32px; border-radius: var(--radius-xs); background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.settings-row-text { flex: 1; min-width: 0; }
+.settings-row-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.settings-row-sub { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+.settings-row-action { font-size: 0.75rem; color: var(--accent); font-weight: 600; flex-shrink: 0; }
+.settings-row-chev { color: var(--text3); flex-shrink: 0; }
+
+/* Site management */
+.site-manage-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.85rem 1rem; border-bottom: 1px solid var(--border);
+}
+.site-manage-item:last-child { border-bottom: none; }
+.site-manage-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--site-color); flex-shrink: 0; }
+.site-manage-name { flex: 1; min-width: 0; }
+.site-manage-name-text { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.site-manage-postcode { font-size: 0.7rem; color: var(--text2); margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
+.site-manage-miles {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; font-weight: 600; color: var(--accent); width: 52px; text-align: right;
+}
+.site-manage-del {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+  background: none; display: flex; align-items: center; justify-content: center;
+  color: var(--text3); font-size: 0.75rem;
+  transition: background 0.12s, color 0.12s;
+}
+.site-manage-del:hover { background: rgba(255,69,69,0.12); color: var(--red); border-color: var(--red); }
+
+/* ── Modal / Sheet ── */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: flex; align-items: flex-end; animation: fadeIn 0.18s ease; }
+.sheet {
+  width: 100%; background: var(--surface);
+  border-radius: 24px 24px 0 0; padding: 0.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 0.75rem;
+  animation: slideUp 0.3s cubic-bezier(0.22, 0.9, 0.3, 1);
+  max-height: 90vh; overflow-y: auto;
+}
+.sheet-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border2); margin: 0.6rem auto 0.25rem; }
+.sheet-title { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; padding: 0.25rem 0 0.1rem; }
+.sheet-field-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); }
+.sheet-input {
+  background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.8rem 1rem;
+  font-size: 0.9rem; color: var(--text); width: 100%;
+  transition: border-color 0.15s;
+}
+.sheet-input:focus { border-color: var(--accent); outline: none; }
+.sheet-input::placeholder { color: var(--text3); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: calc(5rem + env(safe-area-inset-bottom));
+  left: 50%; transform: translateX(-50%);
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 0.6rem 1.1rem;
+  font-size: 0.82rem; font-weight: 600; color: var(--text);
+  z-index: 200; white-space: nowrap;
+  animation: toastIn 0.22s cubic-bezier(0.22,0.9,0.3,1);
+}
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ── Home/site icon labels ── */
+.stop-type-label {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-top: 3px;
+}
+.home-label { color: var(--home-color); }
+.site-label { color: var(--site-color); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- AUTH -->
+  <div id="auth-screen" class="screen active">
+    <div class="auth-box">
+      <div class="auth-wordmark">TRVL</div>
+      <div class="auth-sub">Mileage tracker</div>
+      <div class="auth-fields">
+        <input id="auth-email" class="auth-field" type="email" placeholder="Email" autocomplete="username">
+        <input id="auth-pass" class="auth-field" type="password" placeholder="Password" autocomplete="current-password">
+      </div>
+      <div id="auth-error" class="auth-error"></div>
+      <button class="btn-primary" id="auth-btn">Sign in</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main-screen" class="screen">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <span class="topbar-wordmark">TRVL</span>
+      <button class="topbar-date" id="topbar-date-btn">Today</button>
+      <button class="icon-btn" id="settings-btn" title="Settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color="#A0A0A0">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="day">Today</button>
+      <button class="nav-tab" data-tab="log">Log</button>
+      <button class="nav-tab" data-tab="export">Export</button>
+    </div>
+
+    <!-- DAY TAB -->
+    <div id="tab-day" class="day-content">
+      <!-- Dynamically rendered -->
+    </div>
+
+    <!-- LOG TAB -->
+    <div id="tab-log" class="log-content" style="display:none">
+      <div class="month-header">
+        <span class="month-label" id="log-month-label"></span>
+        <div class="month-nav">
+          <button class="month-nav-btn" id="log-prev">&#8249;</button>
+          <button class="month-nav-btn" id="log-next">&#8250;</button>
+        </div>
+      </div>
+      <div id="log-list"></div>
+    </div>
+
+    <!-- EXPORT TAB -->
+    <div id="tab-export" class="export-content" style="display:none">
+      <div class="export-section">
+        <span class="export-label">This month</span>
+        <div id="export-summary" class="export-summary"></div>
+      </div>
+      <div class="export-section">
+        <span class="export-label">Download</span>
+        <div class="export-card" id="export-week-csv">
+          <div class="export-icon">📊</div>
+          <div class="export-card-text">
+            <div class="export-card-title">Weekly CSV</div>
+            <div class="export-card-sub">Current week, grouped by day</div>
+          </div>
+        </div>
+        <div class="export-card" id="export-month-csv">
+          <div class="export-icon">📅</div>
+          <div class="export-card-text">
+            <div class="export-card-title">Monthly CSV</div>
+            <div class="export-card-sub">Full month summary</div>
+          </div>
+        </div>
+        <div class="export-card" id="export-week-txt">
+          <div class="export-icon">📋</div>
+          <div class="export-card-text">
+            <div class="export-card-title">Copy week as text</div>
+            <div class="export-card-sub">Paste into email or expenses form</div>
+          </div>
+        </div>
+        <div class="export-card" id="export-month-txt">
+          <div class="export-icon">📝</div>
+          <div class="export-card-text">
+            <div class="export-card-title">Copy month as text</div>
+            <div class="export-card-sub">Full month, plain text</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB (hidden panel) -->
+    <div id="settings-panel" style="display:none; flex:1; overflow-y:auto;" class="settings-content">
+      <div class="settings-section">
+        <span class="settings-section-label">Account</span>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-icon">👤</div>
+            <div class="settings-row-text">
+              <div class="settings-row-title" id="settings-email">—</div>
+              <div class="settings-row-sub">Signed in</div>
+            </div>
+            <button class="settings-row-action" id="signout-btn">Sign out</button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <span class="settings-section-label">Home location</span>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-icon">🏠</div>
+            <div class="settings-row-text">
+              <div class="settings-row-title" id="home-postcode-display">BL5 2RX</div>
+              <div class="settings-row-sub">Your home postcode — used as journey start</div>
+            </div>
+            <button class="settings-row-action" id="edit-home-btn">Edit</button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <span class="settings-section-label">Sites</span>
+        <div class="settings-card" id="sites-list-settings"><!-- rendered --></div>
+        <button class="btn-secondary" id="add-site-btn" style="margin-top:0.25rem">+ Add site</button>
+      </div>
+    </div>
+
+    <!-- Save row (day tab only) -->
+    <div class="save-row" id="save-row">
+      <button class="btn-secondary" id="clear-day-btn">Clear</button>
+      <button class="btn-save" id="save-day-btn">Save day</button>
+    </div>
+
+  </div><!-- /main-screen -->
+</div><!-- /app -->
+
+<!-- SHEETS -->
+<div id="overlay" class="overlay" style="display:none">
+  <div class="sheet" id="sheet-content"></div>
+</div>
+
+<div id="toast" class="toast" style="display:none"></div>
+
+<script>
+// ─── Firebase ───
+const firebaseConfig = {
+  apiKey: "AIzaSyBPVj8TRblvCM4yeJVHL_EFUd71yiow9PI",
+  authDomain: "mileage-tracker-d0d31.firebaseapp.com",
+  projectId: "mileage-tracker-d0d31",
+  storageBucket: "mileage-tracker-d0d31.firebasestorage.app",
+  messagingSenderId: "825371829472",
+  appId: "1:825371829472:web:7b53c4e13d086b0e0cdc85"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch(e) {}
+
+// ─── ORS API ───
+const ORS_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImYzZjEzMzA4MzcyZTRmYWFhZGQxMDA2NWVhZTdjNmQ2IiwiaCI6Im11cm11cjY0In0=';
+const HOME_POSTCODE = 'BL5 2RX';
+
+// ─── Default sites ───
+const DEFAULT_SITES = [
+  { id: 'rluh',   name: 'Royal Liverpool University Hospital', postcode: 'L7 8YE',   miles: null },
+  { id: 'lhch',   name: 'Liverpool Heart & Chest Hospital',   postcode: 'L14 3PE',  miles: null },
+  { id: 'coch',   name: 'Countess of Chester Hospital',       postcode: 'CH2 1UL',  miles: null },
+  { id: 'arrowe', name: 'Arrowe Park Hospital',               postcode: 'CH49 5PE', miles: null },
+  { id: 'whiston',name: 'Whiston Hospital',                   postcode: 'L35 5DR',  miles: null },
+  { id: 'mri',    name: 'Manchester Royal Infirmary',         postcode: 'M13 9WL',  miles: null },
+  { id: 'nmgh',   name: 'North Manchester General Hospital',  postcode: 'M8 5RB',   miles: null },
+  { id: 'oldham', name: 'Royal Oldham Hospital',              postcode: 'OL1 2JH',  miles: null },
+  { id: 'stepping',name: 'Stepping Hill Hospital',            postcode: 'SK2 7JE',  miles: null },
+  { id: 'tameside',name: 'Tameside General Hospital',         postcode: 'OL6 9RW',  miles: null },
+  { id: 'christie',name: 'The Christie',                      postcode: 'M20 4BX',  miles: null },
+  { id: 'spireliv',name: 'Spire Liverpool',                   postcode: 'L18 1HQ',  miles: null },
+  { id: 'lgi',    name: 'Leeds General Infirmary',            postcode: 'LS1 3EX',  miles: null },
+  { id: 'barnsley',name: 'Barnsley Hospital',                 postcode: 'S75 2EP',  miles: null },
+  { id: 'leicester',name: 'Leicester Royal Infirmary',        postcode: 'LE1 5WW',  miles: null },
+  { id: 'spirehull',name: 'Spire Hull & East Riding',         postcode: 'HU10 7AZ', miles: null },
+  { id: 'hudds',  name: 'Huddersfield Royal Infirmary',       postcode: 'HD3 3EA',  miles: null },
+  { id: 'sthelens',name: "St Helens Hospital",                postcode: 'WA9 3DA',  miles: null },
+];
+
+// ─── State ───
+let currentUser = null;
+let userDoc = null;
+let sites = [];
+let homePostcode = HOME_POSTCODE;
+let todayISO = isoDate(new Date());
+let viewDate = new Date();
+let logMonth = new Date();
+let currentTab = 'day';
+
+// day journey: array of stops { type:'home'|'site'|'custom', id, name, postcode, miles }
+let dayStops = [];
+let dayNotes = '';
+let savedLogs = {}; // keyed by ISO date
+
+// ─── Helpers ───
+function isoDate(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function formatDate(iso) {
+  const d = new Date(iso + 'T00:00');
+  return d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+}
+function formatDateShort(iso) {
+  const d = new Date(iso + 'T00:00');
+  return d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
+}
+function round1(n) { return Math.round(n * 10) / 10; }
+
+// ─── Toast ───
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2500);
+}
+
+// ─── ORS distance lookup ───
+const distCache = {};
+async function postcodeToCoords(postcode) {
+  const key = postcode.trim().toUpperCase();
+  if (distCache['coords_'+key]) return distCache['coords_'+key];
+  const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(key)}`);
+  const j = await res.json();
+  if (j.status === 200) {
+    const c = [j.result.longitude, j.result.latitude];
+    distCache['coords_'+key] = c;
+    return c;
+  }
+  return null;
+}
+
+async function getDrivingMiles(postcodeA, postcodeB) {
+  const cacheKey = postcodeA+'|'+postcodeB;
+  if (distCache[cacheKey] != null) return distCache[cacheKey];
+  try {
+    const [ca, cb] = await Promise.all([postcodeToCoords(postcodeA), postcodeToCoords(postcodeB)]);
+    if (!ca || !cb) return null;
+    const body = { coordinates: [ca, cb] };
+    const res = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json', {
+      method: 'POST',
+      headers: { 'Authorization': ORS_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const j = await res.json();
+    if (j.routes && j.routes[0]) {
+      const metres = j.routes[0].summary.distance;
+      const miles = round1(metres / 1609.344);
+      distCache[cacheKey] = miles;
+      distCache[postcodeB+'|'+postcodeA] = miles; // symmetric
+      return miles;
+    }
+  } catch(e) {}
+  return null;
+}
+
+// ─── Firestore save/load ───
+async function saveToCloud(data) {
+  if (!currentUser) return;
+  try {
+    await db.collection('users').doc(currentUser.uid).set(data, { merge: true });
+  } catch(e) {}
+}
+
+async function loadFromCloud() {
+  if (!currentUser) return;
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid).get();
+    if (snap.exists) {
+      userDoc = snap.data();
+      sites = (userDoc.sites && userDoc.sites.length) ? userDoc.sites : DEFAULT_SITES.map(s => ({...s}));
+      homePostcode = userDoc.homePostcode || HOME_POSTCODE;
+      savedLogs = userDoc.logs || {};
+    } else {
+      sites = DEFAULT_SITES.map(s => ({...s}));
+      homePostcode = HOME_POSTCODE;
+      savedLogs = {};
+      await saveToCloud({ sites, homePostcode, logs: {} });
+    }
+  } catch(e) {
+    sites = DEFAULT_SITES.map(s => ({...s}));
+    homePostcode = HOME_POSTCODE;
+    savedLogs = {};
+  }
+}
+
+// ─── Auth ───
+document.getElementById('auth-btn').addEventListener('click', async () => {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass = document.getElementById('auth-pass').value;
+  const errEl = document.getElementById('auth-error');
+  errEl.textContent = '';
+  if (!email || !pass) { errEl.textContent = 'Enter email and password.'; return; }
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    // Try sign up
+    try {
+      await auth.createUserWithEmailAndPassword(email, pass);
+    } catch(e2) {
+      errEl.textContent = e2.message || 'Could not sign in.';
+    }
+  }
+});
+
+document.getElementById('auth-email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('auth-pass').focus(); });
+document.getElementById('auth-pass').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('auth-btn').click(); });
+
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  if (user) {
+    document.getElementById('auth-screen').classList.remove('active');
+    document.getElementById('main-screen').classList.add('active');
+    document.getElementById('settings-email').textContent = user.email || '';
+    await loadFromCloud();
+    // Pre-fetch miles for all sites in background
+    prefetchSiteMiles();
+    updateTopbarDate();
+    loadDayData(isoDate(new Date()));
+    renderDayView();
+    renderLogView();
+    renderExportView();
+    renderSettingsSites();
+  } else {
+    document.getElementById('auth-screen').classList.add('active');
+    document.getElementById('main-screen').classList.remove('active');
+  }
+});
+
+document.getElementById('signout-btn').addEventListener('click', () => auth.signOut());
+
+// ─── Tabs ───
+document.querySelectorAll('.nav-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTab = btn.dataset.tab;
+    document.getElementById('tab-day').style.display = currentTab === 'day' ? 'flex' : 'none';
+    document.getElementById('tab-log').style.display = currentTab === 'log' ? 'block' : 'none';
+    document.getElementById('tab-export').style.display = currentTab === 'export' ? 'flex' : 'none';
+    document.getElementById('settings-panel').style.display = 'none';
+    document.getElementById('save-row').style.display = currentTab === 'day' ? 'flex' : 'none';
+    if (currentTab === 'log') renderLogView();
+    if (currentTab === 'export') renderExportView();
+  });
+});
+
+document.getElementById('settings-btn').addEventListener('click', () => {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  ['tab-day','tab-log','tab-export'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('save-row').style.display = 'none';
+  document.getElementById('settings-panel').style.display = 'flex';
+  currentTab = 'settings';
+  renderSettingsSites();
+  document.getElementById('home-postcode-display').textContent = homePostcode;
+});
+
+// ─── Topbar date ───
+function updateTopbarDate() {
+  const btn = document.getElementById('topbar-date-btn');
+  const iso = isoDate(viewDate);
+  const today = isoDate(new Date());
+  btn.textContent = iso === today ? 'Today' : formatDateShort(iso);
+}
+
+document.getElementById('topbar-date-btn').addEventListener('click', () => showDatePicker());
+
+// ─── Day data ───
+function loadDayData(iso) {
+  const log = savedLogs[iso];
+  if (log) {
+    dayStops = log.stops ? JSON.parse(JSON.stringify(log.stops)) : [];
+    dayNotes = log.notes || '';
+  } else {
+    // Default: Home → Home
+    dayStops = [
+      { type:'home', id:'home', name:'Home', postcode: homePostcode, miles: null },
+      { type:'home', id:'home2', name:'Home', postcode: homePostcode, miles: null }
+    ];
+    dayNotes = '';
+  }
+}
+
+// ─── Prefetch miles in background ───
+async function prefetchSiteMiles() {
+  for (const site of sites) {
+    if (site.miles == null) {
+      const m = await getDrivingMiles(homePostcode, site.postcode);
+      if (m != null) {
+        site.miles = m;
+      }
+    }
+  }
+  await saveToCloud({ sites });
+  renderSettingsSites();
+}
+
+// ─── Compute leg miles ───
+async function computeLegMiles(stopA, stopB) {
+  return getDrivingMiles(stopA.postcode, stopB.postcode);
+}
+
+// ─── Total miles ───
+function totalMiles() {
+  let total = 0;
+  for (let i = 1; i < dayStops.length; i++) {
+    const m = dayStops[i].miles;
+    if (m != null) total += m;
+  }
+  return round1(total);
+}
+
+// ─── Render day view ───
+function renderDayView() {
+  const wrap = document.getElementById('tab-day');
+  if (currentTab !== 'day') return;
+
+  const iso = isoDate(viewDate);
+  const totalM = totalMiles();
+
+  let html = '';
+
+  // Stats bar
+  html += `<div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-val">${totalM || '—'}</div>
+      <div class="stat-lbl">Miles today</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">${dayStops.filter(s=>s.type==='site').length}</div>
+      <div class="stat-lbl">Sites visited</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">${monthMiles(iso)}</div>
+      <div class="stat-lbl">Month total</div>
+    </div>
+  </div>`;
+
+  // Journey
+  html += `<div class="journey-wrap" id="journey-wrap">`;
+
+  for (let i = 0; i < dayStops.length; i++) {
+    const stop = dayStops[i];
+    const isHome = stop.type === 'home';
+    const dotClass = isHome ? 'home' : (stop.type === 'site' ? 'site' : 'custom');
+    const icon = isHome ? '🏠' : (stop.type === 'site' ? '🏥' : '📍');
+    const typeLabel = isHome
+      ? `<div class="stop-type-label home-label">HOME</div>`
+      : `<div class="stop-type-label site-label">SITE</div>`;
+
+    html += `<div class="journey-stop">
+      <div class="stop-dot-wrap">
+        <div class="stop-dot ${dotClass}">${icon}</div>
+        ${typeLabel}
+      </div>
+      <div class="stop-info">
+        <div class="stop-name">${stop.name}</div>
+        <div class="stop-time">${stop.postcode}</div>
+      </div>
+      ${i > 0 && i < dayStops.length - 1 ? `<button class="stop-remove" data-idx="${i}" title="Remove stop">✕</button>` : ''}
+    </div>`;
+
+    // Line between stops
+    if (i < dayStops.length - 1) {
+      const nextStop = dayStops[i+1];
+      const legMiles = nextStop.miles;
+      const badgeClass = legMiles == null ? 'loading' : '';
+      const badgeText = legMiles != null ? `${legMiles} mi` : '···';
+      html += `<div class="stop-dot-wrap" style="margin-left:24px">
+        <div class="stop-line" style="height:64px; width:2px; position:relative;">
+          <div class="stop-line-track"></div>
+          <div class="miles-badge ${badgeClass}" id="miles-leg-${i}">${badgeText}</div>
+        </div>
+      </div>`;
+    }
+  }
+
+  html += `</div>`; // /journey-wrap
+
+  // Add stop row
+  html += `<button class="add-stop-row" id="add-stop-btn">
+    <div class="add-stop-dot">+</div>
+    <div class="add-stop-label">Add a stop</div>
+  </button>`;
+
+  // Notes
+  html += `<textarea class="notes-field" id="day-notes" placeholder="Notes (optional)…" rows="3">${dayNotes}</textarea>`;
+
+  wrap.innerHTML = html;
+
+  // Events
+  wrap.querySelectorAll('.stop-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      dayStops.splice(idx, 1);
+      renderDayView();
+    });
+  });
+
+  document.getElementById('add-stop-btn')?.addEventListener('click', () => showSiteSelector());
+  document.getElementById('day-notes')?.addEventListener('input', e => { dayNotes = e.target.value; });
+
+  // Fetch missing leg miles
+  fetchMissingLegMiles();
+}
+
+async function fetchMissingLegMiles() {
+  for (let i = 1; i < dayStops.length; i++) {
+    const stop = dayStops[i];
+    if (stop.miles == null) {
+      const prev = dayStops[i-1];
+      const m = await getDrivingMiles(prev.postcode, stop.postcode);
+      if (m != null) {
+        stop.miles = m;
+        const badge = document.getElementById(`miles-leg-${i-1}`);
+        if (badge) {
+          badge.textContent = `${m} mi`;
+          badge.classList.remove('loading');
+        }
+        // Update stats
+        const statEl = document.querySelector('.stat-val');
+        if (statEl) statEl.textContent = totalMiles() || '—';
+      }
+    }
+  }
+}
+
+// ─── Site selector sheet ───
+function showSiteSelector() {
+  const filtered = () => {
+    const q = document.getElementById('site-search')?.value.trim().toLowerCase() || '';
+    return q ? sites.filter(s => s.name.toLowerCase().includes(q) || s.postcode.toLowerCase().includes(q)) : sites;
+  };
+
+  const renderList = () => {
+    const list = filtered();
+    return list.map(s => `
+      <div class="site-item" data-site-id="${s.id}">
+        <div class="site-item-dot"></div>
+        <div class="site-item-name">${s.name}</div>
+        <span class="site-item-miles">${s.miles != null ? s.miles+' mi' : ''}</span>
+        <span class="site-item-add">Add →</span>
+      </div>
+    `).join('');
+  };
+
+  const content = `
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Add stop</div>
+    <div class="site-selector-wrap">
+      <div class="site-search-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#606060" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        <input id="site-search" class="site-search-input" placeholder="Search sites…" autocomplete="off">
+      </div>
+      <div class="site-list" id="site-list-inner">${renderList()}</div>
+    </div>
+    <button class="btn-secondary" id="close-sheet-btn">Cancel</button>
+  `;
+
+  openSheet(content, () => {});
+
+  setTimeout(() => {
+    document.getElementById('site-search')?.addEventListener('input', () => {
+      document.getElementById('site-list-inner').innerHTML = renderList();
+      bindSiteItems();
+    });
+    document.getElementById('close-sheet-btn')?.addEventListener('click', closeSheet);
+    bindSiteItems();
+    document.getElementById('site-search')?.focus();
+  }, 50);
+
+  function bindSiteItems() {
+    document.querySelectorAll('.site-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const siteId = el.dataset.siteId;
+        const site = sites.find(s => s.id === siteId);
+        if (!site) return;
+        // Insert before last Home stop
+        const insertIdx = dayStops.length - 1;
+        dayStops.splice(insertIdx, 0, {
+          type: 'site',
+          id: site.id + '_' + Date.now(),
+          name: site.name,
+          postcode: site.postcode,
+          miles: null
+        });
+        closeSheet();
+        renderDayView();
+      });
+    });
+  }
+}
+
+// ─── Save day ───
+document.getElementById('save-day-btn').addEventListener('click', async () => {
+  const iso = isoDate(viewDate);
+  const log = { stops: dayStops, notes: dayNotes, total: totalMiles(), date: iso, saved: new Date().toISOString() };
+  savedLogs[iso] = log;
+  await saveToCloud({ logs: savedLogs });
+  showToast('Day saved ✓');
+  renderLogView();
+  renderExportView();
+});
+
+document.getElementById('clear-day-btn').addEventListener('click', () => {
+  if (!confirm('Clear today\'s journey?')) return;
+  dayStops = [
+    { type:'home', id:'home', name:'Home', postcode: homePostcode, miles: null },
+    { type:'home', id:'home2', name:'Home', postcode: homePostcode, miles: null }
+  ];
+  dayNotes = '';
+  renderDayView();
+});
+
+// ─── Month miles helper ───
+function monthMiles(iso) {
+  const prefix = iso.slice(0, 7);
+  let total = 0;
+  Object.keys(savedLogs).forEach(k => {
+    if (k.startsWith(prefix)) {
+      const log = savedLogs[k];
+      if (log.total) total += log.total;
+    }
+  });
+  return round1(total) || '—';
+}
+
+// ─── Log view ───
+function renderLogView() {
+  const y = logMonth.getFullYear(), m = logMonth.getMonth();
+  document.getElementById('log-month-label').textContent =
+    logMonth.toLocaleDateString('en-GB', { month:'long', year:'numeric' });
+
+  const prefix = y + '-' + String(m+1).padStart(2,'0');
+  const entries = Object.keys(savedLogs)
+    .filter(k => k.startsWith(prefix))
+    .sort((a,b) => b.localeCompare(a));
+
+  const list = document.getElementById('log-list');
+  if (!entries.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🗺️</div><div class="empty-text">No journeys logged this month</div></div>`;
+    return;
+  }
+
+  list.innerHTML = entries.map(iso => {
+    const log = savedLogs[iso];
+    const stops = log.stops || [];
+    const siteStops = stops.filter(s => s.type === 'site');
+    return `<div class="log-day" data-iso="${iso}">
+      <div class="log-day-header">
+        <span class="log-day-date">${formatDate(iso)}</span>
+        <span class="log-day-miles">${log.total || 0} mi</span>
+      </div>
+      <div class="log-day-body">
+        ${stops.map((s, i) => {
+          const legMiles = i > 0 && stops[i].miles != null ? stops[i].miles + ' mi' : '';
+          return `<div class="log-stop-row">
+            <div class="log-dot ${s.type === 'home' ? 'home' : 'site'}"></div>
+            <div class="log-stop-name">${s.name}</div>
+            <div class="log-stop-miles">${legMiles}</div>
+          </div>`;
+        }).join('')}
+        ${log.notes ? `<div style="font-size:0.75rem;color:var(--text2);padding:0.5rem 0 0;border-top:1px solid var(--border);margin-top:0.25rem;">${log.notes}</div>` : ''}
+        <div class="log-day-actions">
+          <button class="log-action-btn" data-edit="${iso}">✏️ Edit</button>
+          <button class="log-action-btn danger" data-delete="${iso}">🗑 Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const iso = btn.dataset.edit;
+      viewDate = new Date(iso + 'T00:00');
+      loadDayData(iso);
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-tab="day"]').classList.add('active');
+      document.getElementById('tab-day').style.display = 'flex';
+      document.getElementById('tab-log').style.display = 'none';
+      document.getElementById('save-row').style.display = 'flex';
+      currentTab = 'day';
+      updateTopbarDate();
+      renderDayView();
+    });
+  });
+
+  list.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Delete this journey log?')) return;
+      delete savedLogs[btn.dataset.delete];
+      await saveToCloud({ logs: savedLogs });
+      renderLogView();
+      renderExportView();
+      showToast('Deleted');
+    });
+  });
+}
+
+document.getElementById('log-prev').addEventListener('click', () => { logMonth.setMonth(logMonth.getMonth()-1); renderLogView(); });
+document.getElementById('log-next').addEventListener('click', () => { logMonth.setMonth(logMonth.getMonth()+1); renderLogView(); });
+
+// ─── Export view ───
+function renderExportView() {
+  const now = new Date();
+  const prefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  const monthEntries = Object.keys(savedLogs).filter(k => k.startsWith(prefix));
+  let monthTotal = 0, monthDays = monthEntries.length;
+  monthEntries.forEach(k => { monthTotal += (savedLogs[k].total || 0); });
+
+  // Week
+  const wStart = new Date(now); wStart.setDate(now.getDate() - ((now.getDay()+6)%7));
+  let weekTotal = 0, weekDays = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(wStart); d.setDate(wStart.getDate() + i);
+    const k = isoDate(d);
+    if (savedLogs[k]) { weekTotal += (savedLogs[k].total || 0); weekDays++; }
+  }
+
+  document.getElementById('export-summary').innerHTML = `
+    <div class="export-summary-row"><span class="export-summary-lbl">Month total miles</span><span class="export-summary-val">${round1(monthTotal)} mi</span></div>
+    <div class="export-summary-row"><span class="export-summary-lbl">Days logged this month</span><span class="export-summary-val">${monthDays}</span></div>
+    <div class="export-summary-row"><span class="export-summary-lbl">Week total miles</span><span class="export-summary-val">${round1(weekTotal)} mi</span></div>
+    <div class="export-summary-row"><span class="export-summary-lbl">Days logged this week</span><span class="export-summary-val">${weekDays}</span></div>
+  `;
+}
+
+function buildCSV(entries) {
+  const rows = [['Date','Stops','Total Miles','Notes']];
+  entries.forEach(iso => {
+    const log = savedLogs[iso];
+    if (!log) return;
+    const stops = (log.stops || []).map(s => s.name).join(' → ');
+    rows.push([iso, stops, log.total || 0, (log.notes || '').replace(/\n/g,' ')]);
+  });
+  return rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+}
+
+function downloadText(text, filename) {
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+  a.download = filename;
+  a.click();
+}
+
+function getWeekEntries() {
+  const now = new Date();
+  const wStart = new Date(now); wStart.setDate(now.getDate() - ((now.getDay()+6)%7));
+  const keys = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(wStart); d.setDate(wStart.getDate() + i);
+    const k = isoDate(d);
+    if (savedLogs[k]) keys.push(k);
+  }
+  return keys;
+}
+
+function getMonthEntries() {
+  const now = new Date();
+  const prefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  return Object.keys(savedLogs).filter(k => k.startsWith(prefix)).sort();
+}
+
+document.getElementById('export-week-csv').addEventListener('click', () => {
+  const keys = getWeekEntries();
+  if (!keys.length) { showToast('No data for this week'); return; }
+  downloadText(buildCSV(keys), `TRVL_week_${isoDate(new Date())}.csv`);
+});
+
+document.getElementById('export-month-csv').addEventListener('click', () => {
+  const keys = getMonthEntries();
+  if (!keys.length) { showToast('No data for this month'); return; }
+  downloadText(buildCSV(keys), `TRVL_month_${new Date().toLocaleDateString('en-GB',{month:'short',year:'numeric'}).replace(' ','_')}.csv`);
+});
+
+function buildText(entries) {
+  return entries.map(iso => {
+    const log = savedLogs[iso];
+    if (!log) return '';
+    const stops = (log.stops || []).map(s => s.name).join(' → ');
+    return `${formatDate(iso)}\n${stops}\nTotal: ${log.total || 0} miles${log.notes ? '\nNotes: '+log.notes : ''}`;
+  }).join('\n\n');
+}
+
+document.getElementById('export-week-txt').addEventListener('click', async () => {
+  const keys = getWeekEntries();
+  if (!keys.length) { showToast('No data for this week'); return; }
+  const text = buildText(keys);
+  try { await navigator.clipboard.writeText(text); showToast('Week copied to clipboard'); }
+  catch(e) { downloadText(text, 'TRVL_week.txt'); }
+});
+
+document.getElementById('export-month-txt').addEventListener('click', async () => {
+  const keys = getMonthEntries();
+  if (!keys.length) { showToast('No data for this month'); return; }
+  const text = buildText(keys);
+  try { await navigator.clipboard.writeText(text); showToast('Month copied to clipboard'); }
+  catch(e) { downloadText(text, 'TRVL_month.txt'); }
+});
+
+// ─── Settings ───
+function renderSettingsSites() {
+  const list = document.getElementById('sites-list-settings');
+  if (!list) return;
+  list.innerHTML = sites.map((s, idx) => `
+    <div class="site-manage-item">
+      <div class="site-manage-dot"></div>
+      <div class="site-manage-name">
+        <div class="site-manage-name-text">${s.name}</div>
+        <div class="site-manage-postcode">${s.postcode}</div>
+      </div>
+      <div class="site-manage-miles">${s.miles != null ? s.miles+' mi' : '···'}</div>
+      <button class="site-manage-del" data-idx="${idx}">✕</button>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.site-manage-del').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const idx = parseInt(btn.dataset.idx);
+      if (!confirm(`Remove "${sites[idx].name}"?`)) return;
+      sites.splice(idx, 1);
+      await saveToCloud({ sites });
+      renderSettingsSites();
+    });
+  });
+
+  document.getElementById('home-postcode-display').textContent = homePostcode;
+}
+
+document.getElementById('add-site-btn')?.addEventListener('click', () => showAddSiteSheet());
+document.getElementById('edit-home-btn')?.addEventListener('click', () => showEditHomeSheet());
+
+function showAddSiteSheet() {
+  const content = `
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Add site</div>
+    <div style="display:flex;flex-direction:column;gap:0.65rem;">
+      <div>
+        <div class="sheet-field-label" style="margin-bottom:0.35rem;">Site name</div>
+        <input id="new-site-name" class="sheet-input" placeholder="e.g. Royal Bolton Hospital" autocomplete="off">
+      </div>
+      <div>
+        <div class="sheet-field-label" style="margin-bottom:0.35rem;">Postcode</div>
+        <input id="new-site-postcode" class="sheet-input" placeholder="e.g. BL4 0JR" autocomplete="off" style="text-transform:uppercase;">
+      </div>
+    </div>
+    <div style="display:flex;gap:0.65rem;margin-top:0.25rem;">
+      <button class="btn-secondary" id="cancel-add-site" style="flex:1;">Cancel</button>
+      <button class="btn-primary" id="confirm-add-site" style="flex:2;">Add site</button>
+    </div>
+  `;
+  openSheet(content);
+  setTimeout(() => {
+    document.getElementById('cancel-add-site')?.addEventListener('click', closeSheet);
+    document.getElementById('confirm-add-site')?.addEventListener('click', async () => {
+      const name = document.getElementById('new-site-name').value.trim();
+      const postcode = document.getElementById('new-site-postcode').value.trim().toUpperCase();
+      if (!name || !postcode) { showToast('Enter name and postcode'); return; }
+      const newSite = { id: 'custom_'+Date.now(), name, postcode, miles: null };
+      sites.push(newSite);
+      closeSheet();
+      renderSettingsSites();
+      // Fetch miles in background
+      const m = await getDrivingMiles(homePostcode, postcode);
+      if (m != null) { newSite.miles = m; }
+      await saveToCloud({ sites });
+      renderSettingsSites();
+      showToast('Site added');
+    });
+    document.getElementById('new-site-name')?.focus();
+  }, 50);
+}
+
+function showEditHomeSheet() {
+  const content = `
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Home postcode</div>
+    <div>
+      <div class="sheet-field-label" style="margin-bottom:0.35rem;">Postcode</div>
+      <input id="edit-home-postcode" class="sheet-input" value="${homePostcode}" placeholder="BL5 2RX" style="text-transform:uppercase;">
+    </div>
+    <div style="display:flex;gap:0.65rem;margin-top:0.25rem;">
+      <button class="btn-secondary" id="cancel-home" style="flex:1;">Cancel</button>
+      <button class="btn-primary" id="confirm-home" style="flex:2;">Save</button>
+    </div>
+  `;
+  openSheet(content);
+  setTimeout(() => {
+    document.getElementById('cancel-home')?.addEventListener('click', closeSheet);
+    document.getElementById('confirm-home')?.addEventListener('click', async () => {
+      const p = document.getElementById('edit-home-postcode').value.trim().toUpperCase();
+      if (!p) return;
+      homePostcode = p;
+      // Recalculate all site miles
+      sites.forEach(s => s.miles = null);
+      await saveToCloud({ homePostcode, sites });
+      renderSettingsSites();
+      closeSheet();
+      prefetchSiteMiles();
+      showToast('Home updated — recalculating distances…');
+    });
+    document.getElementById('edit-home-postcode')?.select();
+  }, 50);
+}
+
+// ─── Date picker ───
+function showDatePicker() {
+  const iso = isoDate(viewDate);
+  const content = `
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Select date</div>
+    <input id="date-picker-input" class="sheet-input" type="date" value="${iso}" max="${isoDate(new Date())}">
+    <div style="display:flex;gap:0.65rem;">
+      <button class="btn-secondary" id="dp-cancel" style="flex:1;">Cancel</button>
+      <button class="btn-primary" id="dp-confirm" style="flex:2;">Go to date</button>
+    </div>
+  `;
+  openSheet(content);
+  setTimeout(() => {
+    document.getElementById('dp-cancel')?.addEventListener('click', closeSheet);
+    document.getElementById('dp-confirm')?.addEventListener('click', () => {
+      const val = document.getElementById('date-picker-input').value;
+      if (!val) return;
+      viewDate = new Date(val + 'T00:00');
+      closeSheet();
+      loadDayData(isoDate(viewDate));
+      updateTopbarDate();
+      renderDayView();
+    });
+  }, 50);
+}
+
+// ─── Sheet helpers ───
+function openSheet(html) {
+  document.getElementById('sheet-content').innerHTML = html;
+  document.getElementById('overlay').style.display = 'flex';
+  document.getElementById('overlay').onclick = (e) => { if (e.target === document.getElementById('overlay')) closeSheet(); };
+}
+function closeSheet() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('sheet-content').innerHTML = '';
+}
+
+// ─── Init topbar date on day change ───
+setInterval(() => {
+  const newToday = isoDate(new Date());
+  if (newToday !== todayISO) {
+    todayISO = newToday;
+    if (isoDate(viewDate) === todayISO) updateTopbarDate();
+  }
+}, 30000);
+</script>
+</body>
+</html>
 
