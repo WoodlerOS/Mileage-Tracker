@@ -141,14 +141,12 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .train-card-btn{width:28px;height:28px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;color:var(--ink2);font-size:0.7rem;flex-shrink:0}
 
 .add-stop{
-  margin:0.3rem 0;background:var(--card);border-radius:14px;
-  padding:0.55rem 0.9rem 0.55rem 2.35rem;display:flex;align-items:center;gap:0.5rem;
-  cursor:pointer;color:var(--ink2);font-size:0.78rem;font-weight:600;flex-shrink:0;
-  position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.04);
+  margin:0.15rem 0 0.15rem 5px;width:22px;height:22px;border-radius:50%;
+  background:var(--dark);color:#fff;font-size:0.95rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.12);position:relative;z-index:2;
 }
-.add-stop::before{content:'';position:absolute;left:13px;top:0;bottom:0;width:3px;background:var(--line);border-radius:2px}
-.add-stop:active{transform:scale(0.985)}
-.add-stop-icon{width:22px;height:22px;border-radius:50%;background:var(--dark);color:#fff;font-size:0.9rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.add-stop:active{transform:scale(0.92);opacity:0.85}
 
 .total-bar{
   margin-top:0.45rem;background:var(--dark);border-radius:16px;
@@ -228,6 +226,26 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .loc-del{width:28px;height:28px;border-radius:50%;background:var(--card);font-size:0.7rem;color:var(--ink3);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
 .btn-add-loc{background:var(--dark);color:#fff;font-weight:700;font-size:0.88rem;border-radius:14px;padding:0.9rem 1rem;width:100%;text-align:center;margin-top:0.5rem;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,0.12)}
 .btn-add-loc:active{opacity:0.9}
+
+
+/* Month calendar */
+.month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.3rem;margin-top:0.4rem}
+.month-dow{font-size:0.55rem;font-weight:700;color:var(--ink3);text-align:center;padding:0.25rem 0;letter-spacing:0.04em;text-transform:uppercase}
+.month-day{aspect-ratio:1;border-radius:12px;background:var(--card2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--ink);position:relative}
+.month-day:active{transform:scale(0.94)}
+.month-day.empty{background:transparent;cursor:default}
+.month-day.today{box-shadow:inset 0 0 0 2px var(--dark)}
+.month-day.has{background:var(--dark);color:#fff}
+.month-day .md-mi{font-size:0.5rem;font-weight:700;opacity:0.7;margin-top:1px}
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem}
+.month-nav-lbl{font-size:0.95rem;font-weight:800}
+.month-nav-btn{width:32px;height:32px;border-radius:50%;background:var(--card2);font-size:1rem;display:flex;align-items:center;justify-content:center}
+.pick-list{max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:0.3rem}
+.pick-item{background:var(--card2);border-radius:12px;padding:0.75rem 0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.pick-item:active{background:#E4EBC8}
+.pick-item-title{font-size:0.86rem;font-weight:700;color:var(--ink)}
+.pick-item-sub{font-size:0.62rem;color:var(--ink2);margin-top:2px}
+.pick-item-mi{font-size:0.82rem;font-weight:800;color:var(--ink)}
 
 /* OVERLAY */
 .overlay{position:fixed;inset:0;background:rgba(20,30,10,0.45);z-index:200;display:none;align-items:flex-end}
@@ -380,51 +398,11 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     </div>
     <div class="s-sec">Export</div>
     <div class="s-card">
-      <div class="s-item" id="s-ex-wxlsx">
+      <div class="s-item" id="s-export-data">
         <div class="s-ico">📊</div>
         <div class="s-item-body">
-          <div class="s-item-title">Export week to Excel</div>
-          <div class="s-item-sub">Formatted workbook</div>
-        </div>
-        <div class="s-chev">›</div>
-      </div>
-      <div class="s-item" id="s-ex-mxlsx">
-        <div class="s-ico">📅</div>
-        <div class="s-item-body">
-          <div class="s-item-title">Export month to Excel</div>
-          <div class="s-item-sub">Summary + detail</div>
-        </div>
-        <div class="s-chev">›</div>
-      </div>
-      <div class="s-item" id="s-ex-wcsv">
-        <div class="s-ico">📄</div>
-        <div class="s-item-body">
-          <div class="s-item-title">Weekly CSV</div>
-          <div class="s-item-sub">Plain spreadsheet</div>
-        </div>
-        <div class="s-chev">›</div>
-      </div>
-      <div class="s-item" id="s-ex-mcsv">
-        <div class="s-ico">📄</div>
-        <div class="s-item-body">
-          <div class="s-item-title">Monthly CSV</div>
-          <div class="s-item-sub">Plain spreadsheet</div>
-        </div>
-        <div class="s-chev">›</div>
-      </div>
-      <div class="s-item" id="s-ex-wtxt">
-        <div class="s-ico">📋</div>
-        <div class="s-item-body">
-          <div class="s-item-title">Copy this week</div>
-          <div class="s-item-sub">Paste into email</div>
-        </div>
-        <div class="s-chev">›</div>
-      </div>
-      <div class="s-item" id="s-ex-mtxt">
-        <div class="s-ico">📝</div>
-        <div class="s-item-body">
-          <div class="s-item-title">Copy this month</div>
-          <div class="s-item-sub">All logged days</div>
+          <div class="s-item-title">Export data</div>
+          <div class="s-item-sub">Excel for a week or month</div>
         </div>
         <div class="s-chev">›</div>
       </div>
@@ -585,7 +563,17 @@ document.getElementById('add-loc-btn').addEventListener('click',()=>{
 });
 
 function updateDate(){const i=iso(vDate),today=iso(new Date());document.getElementById('topbar-date').textContent=i===today?'Today':fmtS(i);}
-document.getElementById('topbar-date').addEventListener('click',showDatePicker);
+(function(){
+  const el=document.getElementById('topbar-date');
+  let timer=null, longFired=false;
+  el.addEventListener('click',e=>{if(longFired){longFired=false;return;}showDatePicker();});
+  el.addEventListener('touchstart',e=>{longFired=false;timer=setTimeout(()=>{timer=null;longFired=true;showMonthView();},500);},{passive:true});
+  el.addEventListener('touchend',()=>{if(timer)clearTimeout(timer);});
+  el.addEventListener('touchmove',()=>{if(timer)clearTimeout(timer);});
+  el.addEventListener('mousedown',()=>{longFired=false;timer=setTimeout(()=>{timer=null;longFired=true;showMonthView();},500);});
+  el.addEventListener('mouseup',()=>{if(timer)clearTimeout(timer);});
+  el.addEventListener('mouseleave',()=>{if(timer)clearTimeout(timer);});
+})();
 
 function loadDay(i){
   const l=logs[i];
@@ -649,7 +637,7 @@ function renderDay(){
       </div>`;
     });
     if(n<3){
-      html+=`<div class="add-stop" id="add-stop"><div class="add-stop-icon">+</div>Add site ${n+1}</div>`;
+      html+=`<div class="add-stop" id="add-stop" title="Add site">+</div>`;
     }
     const last=stops[n-1];
     let ret=last.returnMiles!=null?last.returnMiles+' mi':(n===1&&stops[0].fromPrev!=null?stops[0].fromPrev+' mi':'···');
@@ -830,8 +818,9 @@ function renderLog(){
 document.getElementById('log-prev').addEventListener('click',()=>{logMon.setMonth(logMon.getMonth()-1);renderLog();});
 document.getElementById('log-next').addEventListener('click',()=>{logMon.setMonth(logMon.getMonth()+1);renderLog();});
 
-function getWK(){const n=new Date(),ws=new Date(n);ws.setDate(n.getDate()-((n.getDay()+6)%7));const k=[];for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);const ii=iso(d);if(logs[ii])k.push(ii);}return k;}
-function getMK(){const n=new Date();const pfx=n.getFullYear()+'-'+pad(n.getMonth()+1);return Object.keys(logs).filter(k=>k.startsWith(pfx)).sort();}
+function mondayOf(d){const x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);x.setHours(0,0,0,0);return x;}
+function getWK(ref){const n=ref?new Date(ref):new Date();const ws=mondayOf(n);const k=[];for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);const ii=iso(d);if(logs[ii])k.push(ii);}return k;}
+function getMK(ref){const n=ref?new Date(ref):new Date();const pfx=n.getFullYear()+'-'+pad(n.getMonth()+1);return Object.keys(logs).filter(k=>k.startsWith(pfx)).sort();}
 
 function renderStats(){
   const keys=statsMode==='week'?getWK():getMK();
@@ -858,22 +847,13 @@ function getStops(l){
   if(!st.length&&l.primary){st=[{name:l.primary.name,postcode:l.primary.postcode,fromPrev:l.primary.miles}];if(l.second)st.push({name:l.second.name,postcode:l.second.postcode,fromPrev:l.second.legMiles});}
   return st;
 }
-function buildCSV(keys){
-  const r=[['Date','Site 1','PC 1','Site 2','PC 2','Site 3','PC 3','Total Miles']];
-  keys.forEach(i=>{const l=logs[i];if(!l)return;const st=getStops(l);
-    r.push([i,st[0]?.name||'',st[0]?.postcode||'',st[1]?.name||'',st[1]?.postcode||'',st[2]?.name||'',st[2]?.postcode||'',l.total||'']);});
-  return r.map(x=>x.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
-}
-function buildTxt(keys){return keys.map(i=>{const l=logs[i];if(!l)return'';const st=getStops(l);
-  return [fmtD(i),'Home → '+st.map(s=>s.name).join(' → ')+' → Home','Total: '+(l.total||0)+' miles'].join('\n');}).join('\n\n');}
-function dl(t,n){const a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(t);a.download=n;a.click();}
 
 function exportExcel(keys,label){
   if(!keys.length){toast('No data to export');return;}
   if(typeof XLSX==='undefined'){toast('Excel library loading… try again');return;}
   const wb=XLSX.utils.book_new();
   let total=0;keys.forEach(k=>total+=logs[k].total||0);
-  const summary=[['Journeys – '+label],[],['Period',label],['Days logged',keys.length],['Total miles',r1(total)],['Average per day',keys.length?r1(total/keys.length):0],[],['Date','Route','Total Miles']];
+  const summary=[['Journeys – '+label],[],['Period',label],['Days logged',keys.length],['Total miles',r1(total)],[],['Date','Route','Total Miles']];
   keys.forEach(i=>{const st=getStops(logs[i]);summary.push([fmtD(i),'Home → '+st.map(s=>s.name).join(' → ')+' → Home',logs[i].total||0]);});
   const ws1=XLSX.utils.aoa_to_sheet(summary);
   ws1['!cols']=[{wch:22},{wch:55},{wch:14}];
@@ -887,12 +867,64 @@ function exportExcel(keys,label){
   toast('Excel exported');
 }
 
-document.getElementById('s-ex-wxlsx').addEventListener('click',()=>exportExcel(getWK(),'This_Week'));
-document.getElementById('s-ex-mxlsx').addEventListener('click',()=>exportExcel(getMK(),'This_Month'));
-document.getElementById('s-ex-wcsv').addEventListener('click',()=>{const k=getWK();if(!k.length){toast('No data this week');return;}dl(buildCSV(k),'Journeys_week.csv');});
-document.getElementById('s-ex-mcsv').addEventListener('click',()=>{const k=getMK();if(!k.length){toast('No data this month');return;}dl(buildCSV(k),'Journeys_month.csv');});
-document.getElementById('s-ex-wtxt').addEventListener('click',async()=>{const k=getWK();if(!k.length){toast('No data this week');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Week copied!');}catch(e){dl(buildTxt(k),'week.txt');}});
-document.getElementById('s-ex-mtxt').addEventListener('click',async()=>{const k=getMK();if(!k.length){toast('No data this month');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Month copied!');}catch(e){dl(buildTxt(k),'month.txt');}});
+/* Export data flow */
+document.getElementById('s-export-data').addEventListener('click',()=>{
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Export data</div>
+    <div class="s-card" style="box-shadow:none;background:var(--card2)">
+      <div class="s-item" id="ex-pick-week"><div class="s-ico">📅</div><div class="s-item-body"><div class="s-item-title">Week</div><div class="s-item-sub">Choose a week to export</div></div><div class="s-chev">›</div></div>
+      <div class="s-item" id="ex-pick-month"><div class="s-ico">🗓️</div><div class="s-item-body"><div class="s-item-title">Month</div><div class="s-item-sub">Choose a month to export</div></div><div class="s-chev">›</div></div>
+    </div>
+    <button class="sheet-cancel" id="ex-cancel">Cancel</button>`);
+  setTimeout(()=>{
+    document.getElementById('ex-cancel').onclick=closeSheet;
+    document.getElementById('ex-pick-week').onclick=()=>{closeSheet();setTimeout(showWeekPicker,120);};
+    document.getElementById('ex-pick-month').onclick=()=>{closeSheet();setTimeout(showMonthPicker,120);};
+  },40);
+});
+
+function showWeekPicker(){
+  const weeks=[];
+  const today=new Date();
+  let ws=mondayOf(today);
+  for(let w=0;w<16;w++){
+    const start=new Date(ws);start.setDate(ws.getDate()-w*7);
+    const end=new Date(start);end.setDate(start.getDate()+6);
+    const keys=getWK(start);
+    let tot=0;keys.forEach(k=>tot+=logs[k].total||0);
+    const label=fmtS(iso(start))+' – '+fmtS(iso(end));
+    weeks.push({start,end,keys,tot:r1(tot),label,file:'Week_'+iso(start)});
+  }
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Select week</div>
+    <div class="pick-list" id="week-list">${weeks.map((w,i)=>`<div class="pick-item" data-i="${i}"><div><div class="pick-item-title">${w.label}</div><div class="pick-item-sub">${w.keys.length} day${w.keys.length===1?'':'s'} logged</div></div><div class="pick-item-mi">${w.tot||'—'} mi</div></div>`).join('')}</div>
+    <button class="sheet-cancel" id="wp-x">Cancel</button>`);
+  setTimeout(()=>{
+    document.getElementById('wp-x').onclick=closeSheet;
+    document.querySelectorAll('#week-list .pick-item').forEach(el=>{
+      el.onclick=()=>{const w=weeks[parseInt(el.dataset.i,10)];closeSheet();exportExcel(w.keys,w.file);};
+    });
+  },40);
+}
+
+function showMonthPicker(){
+  const months=[];
+  const today=new Date();
+  for(let m=0;m<18;m++){
+    const d=new Date(today.getFullYear(),today.getMonth()-m,1);
+    const keys=getMK(d);
+    let tot=0;keys.forEach(k=>tot+=logs[k].total||0);
+    const label=d.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    months.push({d,keys,tot:r1(tot),label,file:d.getFullYear()+'_'+pad(d.getMonth()+1)});
+  }
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Select month</div>
+    <div class="pick-list" id="month-list">${months.map((m,i)=>`<div class="pick-item" data-i="${i}"><div><div class="pick-item-title">${m.label}</div><div class="pick-item-sub">${m.keys.length} day${m.keys.length===1?'':'s'} logged</div></div><div class="pick-item-mi">${m.tot||'—'} mi</div></div>`).join('')}</div>
+    <button class="sheet-cancel" id="mp-x">Cancel</button>`);
+  setTimeout(()=>{
+    document.getElementById('mp-x').onclick=closeSheet;
+    document.querySelectorAll('#month-list .pick-item').forEach(el=>{
+      el.onclick=()=>{const m=months[parseInt(el.dataset.i,10)];closeSheet();exportExcel(m.keys,m.file);};
+    });
+  },40);
+}
 
 function showDatePicker(){
   const i=iso(vDate);
@@ -900,6 +932,53 @@ function showDatePicker(){
     <input id="dp" class="sheet-input" type="date" value="${i}" max="${iso(new Date())}">
     <div class="sheet-row"><button class="sheet-cancel" id="dp-x">Cancel</button><button class="sheet-confirm" id="dp-ok">Go</button></div>`);
   setTimeout(()=>{document.getElementById('dp-x').onclick=closeSheet;document.getElementById('dp-ok').onclick=()=>{const v=document.getElementById('dp').value;if(!v)return;vDate=new Date(v+'T00:00');loadDay(iso(vDate));updateDate();closeSheet();switchTab('day');};},40);
+}
+
+/* Month calendar view – long-press date */
+let calMon=new Date();
+function showMonthView(){
+  calMon=new Date(vDate.getFullYear(),vDate.getMonth(),1);
+  renderMonthSheet();
+}
+function renderMonthSheet(){
+  const y=calMon.getFullYear(),m=calMon.getMonth();
+  const first=new Date(y,m,1);
+  const startDow=(first.getDay()+6)%7; // Mon=0
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const todayI=iso(new Date());
+  const title=calMon.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+  let cells='';
+  for(let i=0;i<startDow;i++)cells+=`<div class="month-day empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const di=y+'-'+pad(m+1)+'-'+pad(d);
+    const has=!!logs[di];
+    const isToday=di===todayI;
+    const mi=has?(logs[di].total||0):'';
+    cells+=`<div class="month-day${has?' has':''}${isToday?' today':''}" data-d="${di}"><span>${d}</span>${has?`<span class="md-mi">${mi}</span>`:''}</div>`;
+  }
+  openSheet(`<div class="sheet-handle"></div>
+    <div class="month-nav">
+      <button class="month-nav-btn" id="cal-prev">‹</button>
+      <div class="month-nav-lbl">${title}</div>
+      <button class="month-nav-btn" id="cal-next">›</button>
+    </div>
+    <div class="month-grid">
+      <div class="month-dow">Mon</div><div class="month-dow">Tue</div><div class="month-dow">Wed</div><div class="month-dow">Thu</div><div class="month-dow">Fri</div><div class="month-dow">Sat</div><div class="month-dow">Sun</div>
+      ${cells}
+    </div>
+    <button class="sheet-cancel" id="cal-x">Close</button>`);
+  setTimeout(()=>{
+    document.getElementById('cal-x').onclick=closeSheet;
+    document.getElementById('cal-prev').onclick=()=>{calMon.setMonth(calMon.getMonth()-1);renderMonthSheet();};
+    document.getElementById('cal-next').onclick=()=>{calMon.setMonth(calMon.getMonth()+1);renderMonthSheet();};
+    document.querySelectorAll('.month-day[data-d]').forEach(el=>{
+      el.onclick=()=>{
+        const di=el.dataset.d;
+        if(di>todayI){toast("Can't go past today");return;}
+        vDate=new Date(di+'T00:00');loadDay(di);updateDate();closeSheet();switchTab('day');
+      };
+    });
+  },40);
 }
 
 function openSheet(html){document.getElementById('sheet').innerHTML=html;document.getElementById('overlay').classList.add('open');document.getElementById('overlay').onclick=e=>{if(e.target===document.getElementById('overlay'))closeSheet();};}
