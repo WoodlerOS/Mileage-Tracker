@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0C0C0C">
+<meta name="theme-color" content="#0A0A0A">
 <title>Journeys</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,423 +14,279 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0C0C0C;
-  --s1: #161616;
-  --s2: #1E1E1E;
-  --s3: #262626;
-  --s4: #2E2E2E;
-  --t: #F2F0EC;
-  --t2: #9A9590;
-  --t3: #5A5550;
-  --red: #E74C3C;
-  --rdim: rgba(231,76,60,0.15);
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0A;
+  --s1:#141414;
+  --s2:#1C1C1C;
+  --s3:#252525;
+  --s4:#2E2E2E;
+  --t:#F4F2EE;
+  --t2:#9B9690;
+  --t3:#5E5953;
+  --red:#FF3B2F;
+  --red-dim:rgba(255,59,47,0.18);
 }
-html, body {
-  background: var(--bg); color: var(--t);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  height: 100%; overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
+html,body{
+  background:var(--bg);color:var(--t);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  height:100%;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-font-smoothing:antialiased;
 }
-* { -webkit-user-select: none; user-select: none; }
-input, textarea { -webkit-user-select: text; user-select: text; }
-input, select, textarea, button { font-family: inherit; -webkit-appearance: none; appearance: none; }
-button { cursor: pointer; border: none; background: none; color: inherit; }
+*{ -webkit-user-select:none;user-select:none }
+input,textarea{ -webkit-user-select:text;user-select:text }
+input,select,textarea,button{font-family:inherit;-webkit-appearance:none;appearance:none}
+button{cursor:pointer;border:none;background:none;color:inherit}
 
-#app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-.screen { display: none; flex-direction: column; height: 100%; overflow: hidden; }
-.screen.active { display: flex; }
+#app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden}
+.screen.active{display:flex}
 
 /* AUTH */
-#auth-screen {
-  background: var(--bg);
-  align-items: center; justify-content: center;
-  padding: 2rem 1.5rem;
-}
-.auth-logo {
-  width: 64px; height: 64px; border-radius: 16px;
-  background: var(--s1);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 1rem;
-}
-.auth-wordmark {
-  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.04em;
-  margin-bottom: 0.2rem;
-}
-.auth-sub {
-  font-size: 0.65rem; font-weight: 600; color: var(--t3);
-  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem;
-}
-.auth-form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 0.5rem; }
-.auth-field {
-  background: var(--s1); border: none; border-radius: 12px;
-  padding: 0.9rem 1rem; font-size: 0.9rem; color: var(--t); width: 100%;
-}
-.auth-field:focus { outline: none; background: var(--s2); }
-.auth-field::placeholder { color: var(--t3); }
-.auth-err { font-size: 0.72rem; color: var(--red); text-align: center; min-height: 1.1rem; }
-.btn-red {
-  background: var(--red); color: #fff; font-weight: 700; font-size: 0.9rem;
-  padding: 0.95rem; border-radius: 12px; width: 100%;
-}
-.btn-red:active { opacity: 0.85; }
-.auth-note {
-  font-size: 0.65rem; color: var(--t3); text-align: center;
-  line-height: 1.5; margin-top: 0.4rem;
-}
+#auth-screen{background:var(--bg);align-items:center;justify-content:center;padding:2rem 1.5rem}
+.auth-logo{width:64px;height:64px;border-radius:16px;background:var(--s1);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.auth-wordmark{font-size:1.4rem;font-weight:800;letter-spacing:-0.04em;margin-bottom:0.2rem}
+.auth-sub{font-size:0.65rem;font-weight:600;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2rem}
+.auth-form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:0.5rem}
+.auth-field{background:var(--s1);border:none;border-radius:12px;padding:0.9rem 1rem;font-size:0.9rem;color:var(--t);width:100%}
+.auth-field:focus{outline:none;background:var(--s2)}
+.auth-field::placeholder{color:var(--t3)}
+.auth-err{font-size:0.72rem;color:var(--red);text-align:center;min-height:1.1rem}
+.btn-red{background:var(--red);color:#fff;font-weight:700;font-size:0.9rem;padding:0.95rem;border-radius:12px;width:100%}
+.btn-red:active{opacity:0.85}
+.auth-note{font-size:0.65rem;color:var(--t3);text-align:center;line-height:1.5;margin-top:0.4rem}
 
 /* TOPBAR */
-.topbar {
-  flex-shrink: 0;
-  padding: calc(env(safe-area-inset-top) + 0.6rem) 1rem 0.5rem;
-  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
-  background: var(--bg);
+.topbar{
+  flex-shrink:0;
+  padding:calc(env(safe-area-inset-top) + 0.55rem) 1rem 0.45rem;
+  display:flex;align-items:center;justify-content:space-between;gap:0.6rem;
+  background:var(--bg);
 }
-.topbar-logo {
-  width: 30px; height: 30px; border-radius: 8px; background: var(--red);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.topbar-date {
-  font-size: 0.75rem; font-weight: 600; color: var(--t2);
-  background: var(--s1); border-radius: 20px; padding: 0.4rem 1rem;
-  flex: 1; text-align: center;
-}
-.topbar-gear {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--s1);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
+.topbar-logo{width:30px;height:30px;border-radius:8px;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar-date{font-size:0.75rem;font-weight:600;color:var(--t2);background:var(--s1);border-radius:20px;padding:0.4rem 1rem;flex:1;text-align:center}
+.topbar-gear{width:34px;height:34px;border-radius:50%;background:var(--s1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
 /* TABS */
-.tabs {
-  flex-shrink: 0; display: flex;
-  background: var(--s1); margin: 0 1rem; border-radius: 12px;
-  padding: 3px; gap: 2px;
-}
-.tab {
-  flex: 1; padding: 0.55rem 0.2rem; text-align: center;
-  font-size: 0.7rem; font-weight: 700; color: var(--t3);
-  letter-spacing: 0.04em; text-transform: uppercase;
-  border-radius: 10px; transition: all 0.15s;
-}
-.tab.active {
-  color: var(--t); background: var(--s3);
+.tabs{flex-shrink:0;display:flex;background:var(--s1);margin:0 1rem 0.5rem;border-radius:12px;padding:3px;gap:2px}
+.tab{flex:1;padding:0.55rem 0.2rem;text-align:center;font-size:0.7rem;font-weight:700;color:var(--t3);letter-spacing:0.04em;text-transform:uppercase;border-radius:10px;transition:all 0.15s}
+.tab.active{color:var(--t);background:var(--s3)}
+
+/* PANES */
+.tab-pane{display:none!important;flex:1;flex-direction:column;overflow:hidden;min-height:0}
+.tab-pane.active{display:flex!important}
+
+/* ══════════ DAY — TRAIN ROUTE ══════════ */
+#day-pane{position:relative;touch-action:pan-y}
+.day-scroll{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:0.6rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom));
 }
 
-/* TAB PANES — critical for separation */
-.tab-pane {
-  display: none !important;
-  flex: 1;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
-}
-.tab-pane.active {
-  display: flex !important;
+.route{
+  display:flex;flex-direction:column;
+  position:relative;
 }
 
-/* DAY */
-#day-pane { position: relative; touch-action: pan-y; }
-.journey-outer {
-  flex: 1; display: flex; flex-direction: column;
-  padding: 1rem 1.15rem calc(1rem + env(safe-area-inset-bottom));
-  min-height: 0; overflow: hidden; position: relative;
-}
-.track-layer {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-}
-.journey-content {
-  flex: 1; display: flex; flex-direction: column;
-  position: relative; z-index: 1; min-height: 0;
+/* Vertical line */
+.route::before{
+  content:'';
+  position:absolute;
+  left:19px;top:28px;bottom:28px;
+  width:3px;
+  background:linear-gradient(to bottom,var(--s3),var(--red),var(--s3));
+  border-radius:2px;
+  z-index:0;
 }
 
-.j-home-row {
-  display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;
-}
-.j-home-row.right { flex-direction: row-reverse; }
-
-.home-box {
-  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-  background: var(--s2);
-  display: flex; align-items: center; justify-content: center;
-}
-.home-info { display: flex; flex-direction: column; gap: 1px; }
-.home-lbl { font-size: 0.75rem; font-weight: 700; color: var(--t2); }
-.home-pc { font-size: 0.62rem; color: var(--t3); }
-
-.home-total { display: flex; flex-direction: column; align-items: flex-end; }
-.home-total-num {
-  font-size: 1.4rem; font-weight: 800; color: var(--t);
-  letter-spacing: -0.03em; line-height: 1;
-}
-.home-total-lbl {
-  font-size: 0.58rem; font-weight: 600; color: var(--t3);
-  letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px;
+.route-stop{
+  display:flex;align-items:flex-start;gap:0.9rem;
+  position:relative;z-index:1;
 }
 
-.j-spacer { flex: 1; min-height: 8px; }
+.route-node{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--s2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  position:relative;
+}
+.route-node.home{background:var(--s2)}
+.route-node.site{background:var(--red-dim);box-shadow:0 0 0 3px rgba(255,59,47,0.12)}
+.route-node.empty{background:var(--s2);border:2px dashed var(--s4)}
 
-.sites-zone {
-  display: flex; flex-direction: column; gap: 0.65rem; flex-shrink: 0;
-}
+.route-body{flex:1;min-width:0;padding-top:2px}
+.route-label{font-size:0.68rem;font-weight:600;color:var(--t3);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:2px}
+.route-name{font-size:0.95rem;font-weight:700;color:var(--t);line-height:1.25}
+.route-name.muted{color:var(--t3);font-weight:500}
+.route-sub{font-size:0.68rem;color:var(--t2);margin-top:2px}
 
-.site-card {
-  background: var(--s1); border-radius: 14px; padding: 0.85rem 0.95rem;
-  display: flex; align-items: center; gap: 0.75rem;
-  cursor: pointer; position: relative;
+/* Leg mileage between stops */
+.route-leg{
+  display:flex;align-items:center;gap:0.9rem;
+  padding:0.35rem 0;
+  position:relative;z-index:1;
 }
-.site-card.has-site { background: var(--s2); }
-.site-card:active { background: var(--s3); }
+.route-leg-spacer{width:40px;flex-shrink:0}
+.route-leg-badge{
+  background:var(--s2);
+  color:var(--red);
+  font-size:0.72rem;font-weight:700;
+  padding:0.28rem 0.7rem;
+  border-radius:20px;
+  letter-spacing:0.02em;
+}
+.route-leg-badge.dim{color:var(--t3)}
 
-.site-card-icon {
-  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
-  background: var(--rdim);
-  display: flex; align-items: center; justify-content: center;
+/* Site card inside route */
+.route-card{
+  background:var(--s1);
+  border-radius:14px;
+  padding:0.85rem 1rem;
+  margin-top:0.15rem;
+  display:flex;align-items:center;gap:0.7rem;
+  cursor:pointer;
+  transition:background 0.12s;
 }
-.site-card-empty-icon {
-  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
-  background: var(--s3);
-  display: flex; align-items: center; justify-content: center;
-}
-.site-card-body { flex: 1; min-width: 0; }
-.site-card-name {
-  font-size: 0.88rem; font-weight: 700; color: var(--t);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.site-card-name.empty { color: var(--t3); font-weight: 500; }
-.site-card-sub { font-size: 0.64rem; color: var(--t2); margin-top: 2px; }
-.site-card-chev { color: var(--t3); font-size: 1rem; flex-shrink: 0; }
-
-.add-site-plus {
-  position: absolute; right: -10px; bottom: -10px;
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--red);
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 1.05rem; font-weight: 700;
-  z-index: 5;
-}
-.add-site-plus:active { opacity: 0.85; }
-
-/* LOG */
-#log-pane { overflow: hidden; }
-.log-scroll {
-  flex: 1; overflow-y: auto;
-  padding: 0.85rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
-  -webkit-overflow-scrolling: touch;
-}
-.log-month-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 0.1rem 0.85rem;
-}
-.log-month-lbl { font-size: 0.95rem; font-weight: 700; }
-.mnav { display: flex; gap: 0.35rem; }
-.mnav-btn {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--s1); color: var(--t2); font-size: 0.95rem;
-  display: flex; align-items: center; justify-content: center;
-}
-.log-card {
-  background: var(--s1); border-radius: 14px;
-  margin-bottom: 0.55rem; overflow: hidden;
-}
-.log-card-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.8rem 0.95rem;
-}
-.log-card-date {
-  font-size: 0.72rem; font-weight: 700; color: var(--t2);
-  letter-spacing: 0.03em; text-transform: uppercase;
-}
-.log-card-mi {
-  font-size: 1.05rem; font-weight: 800; color: var(--red);
-}
-.log-card-body { padding: 0 0.95rem 0.8rem; }
-.log-stop {
-  display: flex; align-items: center; gap: 0.55rem;
-  padding: 0.35rem 0;
-}
-.log-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.log-dot.h { background: var(--t2); }
-.log-dot.s { background: var(--red); }
-.log-stop-name { font-size: 0.8rem; font-weight: 600; flex: 1; }
-.log-stop-mi { font-size: 0.7rem; color: var(--t2); }
-.log-actions { display: flex; gap: 0.4rem; padding-top: 0.55rem; }
-.log-act {
-  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.04em;
-  text-transform: uppercase; padding: 0.4rem 0.75rem;
-  border-radius: 8px; color: var(--t2); background: var(--s2);
-}
-.log-act.del { color: var(--red); }
-.log-empty {
-  text-align: center; padding: 3.5rem 1rem;
-  color: var(--t3); font-size: 0.85rem;
+.route-card:active{background:var(--s2)}
+.route-card.active{background:var(--s2)}
+.route-card-text{flex:1;min-width:0}
+.route-card-name{font-size:0.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.route-card-name.placeholder{color:var(--t3);font-weight:500}
+.route-card-pc{font-size:0.66rem;color:var(--t2);margin-top:2px}
+.route-card-action{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--s3);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--t3);font-size:0.75rem;flex-shrink:0;
 }
 
-/* EXPORT */
-#export-pane {
-  overflow-y: auto; padding: 1rem;
-  display: flex; flex-direction: column; gap: 0.65rem;
+/* Add second site button */
+.add-second{
+  margin:0.5rem 0 0.5rem 52px;
+  background:var(--s1);
+  border-radius:12px;
+  padding:0.7rem 1rem;
+  display:flex;align-items:center;gap:0.6rem;
+  cursor:pointer;
+  color:var(--t2);font-size:0.82rem;font-weight:600;
 }
-.exp-stats {
-  background: var(--s1); border-radius: 14px;
-  display: flex; overflow: hidden;
+.add-second:active{background:var(--s2)}
+.add-second-icon{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--red);
+  color:#fff;font-size:1rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
 }
-.exp-stat {
-  flex: 1; padding: 0.9rem 0.4rem; text-align: center;
-}
-.exp-stat-num {
-  font-size: 1.4rem; font-weight: 800; color: var(--red);
-  letter-spacing: -0.03em; display: block;
-}
-.exp-stat-lbl {
-  font-size: 0.56rem; font-weight: 700; letter-spacing: 0.07em;
-  text-transform: uppercase; color: var(--t3); display: block; margin-top: 3px;
-}
-.exp-sec-lbl {
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--t3); margin-top: 0.3rem;
-}
-.exp-btn {
-  background: var(--s1); border-radius: 13px; padding: 0.9rem 1rem;
-  display: flex; align-items: center; gap: 0.75rem;
-}
-.exp-btn:active { background: var(--s2); }
-.exp-btn-icon { font-size: 1.15rem; width: 28px; text-align: center; }
-.exp-btn-body { flex: 1; }
-.exp-btn-title { font-size: 0.85rem; font-weight: 700; }
-.exp-btn-sub { font-size: 0.66rem; color: var(--t2); margin-top: 2px; }
-.exp-arrow { color: var(--t3); font-size: 0.9rem; }
 
-/* SETTINGS */
-#settings-pane {
-  overflow-y: auto;
-  padding: 0.75rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; gap: 0.65rem;
+/* Total bar */
+.total-bar{
+  margin-top:1.1rem;
+  background:var(--s1);
+  border-radius:14px;
+  padding:1rem 1.15rem;
+  display:flex;align-items:center;justify-content:space-between;
 }
-.s-back {
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
-  text-transform: uppercase; color: var(--t2); text-align: left;
+.total-label{font-size:0.72rem;font-weight:600;color:var(--t2);letter-spacing:0.04em;text-transform:uppercase}
+.total-value{font-size:1.6rem;font-weight:800;color:var(--red);letter-spacing:-0.03em}
+.total-unit{font-size:0.75rem;font-weight:600;color:var(--t3);margin-left:4px}
+
+/* Empty hint */
+.empty-hint{
+  text-align:center;padding:2rem 1rem;
+  color:var(--t3);font-size:0.85rem;line-height:1.5;
 }
-.s-title {
-  font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em;
-  margin-bottom: 0.1rem;
-}
-.s-sec-lbl {
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--t3); margin-top: 0.2rem;
-}
-.s-card {
-  background: var(--s1); border-radius: 14px; overflow: hidden;
-}
-.s-row {
-  display: flex; align-items: center; gap: 0.7rem;
-  padding: 0.85rem 0.95rem;
-}
-.s-row-icon { font-size: 1.05rem; width: 26px; text-align: center; }
-.s-row-body { flex: 1; min-width: 0; }
-.s-row-title { font-size: 0.85rem; font-weight: 600; }
-.s-row-sub { font-size: 0.65rem; color: var(--t2); margin-top: 2px; }
-.s-row-act { font-size: 0.72rem; font-weight: 700; color: var(--red); }
-.site-row {
-  display: flex; align-items: center; gap: 0.65rem;
-  padding: 0.75rem 0.95rem;
-}
-.site-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
-.site-row-name { flex: 1; min-width: 0; }
-.site-row-title {
-  font-size: 0.82rem; font-weight: 700;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.site-row-pc { font-size: 0.63rem; color: var(--t2); margin-top: 1px; }
-.site-row-mi {
-  font-size: 0.72rem; font-weight: 700; color: var(--t2);
-  width: 48px; text-align: right;
-}
-.site-row-del {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: var(--s2); font-size: 0.65rem; color: var(--t3);
-  display: flex; align-items: center; justify-content: center;
-}
-.btn-outline {
-  background: var(--s1); color: var(--t2); font-weight: 600;
-  font-size: 0.85rem; border-radius: 12px; padding: 0.82rem 1rem; width: 100%;
-}
+
+/* ══════════ LOG ══════════ */
+#log-pane{overflow:hidden}
+.log-scroll{flex:1;overflow-y:auto;padding:0.85rem 1rem calc(1.1rem + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+.log-month-row{display:flex;align-items:center;justify-content:space-between;padding:0 0.1rem 0.85rem}
+.log-month-lbl{font-size:0.95rem;font-weight:700}
+.mnav{display:flex;gap:0.35rem}
+.mnav-btn{width:30px;height:30px;border-radius:50%;background:var(--s1);color:var(--t2);font-size:0.95rem;display:flex;align-items:center;justify-content:center}
+.log-card{background:var(--s1);border-radius:14px;margin-bottom:0.55rem;overflow:hidden}
+.log-card-head{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0.95rem}
+.log-card-date{font-size:0.72rem;font-weight:700;color:var(--t2);letter-spacing:0.03em;text-transform:uppercase}
+.log-card-mi{font-size:1.05rem;font-weight:800;color:var(--red)}
+.log-card-body{padding:0 0.95rem 0.8rem}
+.log-stop{display:flex;align-items:center;gap:0.55rem;padding:0.3rem 0}
+.log-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.log-dot.h{background:var(--t2)}
+.log-dot.s{background:var(--red)}
+.log-stop-name{font-size:0.8rem;font-weight:600;flex:1}
+.log-stop-mi{font-size:0.7rem;color:var(--t2)}
+.log-actions{display:flex;gap:0.4rem;padding-top:0.5rem}
+.log-act{font-size:0.66rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:0.4rem 0.75rem;border-radius:8px;color:var(--t2);background:var(--s2)}
+.log-act.del{color:var(--red)}
+.log-empty{text-align:center;padding:3.5rem 1rem;color:var(--t3);font-size:0.85rem}
+
+/* ══════════ EXPORT ══════════ */
+#export-pane{overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.65rem}
+.exp-stats{background:var(--s1);border-radius:14px;display:flex;overflow:hidden}
+.exp-stat{flex:1;padding:0.9rem 0.4rem;text-align:center}
+.exp-stat-num{font-size:1.4rem;font-weight:800;color:var(--red);letter-spacing:-0.03em;display:block}
+.exp-stat-lbl{font-size:0.56rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--t3);display:block;margin-top:3px}
+.exp-sec-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:0.3rem}
+.exp-btn{background:var(--s1);border-radius:13px;padding:0.9rem 1rem;display:flex;align-items:center;gap:0.75rem}
+.exp-btn:active{background:var(--s2)}
+.exp-btn-icon{font-size:1.15rem;width:28px;text-align:center}
+.exp-btn-body{flex:1}
+.exp-btn-title{font-size:0.85rem;font-weight:700}
+.exp-btn-sub{font-size:0.66rem;color:var(--t2);margin-top:2px}
+.exp-arrow{color:var(--t3);font-size:0.9rem}
+
+/* ══════════ SETTINGS ══════════ */
+#settings-pane{overflow-y:auto;padding:0.75rem 1rem calc(1.1rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0.6rem}
+.s-back{font-size:0.68rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--t2);text-align:left;padding:0.2rem 0}
+.s-title{font-size:1.2rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.15rem}
+.s-sec-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:0.25rem}
+.s-card{background:var(--s1);border-radius:14px;overflow:hidden}
+.s-row{display:flex;align-items:center;gap:0.7rem;padding:0.85rem 0.95rem}
+.s-row-icon{font-size:1.05rem;width:26px;text-align:center}
+.s-row-body{flex:1;min-width:0}
+.s-row-title{font-size:0.85rem;font-weight:600}
+.s-row-sub{font-size:0.65rem;color:var(--t2);margin-top:2px}
+.s-row-act{font-size:0.72rem;font-weight:700;color:var(--red)}
+.site-row{display:flex;align-items:center;gap:0.65rem;padding:0.7rem 0.95rem}
+.site-dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0}
+.site-row-name{flex:1;min-width:0}
+.site-row-title{font-size:0.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.site-row-pc{font-size:0.63rem;color:var(--t2);margin-top:1px}
+.site-row-mi{font-size:0.72rem;font-weight:700;color:var(--t2);width:48px;text-align:right}
+.site-row-del{width:26px;height:26px;border-radius:50%;background:var(--s2);font-size:0.7rem;color:var(--t3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-outline{background:var(--s1);color:var(--t2);font-weight:600;font-size:0.85rem;border-radius:12px;padding:0.82rem 1rem;width:100%}
 
 /* OVERLAY */
-.overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-  z-index: 200; display: none; align-items: flex-end;
-}
-.overlay.open { display: flex; animation: fadeIn 0.18s ease; }
-.sheet {
-  width: 100%; background: var(--s1);
-  border-radius: 22px 22px 0 0;
-  padding: 0 1.15rem calc(1.3rem + env(safe-area-inset-bottom));
-  max-height: 85vh; overflow-y: auto;
-  display: flex; flex-direction: column; gap: 0.75rem;
-  animation: slideUp 0.28s cubic-bezier(0.22,0.9,0.3,1);
-}
-.sheet-handle {
-  width: 36px; height: 4px; border-radius: 2px;
-  background: var(--s4); margin: 0.7rem auto 0.1rem;
-}
-.sheet-title { font-size: 1rem; font-weight: 700; }
-.sheet-lbl {
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--t3);
-}
-.sheet-input {
-  background: var(--s2); border: none; border-radius: 12px;
-  padding: 0.82rem 0.95rem; font-size: 0.9rem; color: var(--t); width: 100%;
-}
-.sheet-input:focus { outline: none; background: var(--s3); }
-.sheet-input::placeholder { color: var(--t3); }
-.site-search-wrap {
-  border-radius: 13px; overflow: hidden; background: var(--s2);
-}
-.site-search-bar {
-  display: flex; align-items: center; gap: 0.5rem;
-  padding: 0.7rem 0.9rem; background: var(--s3);
-}
-.site-search-bar input {
-  flex: 1; font-size: 0.88rem; color: var(--t); background: none;
-}
-.site-search-bar input::placeholder { color: var(--t3); }
-.site-list-scroll { max-height: 240px; overflow-y: auto; }
-.site-list-item {
-  display: flex; align-items: center; gap: 0.65rem;
-  padding: 0.75rem 0.9rem; cursor: pointer; background: var(--s2);
-}
-.site-list-item:active { background: var(--s3); }
-.site-list-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
-.site-list-name { flex: 1; font-size: 0.84rem; font-weight: 600; }
-.site-list-mi { font-size: 0.7rem; color: var(--t2); }
-.sheet-row { display: flex; gap: 0.55rem; }
-.sheet-cancel {
-  flex: 1; background: var(--s2); color: var(--t2);
-  font-weight: 600; font-size: 0.86rem; border-radius: 12px; padding: 0.85rem;
-}
-.sheet-confirm {
-  flex: 2; background: var(--red); color: #fff;
-  font-weight: 700; font-size: 0.86rem; border-radius: 12px; padding: 0.85rem;
-}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;display:none;align-items:flex-end}
+.overlay.open{display:flex;animation:fadeIn 0.18s ease}
+.sheet{width:100%;background:var(--s1);border-radius:22px 22px 0 0;padding:0 1.15rem calc(1.3rem + env(safe-area-inset-bottom));max-height:85vh;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;animation:slideUp 0.28s cubic-bezier(0.22,0.9,0.3,1)}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--s4);margin:0.7rem auto 0.1rem}
+.sheet-title{font-size:1rem;font-weight:700}
+.sheet-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3)}
+.sheet-input{background:var(--s2);border:none;border-radius:12px;padding:0.82rem 0.95rem;font-size:0.9rem;color:var(--t);width:100%}
+.sheet-input:focus{outline:none;background:var(--s3)}
+.sheet-input::placeholder{color:var(--t3)}
+.site-search-wrap{border-radius:13px;overflow:hidden;background:var(--s2)}
+.site-search-bar{display:flex;align-items:center;gap:0.5rem;padding:0.7rem 0.9rem;background:var(--s3)}
+.site-search-bar input{flex:1;font-size:0.88rem;color:var(--t);background:none}
+.site-search-bar input::placeholder{color:var(--t3)}
+.site-list-scroll{max-height:240px;overflow-y:auto}
+.site-list-item{display:flex;align-items:center;gap:0.65rem;padding:0.75rem 0.9rem;cursor:pointer;background:var(--s2)}
+.site-list-item:active{background:var(--s3)}
+.site-list-dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
+.site-list-name{flex:1;font-size:0.84rem;font-weight:600}
+.site-list-mi{font-size:0.7rem;color:var(--t2)}
+.sheet-row{display:flex;gap:0.55rem}
+.sheet-cancel{flex:1;background:var(--s2);color:var(--t2);font-weight:600;font-size:0.86rem;border-radius:12px;padding:0.85rem}
+.sheet-confirm{flex:2;background:var(--red);color:#fff;font-weight:700;font-size:0.86rem;border-radius:12px;padding:0.85rem}
 
-.toast {
-  position: fixed; bottom: calc(1.6rem + env(safe-area-inset-bottom));
-  left: 50%; transform: translateX(-50%);
-  background: var(--s3); color: var(--t); font-size: 0.8rem; font-weight: 600;
-  padding: 0.55rem 1.2rem; border-radius: 22px;
-  z-index: 500; white-space: nowrap; display: none;
-  pointer-events: none; animation: toastIn 0.2s ease;
-}
+.toast{position:fixed;bottom:calc(1.6rem + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--s3);color:var(--t);font-size:0.8rem;font-weight:600;padding:0.55rem 1.2rem;border-radius:22px;z-index:500;white-space:nowrap;display:none;pointer-events:none;animation:toastIn 0.2s ease}
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
-
-::-webkit-scrollbar { width: 0; }
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+::-webkit-scrollbar{width:0}
 </style>
 </head>
 <body>
@@ -440,9 +296,9 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 <div id="auth-screen" class="screen active">
   <div class="auth-logo">
     <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-      <circle cx="20" cy="15" r="9" fill="#E74C3C"/>
-      <circle cx="20" cy="15" r="3.4" fill="#0C0C0C"/>
-      <path d="M20 24 L11 36 Q20 32 29 36 Z" fill="#E74C3C"/>
+      <circle cx="20" cy="15" r="9" fill="#FF3B2F"/>
+      <circle cx="20" cy="15" r="3.4" fill="#0A0A0A"/>
+      <path d="M20 24 L11 36 Q20 32 29 36 Z" fill="#FF3B2F"/>
     </svg>
   </div>
   <div class="auth-wordmark">Journeys</div>
@@ -463,20 +319,20 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
     <div class="topbar-logo">
       <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="7.5" r="4.5" fill="white"/>
-        <circle cx="10" cy="7.5" r="1.6" fill="#E74C3C"/>
+        <circle cx="10" cy="7.5" r="1.6" fill="#FF3B2F"/>
         <path d="M10 12 L5 19 Q10 16.5 15 19 Z" fill="white"/>
       </svg>
     </div>
     <button class="topbar-date" id="topbar-date">Today</button>
     <button class="topbar-gear" id="settings-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9A9590" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9B9690" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     </button>
   </div>
 
-  <div class="tabs" style="margin-bottom: 0.4rem;">
+  <div class="tabs">
     <button class="tab active" data-tab="day">Today</button>
     <button class="tab" data-tab="log">Log</button>
     <button class="tab" data-tab="export">Export</button>
@@ -484,10 +340,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 
   <!-- DAY -->
   <div id="day-pane" class="tab-pane active">
-    <div class="journey-outer">
-      <svg class="track-layer" id="track-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-      <div class="journey-content" id="journey-content"></div>
-    </div>
+    <div class="day-scroll" id="day-scroll"></div>
   </div>
 
   <!-- LOG -->
@@ -540,6 +393,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
   <div id="settings-pane" class="tab-pane">
     <button class="s-back" id="settings-back">← Back</button>
     <div class="s-title">Settings</div>
+
     <div class="s-sec-lbl">Account</div>
     <div class="s-card">
       <div class="s-row">
@@ -551,6 +405,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
         <button class="s-row-act" id="signout-btn">Sign out</button>
       </div>
     </div>
+
     <div class="s-sec-lbl">Home postcode</div>
     <div class="s-card">
       <div class="s-row">
@@ -562,6 +417,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
         <button class="s-row-act" id="edit-home-btn">Edit</button>
       </div>
     </div>
+
     <div class="s-sec-lbl">Sites</div>
     <div class="s-card" id="sites-list"></div>
     <button class="btn-outline" id="add-site-btn">+ Add site</button>
@@ -702,7 +558,7 @@ document.getElementById('auth-btn').addEventListener('click', async () => {
     } else { err.textContent = e.message || 'Could not sign in.'; }
   }
 });
-[['ae', 'ap'], ['ap', 'ai'], ['ai', null]].forEach(([id, next]) => {
+[['ae','ap'],['ap','ai'],['ai',null]].forEach(([id,next]) => {
   document.getElementById(id).addEventListener('keydown', e => {
     if (e.key === 'Enter') {
       if (next) document.getElementById(next).focus();
@@ -729,7 +585,7 @@ auth.onAuthStateChanged(async u => {
 });
 document.getElementById('signout-btn').addEventListener('click', () => auth.signOut());
 
-/* TABS — strict separation */
+/* TABS */
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
 function switchTab(t) {
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
@@ -740,15 +596,15 @@ function switchTab(t) {
   curTab = t;
   if (t === 'log') renderLog();
   if (t === 'export') renderExport();
-  if (t === 'day') { renderDay(); requestAnimationFrame(drawCurves); }
+  if (t === 'day') renderDay();
 }
 document.getElementById('settings-btn').addEventListener('click', () => {
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.getElementById('settings-pane').classList.add('active');
   curTab = 'settings';
-  renderSites();
   document.getElementById('s-home-pc').textContent = homePC;
+  renderSites();
 });
 document.getElementById('settings-back').addEventListener('click', () => switchTab('day'));
 
@@ -756,7 +612,6 @@ document.getElementById('settings-back').addEventListener('click', () => switchT
 function updateDate() {
   const i = iso(vDate), today = iso(new Date());
   document.getElementById('topbar-date').textContent = i === today ? 'Today' : fmtS(i);
-  document.getElementById('s-home-pc').textContent = homePC;
 }
 document.getElementById('topbar-date').addEventListener('click', showDatePicker);
 
@@ -776,220 +631,164 @@ async function autoSave() {
   if (!primary) {
     delete logs[i];
   } else {
-    const t = calcTotal();
-    logs[i] = { primary, second, total: t, date: i, saved: new Date().toISOString() };
+    logs[i] = { primary, second, total: calcTotal(), date: i, saved: new Date().toISOString() };
   }
   await save({ logs });
 }
 
 function calcTotal() {
   if (!primary || primary.miles == null) return 0;
-  let t = primary.miles; // home → site1
+  let t = primary.miles;
   if (second) {
-    if (second.legMiles != null) t += second.legMiles; // site1 → site2
-    if (second.returnMiles != null) t += second.returnMiles; // site2 → home
-    else if (primary.miles != null) t += primary.miles;
+    if (second.legMiles != null) t += second.legMiles;
+    if (second.returnMiles != null) t += second.returnMiles;
+    else t += primary.miles;
   } else {
-    t += primary.miles; // site1 → home
+    t += primary.miles;
   }
   return r1(t);
 }
 
-/* RENDER DAY */
+/* ══════════ RENDER DAY — TRAIN ROUTE ══════════ */
 function renderDay() {
-  const c = document.getElementById('journey-content');
-  const hasPrimary = !!primary, hasSecond = !!second;
-  const tot = hasPrimary ? calcTotal() : null;
+  const el = document.getElementById('day-scroll');
+  const hasP = !!primary;
+  const hasS = !!second;
+  const tot = hasP ? calcTotal() : null;
 
-  let html = '';
+  let html = '<div class="route">';
 
-  html += `<div class="j-home-row" id="home-top-row">
-    <div class="home-box" id="home-top-box">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9590" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
+  // HOME (top)
+  html += `
+  <div class="route-stop">
+    <div class="route-node home">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9B9690" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
     </div>
-    <div class="home-info">
-      <div class="home-lbl">Home</div>
-      <div class="home-pc">${homePC}</div>
+    <div class="route-body">
+      <div class="route-label">Start</div>
+      <div class="route-name">Home</div>
+      <div class="route-sub">${homePC}</div>
     </div>
   </div>`;
 
-  html += '<div class="j-spacer"></div>';
-  html += '<div class="sites-zone" id="sites-zone">';
+  // LEG 1 badge
+  if (hasP) {
+    const m1 = primary.miles != null ? primary.miles + ' mi' : '···';
+    html += `<div class="route-leg"><div class="route-leg-spacer"></div>
+      <div class="route-leg-badge ${primary.miles == null ? 'dim' : ''}">${m1}</div></div>`;
+  } else {
+    html += `<div class="route-leg"><div class="route-leg-spacer"></div></div>`;
+  }
 
-  html += `<div style="position:relative">
-    <div class="site-card ${hasPrimary ? 'has-site' : ''}" id="site-card-1">
-      <div class="${hasPrimary ? 'site-card-icon' : 'site-card-empty-icon'}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${hasPrimary ? '#E74C3C' : '#5A5550'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="10" r="3"/>
-          <path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
-        </svg>
-      </div>
-      <div class="site-card-body">
-        <div class="site-card-name ${hasPrimary ? '' : 'empty'}">${hasPrimary ? primary.name : 'Tap to select site'}</div>
-        <div class="site-card-sub">${hasPrimary ? primary.postcode : 'Select your destination'}</div>
-      </div>
-      <div class="site-card-chev">›</div>
+  // SITE 1
+  html += `
+  <div class="route-stop">
+    <div class="route-node ${hasP ? 'site' : 'empty'}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${hasP ? '#FF3B2F' : '#5E5953'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
+      </svg>
     </div>
-    ${hasPrimary && !hasSecond ? `<button class="add-site-plus" id="add-plus-btn">+</button>` : ''}
+    <div class="route-body">
+      <div class="route-label">Site 1</div>
+      <div class="route-card ${hasP ? 'active' : ''}" id="card-1">
+        <div class="route-card-text">
+          <div class="route-card-name ${hasP ? '' : 'placeholder'}">${hasP ? primary.name : 'Tap to select site'}</div>
+          <div class="route-card-pc">${hasP ? primary.postcode : 'Choose destination'}</div>
+        </div>
+        <div class="route-card-action">›</div>
+      </div>
+    </div>
   </div>`;
 
-  if (hasSecond) {
-    html += `<div class="site-card has-site" id="site-card-2">
-      <div class="site-card-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E74C3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="10" r="3"/>
-          <path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
+  // LEG 2 + SITE 2
+  if (hasS) {
+    const m2 = second.legMiles != null ? second.legMiles + ' mi' : '···';
+    html += `<div class="route-leg"><div class="route-leg-spacer"></div>
+      <div class="route-leg-badge ${second.legMiles == null ? 'dim' : ''}">${m2}</div></div>`;
+
+    html += `
+    <div class="route-stop">
+      <div class="route-node site">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF3B2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
         </svg>
       </div>
-      <div class="site-card-body">
-        <div class="site-card-name">${second.name}</div>
-        <div class="site-card-sub">${second.postcode}</div>
+      <div class="route-body">
+        <div class="route-label">Site 2</div>
+        <div class="route-card active" id="card-2">
+          <div class="route-card-text">
+            <div class="route-card-name">${second.name}</div>
+            <div class="route-card-pc">${second.postcode}</div>
+          </div>
+          <button class="route-card-action" id="del-second">✕</button>
+        </div>
       </div>
-      <button style="background:var(--s3);border-radius:50%;width:26px;height:26px;color:var(--t3);font-size:0.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0" id="del-second">✕</button>
+    </div>`;
+  } else if (hasP) {
+    html += `<div class="add-second" id="add-second">
+      <div class="add-second-icon">+</div>
+      Add second site
     </div>`;
   }
 
-  html += '</div>';
-  html += '<div class="j-spacer"></div>';
+  // RETURN LEG
+  if (hasP) {
+    let retTxt = '···';
+    let dim = true;
+    if (hasS && second.returnMiles != null) {
+      retTxt = second.returnMiles + ' mi';
+      dim = false;
+    } else if (!hasS && primary.miles != null) {
+      retTxt = primary.miles + ' mi';
+      dim = false;
+    }
+    html += `<div class="route-leg"><div class="route-leg-spacer"></div>
+      <div class="route-leg-badge ${dim ? 'dim' : ''}">${retTxt}</div></div>`;
+  } else {
+    html += `<div class="route-leg"><div class="route-leg-spacer"></div></div>`;
+  }
 
-  html += `<div class="j-home-row right" id="home-bot-row">
-    <div class="home-box" id="home-bot-box">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9590" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
+  // HOME (bottom)
+  html += `
+  <div class="route-stop">
+    <div class="route-node home">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9B9690" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
     </div>
-    <div class="home-info" style="text-align:right">
-      <div class="home-lbl">Home</div>
-      <div class="home-pc">${homePC}</div>
+    <div class="route-body">
+      <div class="route-label">End</div>
+      <div class="route-name">Home</div>
+      <div class="route-sub">${homePC}</div>
     </div>
-    ${tot ? `<div class="home-total"><div class="home-total-num">${tot}</div><div class="home-total-lbl">total mi</div></div>` : ''}
   </div>`;
 
-  c.innerHTML = html;
+  html += '</div>'; // .route
 
-  document.getElementById('site-card-1')?.addEventListener('click', () => showPicker(false));
-  document.getElementById('site-card-2')?.addEventListener('click', () => showPicker(true));
-  document.getElementById('add-plus-btn')?.addEventListener('click', e => { e.stopPropagation(); showPicker(true); });
+  // TOTAL
+  if (tot) {
+    html += `<div class="total-bar">
+      <div class="total-label">Total distance</div>
+      <div><span class="total-value">${tot}</span><span class="total-unit">mi</span></div>
+    </div>`;
+  } else {
+    html += `<div class="empty-hint">Select a site to start logging<br>your journey for this day</div>`;
+  }
+
+  el.innerHTML = html;
+
+  // Bind
+  document.getElementById('card-1')?.addEventListener('click', () => showPicker(false));
+  document.getElementById('card-2')?.addEventListener('click', () => showPicker(true));
+  document.getElementById('add-second')?.addEventListener('click', () => showPicker(true));
   document.getElementById('del-second')?.addEventListener('click', async e => {
     e.stopPropagation();
     second = null;
     renderDay();
     await autoSave();
-    requestAnimationFrame(drawCurves);
   });
-
-  requestAnimationFrame(drawCurves);
-}
-
-/* DRAW CURVES */
-function drawCurves() {
-  const pane = document.getElementById('day-pane');
-  const svg = document.getElementById('track-svg');
-  const W = pane.offsetWidth, H = pane.offsetHeight;
-  if (!W || !H) { svg.innerHTML = ''; return; }
-
-  const homeTop = document.getElementById('home-top-box');
-  const homeBot = document.getElementById('home-bot-box');
-  const card1 = document.getElementById('site-card-1');
-  const card2 = document.getElementById('site-card-2');
-  const paneRect = pane.getBoundingClientRect();
-
-  function rel(el) {
-    const r = el.getBoundingClientRect();
-    return {
-      cx: r.left + r.width / 2 - paneRect.left,
-      cy: r.top + r.height / 2 - paneRect.top,
-      top: r.top - paneRect.top,
-      bottom: r.bottom - paneRect.top
-    };
-  }
-
-  if (!homeTop || !homeBot || !card1) { svg.innerHTML = ''; return; }
-  const ht = rel(homeTop), hb = rel(homeBot), c1 = rel(card1);
-  const c2 = card2 ? rel(card2) : null;
-
-  const strokeColor = 'rgba(231,76,60,0.5)';
-  const strokeW = 2.4;
-  let pathsHTML = '';
-
-  function curvePath(x1, y1, x2, y2, flip) {
-    const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2;
-    const dx = x2 - x1, dy = y2 - y1;
-    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-    const bulge = Math.min(dist * 0.4, 65);
-    const perp = flip ? 1 : -1;
-    const px = -dy / dist * bulge * perp;
-    const py = dx / dist * bulge * perp;
-    return `M ${x1} ${y1} Q ${midX + px} ${midY + py} ${x2} ${y2}`;
-  }
-
-  function qMid(x1, y1, cpx, cpy, x2, y2) {
-    return { x: 0.25 * x1 + 0.5 * cpx + 0.25 * x2, y: 0.25 * y1 + 0.5 * cpy + 0.25 * y2 };
-  }
-  function getCP(x1, y1, x2, y2, flip) {
-    const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2;
-    const dx = x2 - x1, dy = y2 - y1;
-    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-    const bulge = Math.min(dist * 0.4, 65);
-    const perp = flip ? 1 : -1;
-    return { cpx: midX + (-dy / dist * bulge * perp), cpy: midY + (dx / dist * bulge * perp) };
-  }
-
-  function badge(x, y, text, dim) {
-    const w = text.length > 4 ? 50 : 44;
-    return `<rect x="${x - w / 2}" y="${y - 10}" width="${w}" height="20" rx="10"
-      fill="#161616"/>
-    <text x="${x}" y="${y + 3.5}" text-anchor="middle" font-family="Inter,sans-serif"
-      font-size="10" font-weight="700" fill="${dim ? '#5A5550' : '#E74C3C'}">${text}</text>`;
-  }
-
-  const hasPrimary = !!primary, hasSecond = !!second;
-
-  if (hasPrimary) {
-    const x1 = ht.cx, y1 = ht.bottom;
-    const x2 = c1.cx, y2 = c1.top;
-    const { cpx, cpy } = getCP(x1, y1, x2, y2, false);
-    const mid1 = qMid(x1, y1, cpx, cpy, x2, y2);
-    pathsHTML += `<path d="${curvePath(x1, y1, x2, y2, false)}" fill="none" stroke="${strokeColor}" stroke-width="${strokeW}" stroke-linecap="round"/>`;
-    pathsHTML += badge(mid1.x, mid1.y, primary.miles != null ? primary.miles + ' mi' : '···', primary.miles == null);
-
-    if (hasSecond && c2) {
-      const lx1 = c1.cx, ly1 = c1.bottom;
-      const lx2 = c2.cx, ly2 = c2.top;
-      const { cpx: cp2x, cpy: cp2y } = getCP(lx1, ly1, lx2, ly2, true);
-      const mid2 = qMid(lx1, ly1, cp2x, cp2y, lx2, ly2);
-      pathsHTML += `<path d="${curvePath(lx1, ly1, lx2, ly2, true)}" fill="none" stroke="${strokeColor}" stroke-width="${strokeW}" stroke-linecap="round"/>`;
-      pathsHTML += badge(mid2.x, mid2.y, second.legMiles != null ? second.legMiles + ' mi' : '···', second.legMiles == null);
-
-      const rx1 = c2.cx, ry1 = c2.bottom;
-      const rx2 = hb.cx, ry2 = hb.top;
-      const { cpx: cp3x, cpy: cp3y } = getCP(rx1, ry1, rx2, ry2, false);
-      const mid3 = qMid(rx1, ry1, cp3x, cp3y, rx2, ry2);
-      pathsHTML += `<path d="${curvePath(rx1, ry1, rx2, ry2, false)}" fill="none" stroke="${strokeColor}" stroke-width="${strokeW}" stroke-linecap="round"/>`;
-      const ret = second.returnMiles != null ? second.returnMiles : (primary.miles != null ? primary.miles : null);
-      pathsHTML += badge(mid3.x, mid3.y, ret != null ? ret + ' mi' : '···', ret == null);
-    } else {
-      const rx1 = c1.cx, ry1 = c1.bottom;
-      const rx2 = hb.cx, ry2 = hb.top;
-      const { cpx: cp3x, cpy: cp3y } = getCP(rx1, ry1, rx2, ry2, false);
-      const mid3 = qMid(rx1, ry1, cp3x, cp3y, rx2, ry2);
-      pathsHTML += `<path d="${curvePath(rx1, ry1, rx2, ry2, false)}" fill="none" stroke="${strokeColor}" stroke-width="${strokeW}" stroke-linecap="round"/>`;
-      pathsHTML += badge(mid3.x, mid3.y, primary.miles != null ? primary.miles + ' mi' : '···', primary.miles == null);
-    }
-  } else {
-    const x1 = ht.cx, y1 = ht.bottom;
-    const x2 = hb.cx, y2 = hb.top;
-    const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2;
-    pathsHTML += `<path d="M ${x1} ${y1} Q ${midX + 32} ${midY} ${x2} ${y2}" fill="none"
-      stroke="rgba(255,255,255,0.05)" stroke-width="2" stroke-dasharray="5,6" stroke-linecap="round"/>`;
-  }
-
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = pathsHTML;
 }
 
 /* SITE PICKER */
@@ -1007,9 +806,7 @@ function showPicker(isSecond) {
     <div class="sheet-title">${isSecond ? 'Second site' : 'Select site'}</div>
     <div class="site-search-wrap">
       <div class="site-search-bar">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A5550" stroke-width="2.2">
-          <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
-        </svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5E5953" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
         <input id="sp-s" placeholder="Search…" autocomplete="off">
       </div>
       <div class="site-list-scroll" id="sp-list">${listHtml()}</div>
@@ -1023,11 +820,11 @@ function showPicker(isSecond) {
     });
     document.getElementById('sp-s')?.focus();
     bindItems();
-  }, 50);
+  }, 40);
 
   function bindItems() {
     document.querySelectorAll('.site-list-item').forEach(el => {
-      el.addEventListener('click', async () => {
+      el.onclick = async () => {
         const s = sites.find(x => x.id === el.dataset.id);
         if (!s) return;
         closeSheet();
@@ -1043,7 +840,6 @@ function showPicker(isSecond) {
             if (leg != null) second.legMiles = leg;
             if (ret != null) second.returnMiles = ret;
             renderDay();
-            requestAnimationFrame(drawCurves);
             await autoSave();
           }
         } else {
@@ -1057,13 +853,12 @@ function showPicker(isSecond) {
               primary.miles = m;
               s.miles = m;
               renderDay();
-              requestAnimationFrame(drawCurves);
               await autoSave();
               await save({ sites });
             }
           }
         }
-      });
+      };
     });
   }
 }
@@ -1076,7 +871,6 @@ async function prefetch() {
     }
   }
   await save({ sites });
-  renderSites();
 }
 
 /* LOG */
@@ -1093,12 +887,8 @@ function renderLog() {
   el.innerHTML = keys.map(i => {
     const l = logs[i];
     const stops = [{ t: 'h', name: 'Home' }];
-    if (l.primary) {
-      stops.push({ t: 's', name: l.primary.name, mi: l.primary.miles != null ? l.primary.miles + ' mi' : '' });
-    }
-    if (l.second) {
-      stops.push({ t: 's', name: l.second.name, mi: l.second.legMiles != null ? l.second.legMiles + ' mi leg' : '' });
-    }
+    if (l.primary) stops.push({ t: 's', name: l.primary.name, mi: l.primary.miles != null ? l.primary.miles + ' mi' : '' });
+    if (l.second) stops.push({ t: 's', name: l.second.name, mi: l.second.legMiles != null ? l.second.legMiles + ' mi' : '' });
     stops.push({ t: 'h', name: 'Home' });
     return `<div class="log-card">
       <div class="log-card-head">
@@ -1119,33 +909,26 @@ function renderLog() {
     </div>`;
   }).join('');
   el.querySelectorAll('[data-edit]').forEach(b => {
-    b.addEventListener('click', () => {
-      const i = b.dataset.edit;
-      vDate = new Date(i + 'T00:00');
-      loadDay(i);
+    b.onclick = () => {
+      vDate = new Date(b.dataset.edit + 'T00:00');
+      loadDay(b.dataset.edit);
       updateDate();
       switchTab('day');
-    });
+    };
   });
   el.querySelectorAll('[data-del]').forEach(b => {
-    b.addEventListener('click', async () => {
+    b.onclick = async () => {
       if (!confirm('Delete this day?')) return;
       delete logs[b.dataset.del];
       await save({ logs });
       renderLog();
       renderExport();
       toast('Deleted');
-    });
+    };
   });
 }
-document.getElementById('log-prev').addEventListener('click', () => {
-  logMon.setMonth(logMon.getMonth() - 1);
-  renderLog();
-});
-document.getElementById('log-next').addEventListener('click', () => {
-  logMon.setMonth(logMon.getMonth() + 1);
-  renderLog();
-});
+document.getElementById('log-prev').addEventListener('click', () => { logMon.setMonth(logMon.getMonth() - 1); renderLog(); });
+document.getElementById('log-next').addEventListener('click', () => { logMon.setMonth(logMon.getMonth() + 1); renderLog(); });
 
 /* EXPORT */
 function getWK() {
@@ -1153,10 +936,8 @@ function getWK() {
   ws.setDate(n.getDate() - ((n.getDay() + 6) % 7));
   const k = [];
   for (let i = 0; i < 7; i++) {
-    const d = new Date(ws);
-    d.setDate(ws.getDate() + i);
-    const ii = iso(d);
-    if (logs[ii]) k.push(ii);
+    const d = new Date(ws); d.setDate(ws.getDate() + i);
+    const ii = iso(d); if (logs[ii]) k.push(ii);
   }
   return k;
 }
@@ -1176,93 +957,78 @@ function renderExport() {
   document.getElementById('es-md').textContent = mk.length || '—';
 }
 function buildCSV(keys) {
-  const r = [['Date', 'Site 1', 'Postcode 1', 'Site 2', 'Postcode 2', 'Home→Site1 (mi)', 'Site1→Site2 (mi)', 'Site2→Home (mi)', 'Total Miles']];
+  const r = [['Date','Site 1','Postcode 1','Site 2','Postcode 2','Home→Site1 (mi)','Site1→Site2 (mi)','Site2→Home (mi)','Total Miles']];
   keys.forEach(i => {
-    const l = logs[i];
-    if (!l) return;
+    const l = logs[i]; if (!l) return;
     const s1 = l.primary, s2 = l.second;
     const leg1 = s1 && s1.miles != null ? s1.miles : '';
     const leg2 = s2 && s2.legMiles != null ? s2.legMiles : '';
     const ret = s2 && s2.returnMiles != null ? s2.returnMiles : (s1 && s1.miles != null ? s1.miles : '');
     r.push([i, s1 ? s1.name : '', s1 ? s1.postcode : '', s2 ? s2.name : '', s2 ? s2.postcode : '', leg1, leg2, ret, l.total || '']);
   });
-  return r.map(x => x.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
+  return r.map(x => x.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
 }
 function buildTxt(keys) {
   return keys.map(i => {
-    const l = logs[i];
-    if (!l) return '';
-    return [fmtD(i),
-      'Home → ' + (l.primary ? l.primary.name : '?') + (l.second ? ' → ' + l.second.name : '') + ' → Home',
-      'Total: ' + (l.total || 0) + ' miles'].join('\n');
+    const l = logs[i]; if (!l) return '';
+    return [fmtD(i), 'Home → ' + (l.primary ? l.primary.name : '?') + (l.second ? ' → ' + l.second.name : '') + ' → Home', 'Total: ' + (l.total || 0) + ' miles'].join('\n');
   }).join('\n\n');
 }
 function dl(t, n) {
   const a = document.createElement('a');
   a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(t);
-  a.download = n;
-  a.click();
+  a.download = n; a.click();
 }
-document.getElementById('ex-wcsv').addEventListener('click', () => {
-  const k = getWK();
-  if (!k.length) { toast('No data this week'); return; }
-  dl(buildCSV(k), 'Journeys_week.csv');
-});
-document.getElementById('ex-mcsv').addEventListener('click', () => {
-  const k = getMK();
-  if (!k.length) { toast('No data this month'); return; }
-  dl(buildCSV(k), 'Journeys_month.csv');
-});
-document.getElementById('ex-wtxt').addEventListener('click', async () => {
-  const k = getWK();
-  if (!k.length) { toast('No data this week'); return; }
-  try { await navigator.clipboard.writeText(buildTxt(k)); toast('Week copied!'); }
-  catch (e) { dl(buildTxt(k), 'week.txt'); }
-});
-document.getElementById('ex-mtxt').addEventListener('click', async () => {
-  const k = getMK();
-  if (!k.length) { toast('No data this month'); return; }
-  try { await navigator.clipboard.writeText(buildTxt(k)); toast('Month copied!'); }
-  catch (e) { dl(buildTxt(k), 'month.txt'); }
-});
+document.getElementById('ex-wcsv').addEventListener('click', () => { const k = getWK(); if (!k.length) { toast('No data this week'); return; } dl(buildCSV(k), 'Journeys_week.csv'); });
+document.getElementById('ex-mcsv').addEventListener('click', () => { const k = getMK(); if (!k.length) { toast('No data this month'); return; } dl(buildCSV(k), 'Journeys_month.csv'); });
+document.getElementById('ex-wtxt').addEventListener('click', async () => { const k = getWK(); if (!k.length) { toast('No data this week'); return; } try { await navigator.clipboard.writeText(buildTxt(k)); toast('Week copied!'); } catch (e) { dl(buildTxt(k), 'week.txt'); } });
+document.getElementById('ex-mtxt').addEventListener('click', async () => { const k = getMK(); if (!k.length) { toast('No data this month'); return; } try { await navigator.clipboard.writeText(buildTxt(k)); toast('Month copied!'); } catch (e) { dl(buildTxt(k), 'month.txt'); } });
 
-/* SETTINGS */
+/* SETTINGS — fixed */
 function renderSites() {
   const el = document.getElementById('sites-list');
   if (!el) return;
-  el.innerHTML = sites.map((s, i) => `<div class="site-row">
-    <div class="site-dot"></div>
-    <div class="site-row-name">
-      <div class="site-row-title">${s.name}</div>
-      <div class="site-row-pc">${s.postcode}</div>
-    </div>
-    <div class="site-row-mi">${s.miles != null ? s.miles + ' mi' : '···'}</div>
-    <button class="site-row-del" data-i="${i}">✕</button>
-  </div>`).join('');
-  el.querySelectorAll('[data-i]').forEach(b => {
-    b.addEventListener('click', async () => {
-      const i = parseInt(b.dataset.i);
+  if (!sites.length) {
+    el.innerHTML = '<div class="s-row"><div class="s-row-body"><div class="s-row-sub">No sites yet</div></div></div>';
+    return;
+  }
+  el.innerHTML = sites.map((s, i) => `
+    <div class="site-row">
+      <div class="site-dot"></div>
+      <div class="site-row-name">
+        <div class="site-row-title">${s.name}</div>
+        <div class="site-row-pc">${s.postcode}</div>
+      </div>
+      <div class="site-row-mi">${s.miles != null ? s.miles + ' mi' : '···'}</div>
+      <button class="site-row-del" data-i="${i}">✕</button>
+    </div>`).join('');
+
+  el.querySelectorAll('.site-row-del').forEach(btn => {
+    btn.onclick = async () => {
+      const i = parseInt(btn.dataset.i, 10);
+      if (isNaN(i) || i < 0 || i >= sites.length) return;
       if (!confirm('Remove "' + sites[i].name + '"?')) return;
       sites.splice(i, 1);
       await save({ sites });
       renderSites();
-    });
+    };
   });
 }
+
 document.getElementById('add-site-btn').addEventListener('click', () => {
   openSheet(`<div class="sheet-handle"></div>
     <div class="sheet-title">Add site</div>
-    <div><div class="sheet-lbl" style="margin-bottom:0.35rem">Site name</div>
+    <div><div class="sheet-lbl" style="margin-bottom:0.3rem">Site name</div>
       <input id="ns-n" class="sheet-input" placeholder="e.g. Royal Bolton Hospital"></div>
-    <div><div class="sheet-lbl" style="margin-bottom:0.35rem">Postcode</div>
+    <div><div class="sheet-lbl" style="margin-bottom:0.3rem">Postcode</div>
       <input id="ns-p" class="sheet-input" placeholder="e.g. BL4 0JR" style="text-transform:uppercase"></div>
     <div class="sheet-row">
       <button class="sheet-cancel" id="ns-x">Cancel</button>
       <button class="sheet-confirm" id="ns-ok">Add</button>
     </div>`);
   setTimeout(() => {
-    document.getElementById('ns-x')?.addEventListener('click', closeSheet);
-    document.getElementById('ns-ok')?.addEventListener('click', async () => {
+    document.getElementById('ns-x').onclick = closeSheet;
+    document.getElementById('ns-ok').onclick = async () => {
       const n = document.getElementById('ns-n').value.trim();
       const p = document.getElementById('ns-p').value.trim().toUpperCase();
       if (!n || !p) { toast('Enter name and postcode'); return; }
@@ -1275,10 +1041,11 @@ document.getElementById('add-site-btn').addEventListener('click', () => {
       await save({ sites });
       renderSites();
       toast('Site added');
-    });
-    document.getElementById('ns-n')?.focus();
-  }, 50);
+    };
+    document.getElementById('ns-n').focus();
+  }, 40);
 });
+
 document.getElementById('edit-home-btn').addEventListener('click', () => {
   openSheet(`<div class="sheet-handle"></div>
     <div class="sheet-title">Home postcode</div>
@@ -1288,8 +1055,8 @@ document.getElementById('edit-home-btn').addEventListener('click', () => {
       <button class="sheet-confirm" id="hp-ok">Save</button>
     </div>`);
   setTimeout(() => {
-    document.getElementById('hp-x')?.addEventListener('click', closeSheet);
-    document.getElementById('hp-ok')?.addEventListener('click', async () => {
+    document.getElementById('hp-x').onclick = closeSheet;
+    document.getElementById('hp-ok').onclick = async () => {
       const p = document.getElementById('hp').value.trim().toUpperCase();
       if (!p) return;
       homePC = p;
@@ -1299,9 +1066,9 @@ document.getElementById('edit-home-btn').addEventListener('click', () => {
       closeSheet();
       prefetch();
       toast('Home updated — recalculating…');
-    });
-    document.getElementById('hp')?.select();
-  }, 50);
+    };
+    document.getElementById('hp').select();
+  }, 40);
 });
 
 function showDatePicker() {
@@ -1314,8 +1081,8 @@ function showDatePicker() {
       <button class="sheet-confirm" id="dp-ok">Go</button>
     </div>`);
   setTimeout(() => {
-    document.getElementById('dp-x')?.addEventListener('click', closeSheet);
-    document.getElementById('dp-ok')?.addEventListener('click', () => {
+    document.getElementById('dp-x').onclick = closeSheet;
+    document.getElementById('dp-ok').onclick = () => {
       const v = document.getElementById('dp').value;
       if (!v) return;
       vDate = new Date(v + 'T00:00');
@@ -1323,8 +1090,8 @@ function showDatePicker() {
       updateDate();
       closeSheet();
       switchTab('day');
-    });
-  }, 50);
+    };
+  }, 40);
 }
 
 function openSheet(html) {
@@ -1343,23 +1110,17 @@ function closeSheet() {
 (function () {
   const pane = document.getElementById('day-pane');
   let startX = 0, startY = 0, tracking = false;
-
   pane.addEventListener('touchstart', e => {
     if (curTab !== 'day') return;
     const t = e.changedTouches[0];
-    startX = t.clientX;
-    startY = t.clientY;
-    tracking = true;
+    startX = t.clientX; startY = t.clientY; tracking = true;
   }, { passive: true });
-
   pane.addEventListener('touchend', e => {
     if (!tracking || curTab !== 'day') return;
     tracking = false;
     const t = e.changedTouches[0];
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
+    const dx = t.clientX - startX, dy = t.clientY - startY;
     if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
-
     if (dx < 0) {
       vDate.setDate(vDate.getDate() + 1);
       if (vDate > new Date()) { vDate = new Date(); toast("Can't go past today"); }
@@ -1372,10 +1133,6 @@ function closeSheet() {
     toast(iso(vDate) === iso(new Date()) ? 'Today' : fmtS(iso(vDate)));
   }, { passive: true });
 })();
-
-window.addEventListener('resize', () => {
-  if (curTab === 'day') requestAnimationFrame(drawCurves);
-});
 </script>
 </body>
 </html>
