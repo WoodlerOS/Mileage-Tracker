@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0F0F0F">
+<meta name="theme-color" content="#0C0C0C">
 <title>Journeys</title>
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-<link rel="icon" type="image/png" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,21 +16,16 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0F0F0F;
-  --s1: #1A1A1A;
-  --s2: #242424;
-  --s3: #2E2E2E;
-  --b: rgba(255,255,255,0.06);
-  --b2: rgba(255,255,255,0.10);
-  --b3: rgba(255,255,255,0.16);
-  --t: #F5F2ED;
-  --t2: #A09A94;
-  --t3: #5C5650;
+  --bg: #0C0C0C;
+  --s1: #161616;
+  --s2: #1E1E1E;
+  --s3: #262626;
+  --s4: #2E2E2E;
+  --t: #F2F0EC;
+  --t2: #9A9590;
+  --t3: #5A5550;
   --red: #E74C3C;
-  --red2: #C0392B;
-  --rdim: rgba(231,76,60,0.12);
-  --rdim2: rgba(231,76,60,0.22);
-  --green: #2ECC71;
+  --rdim: rgba(231,76,60,0.15);
 }
 html, body {
   background: var(--bg); color: var(--t);
@@ -50,123 +43,126 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 .screen { display: none; flex-direction: column; height: 100%; overflow: hidden; }
 .screen.active { display: flex; }
 
-/* ── AUTH ── */
+/* AUTH */
 #auth-screen {
   background: var(--bg);
   align-items: center; justify-content: center;
   padding: 2rem 1.5rem;
 }
 .auth-logo {
-  width: 68px; height: 68px; border-radius: 18px;
-  background: var(--s1); border: 1px solid var(--b2);
+  width: 64px; height: 64px; border-radius: 16px;
+  background: var(--s1);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1rem;
 }
 .auth-wordmark {
-  font-size: 1.45rem; font-weight: 800; letter-spacing: -0.04em;
-  color: var(--t); margin-bottom: 0.25rem;
+  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.04em;
+  margin-bottom: 0.2rem;
 }
 .auth-sub {
   font-size: 0.65rem; font-weight: 600; color: var(--t3);
-  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2.2rem;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem;
 }
-.auth-form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 0.55rem; }
+.auth-form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 0.5rem; }
 .auth-field {
-  background: var(--s1); border: 1.5px solid var(--b2); border-radius: 12px;
-  padding: 0.9rem 1rem; font-size: 0.92rem; color: var(--t); width: 100%;
-  transition: border-color 0.15s;
+  background: var(--s1); border: none; border-radius: 12px;
+  padding: 0.9rem 1rem; font-size: 0.9rem; color: var(--t); width: 100%;
 }
-.auth-field:focus { border-color: var(--red); outline: none; }
+.auth-field:focus { outline: none; background: var(--s2); }
 .auth-field::placeholder { color: var(--t3); }
 .auth-err { font-size: 0.72rem; color: var(--red); text-align: center; min-height: 1.1rem; }
 .btn-red {
   background: var(--red); color: #fff; font-weight: 700; font-size: 0.9rem;
   padding: 0.95rem; border-radius: 12px; width: 100%;
-  transition: opacity 0.15s, transform 0.1s;
 }
-.btn-red:active { transform: scale(0.97); opacity: 0.88; }
+.btn-red:active { opacity: 0.85; }
 .auth-note {
   font-size: 0.65rem; color: var(--t3); text-align: center;
   line-height: 1.5; margin-top: 0.4rem;
 }
 
-/* ── TOPBAR ── */
+/* TOPBAR */
 .topbar {
   flex-shrink: 0;
-  padding: calc(env(safe-area-inset-top) + 0.65rem) 1rem 0.55rem;
+  padding: calc(env(safe-area-inset-top) + 0.6rem) 1rem 0.5rem;
   display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
-  background: var(--bg); border-bottom: 1px solid var(--b);
+  background: var(--bg);
 }
 .topbar-logo {
   width: 30px; height: 30px; border-radius: 8px; background: var(--red);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .topbar-date {
-  font-size: 0.72rem; font-weight: 600; color: var(--t2);
-  letter-spacing: 0.03em; background: var(--s1); border: 1px solid var(--b2);
-  border-radius: 20px; padding: 0.4rem 0.9rem; cursor: pointer;
-  flex: 1; text-align: center; transition: background 0.12s;
+  font-size: 0.75rem; font-weight: 600; color: var(--t2);
+  background: var(--s1); border-radius: 20px; padding: 0.4rem 1rem;
+  flex: 1; text-align: center;
 }
-.topbar-date:active { background: var(--s2); }
 .topbar-gear {
   width: 34px; height: 34px; border-radius: 50%;
-  background: var(--s1); border: 1px solid var(--b2);
+  background: var(--s1);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 
-/* ── TABS ── */
+/* TABS */
 .tabs {
   flex-shrink: 0; display: flex;
-  background: var(--s1); border-bottom: 1px solid var(--b);
+  background: var(--s1); margin: 0 1rem; border-radius: 12px;
+  padding: 3px; gap: 2px;
 }
 .tab {
-  flex: 1; padding: 0.7rem 0.2rem; text-align: center;
+  flex: 1; padding: 0.55rem 0.2rem; text-align: center;
   font-size: 0.7rem; font-weight: 700; color: var(--t3);
-  letter-spacing: 0.05em; text-transform: uppercase;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  border-radius: 10px; transition: all 0.15s;
 }
-.tab.active { color: var(--red); border-bottom-color: var(--red); }
+.tab.active {
+  color: var(--t); background: var(--s3);
+}
 
-/* ── TAB PANES ── */
-.tab-pane { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
-.tab-pane.active { display: flex; }
+/* TAB PANES — critical for separation */
+.tab-pane {
+  display: none !important;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+.tab-pane.active {
+  display: flex !important;
+}
 
-/* ── DAY PANE ── */
+/* DAY */
 #day-pane { position: relative; touch-action: pan-y; }
-
 .journey-outer {
   flex: 1; display: flex; flex-direction: column;
-  padding: 1.1rem 1.2rem calc(1rem + env(safe-area-inset-bottom));
+  padding: 1rem 1.15rem calc(1rem + env(safe-area-inset-bottom));
   min-height: 0; overflow: hidden; position: relative;
 }
-
 .track-layer {
   position: absolute; inset: 0; pointer-events: none; z-index: 0;
 }
-
 .journey-content {
   flex: 1; display: flex; flex-direction: column;
   position: relative; z-index: 1; min-height: 0;
 }
 
 .j-home-row {
-  display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0;
+  display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;
 }
 .j-home-row.right { flex-direction: row-reverse; }
 
 .home-box {
-  width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0;
-  background: var(--s2); border: 1.5px solid var(--b2);
+  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+  background: var(--s2);
   display: flex; align-items: center; justify-content: center;
 }
-.home-info { display: flex; flex-direction: column; gap: 2px; }
-.home-lbl { font-size: 0.74rem; font-weight: 700; color: var(--t2); letter-spacing: 0.02em; }
-.home-pc { font-size: 0.62rem; color: var(--t3); font-weight: 500; }
+.home-info { display: flex; flex-direction: column; gap: 1px; }
+.home-lbl { font-size: 0.75rem; font-weight: 700; color: var(--t2); }
+.home-pc { font-size: 0.62rem; color: var(--t3); }
 
 .home-total { display: flex; flex-direction: column; align-items: flex-end; }
 .home-total-num {
-  font-size: 1.35rem; font-weight: 800; color: var(--t);
+  font-size: 1.4rem; font-weight: 800; color: var(--t);
   letter-spacing: -0.03em; line-height: 1;
 }
 .home-total-lbl {
@@ -174,29 +170,28 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
   letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px;
 }
 
-.j-spacer { flex: 1; min-height: 0; }
+.j-spacer { flex: 1; min-height: 8px; }
 
 .sites-zone {
-  display: flex; flex-direction: column; gap: 0.7rem; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 0.65rem; flex-shrink: 0;
 }
 
 .site-card {
-  background: var(--s1); border: 1.5px solid var(--b2);
-  border-radius: 15px; padding: 0.85rem 0.95rem;
-  display: flex; align-items: center; gap: 0.8rem;
-  cursor: pointer; transition: border-color 0.15s, background 0.12s;
-  position: relative;
+  background: var(--s1); border-radius: 14px; padding: 0.85rem 0.95rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  cursor: pointer; position: relative;
 }
-.site-card:active { background: var(--s2); }
-.site-card.has-site { border-color: var(--red); background: linear-gradient(135deg, var(--s1) 0%, rgba(231,76,60,0.04) 100%); }
+.site-card.has-site { background: var(--s2); }
+.site-card:active { background: var(--s3); }
+
 .site-card-icon {
-  width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
-  background: var(--rdim); border: 1.5px solid var(--rdim2);
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  background: var(--rdim);
   display: flex; align-items: center; justify-content: center;
 }
 .site-card-empty-icon {
-  width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
-  background: var(--s2); border: 1.5px solid var(--b2);
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  background: var(--s3);
   display: flex; align-items: center; justify-content: center;
 }
 .site-card-body { flex: 1; min-width: 0; }
@@ -209,43 +204,40 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 .site-card-chev { color: var(--t3); font-size: 1rem; flex-shrink: 0; }
 
 .add-site-plus {
-  position: absolute; right: -12px; bottom: -12px;
+  position: absolute; right: -10px; bottom: -10px;
   width: 28px; height: 28px; border-radius: 50%;
-  background: var(--red); border: 2.5px solid var(--bg);
+  background: var(--red);
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 1.05rem; line-height: 1; font-weight: 700;
-  z-index: 5; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(231,76,60,0.35);
-  transition: transform 0.15s;
+  color: #fff; font-size: 1.05rem; font-weight: 700;
+  z-index: 5;
 }
-.add-site-plus:active { transform: scale(0.9); }
+.add-site-plus:active { opacity: 0.85; }
 
-/* ── LOG ── */
+/* LOG */
 #log-pane { overflow: hidden; }
 .log-scroll {
   flex: 1; overflow-y: auto;
-  padding: 0.9rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
+  padding: 0.85rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
   -webkit-overflow-scrolling: touch;
 }
 .log-month-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 0.1rem 0.9rem;
+  padding: 0 0.1rem 0.85rem;
 }
-.log-month-lbl { font-size: 0.95rem; font-weight: 700; color: var(--t); }
-.mnav { display: flex; gap: 0.4rem; }
+.log-month-lbl { font-size: 0.95rem; font-weight: 700; }
+.mnav { display: flex; gap: 0.35rem; }
 .mnav-btn {
   width: 30px; height: 30px; border-radius: 50%;
-  background: var(--s1); border: 1px solid var(--b2);
-  color: var(--t2); font-size: 0.95rem;
+  background: var(--s1); color: var(--t2); font-size: 0.95rem;
   display: flex; align-items: center; justify-content: center;
 }
 .log-card {
-  background: var(--s1); border: 1px solid var(--b);
-  border-radius: 14px; margin-bottom: 0.6rem; overflow: hidden;
+  background: var(--s1); border-radius: 14px;
+  margin-bottom: 0.55rem; overflow: hidden;
 }
 .log-card-head {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0.8rem 0.95rem; cursor: pointer;
+  padding: 0.8rem 0.95rem;
 }
 .log-card-date {
   font-size: 0.72rem; font-weight: 700; color: var(--t2);
@@ -253,50 +245,43 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 }
 .log-card-mi {
   font-size: 1.05rem; font-weight: 800; color: var(--red);
-  letter-spacing: -0.02em;
 }
-.log-card-body {
-  padding: 0 0.95rem 0.8rem; border-top: 1px solid var(--b);
-}
+.log-card-body { padding: 0 0.95rem 0.8rem; }
 .log-stop {
-  display: flex; align-items: center; gap: 0.6rem;
-  padding: 0.4rem 0; border-bottom: 1px solid var(--b);
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0.35rem 0;
 }
-.log-stop:last-of-type { border-bottom: none; }
 .log-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .log-dot.h { background: var(--t2); }
 .log-dot.s { background: var(--red); }
-.log-stop-name { font-size: 0.8rem; font-weight: 600; color: var(--t); flex: 1; }
-.log-stop-mi { font-size: 0.7rem; color: var(--t2); font-weight: 500; }
-.log-actions { display: flex; gap: 0.45rem; padding-top: 0.6rem; }
+.log-stop-name { font-size: 0.8rem; font-weight: 600; flex: 1; }
+.log-stop-mi { font-size: 0.7rem; color: var(--t2); }
+.log-actions { display: flex; gap: 0.4rem; padding-top: 0.55rem; }
 .log-act {
   font-size: 0.66rem; font-weight: 700; letter-spacing: 0.04em;
   text-transform: uppercase; padding: 0.4rem 0.75rem;
-  border-radius: 8px; border: 1px solid var(--b2);
-  color: var(--t2); background: var(--s2);
+  border-radius: 8px; color: var(--t2); background: var(--s2);
 }
-.log-act.del { color: var(--red); border-color: rgba(231,76,60,0.25); }
+.log-act.del { color: var(--red); }
 .log-empty {
   text-align: center; padding: 3.5rem 1rem;
   color: var(--t3); font-size: 0.85rem;
 }
 
-/* ── EXPORT ── */
+/* EXPORT */
 #export-pane {
   overflow-y: auto; padding: 1rem;
-  gap: 0.7rem; display: flex; flex-direction: column;
+  display: flex; flex-direction: column; gap: 0.65rem;
 }
 .exp-stats {
-  background: var(--s1); border: 1px solid var(--b);
-  border-radius: 14px; display: flex; overflow: hidden; flex-shrink: 0;
+  background: var(--s1); border-radius: 14px;
+  display: flex; overflow: hidden;
 }
 .exp-stat {
   flex: 1; padding: 0.9rem 0.4rem; text-align: center;
-  border-right: 1px solid var(--b);
 }
-.exp-stat:last-child { border-right: none; }
 .exp-stat-num {
-  font-size: 1.45rem; font-weight: 800; color: var(--red);
+  font-size: 1.4rem; font-weight: 800; color: var(--red);
   letter-spacing: -0.03em; display: block;
 }
 .exp-stat-lbl {
@@ -305,85 +290,75 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 }
 .exp-sec-lbl {
   font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--t3); flex-shrink: 0;
-  margin-top: 0.35rem;
+  text-transform: uppercase; color: var(--t3); margin-top: 0.3rem;
 }
 .exp-btn {
-  background: var(--s1); border: 1px solid var(--b);
-  border-radius: 13px; padding: 0.9rem 1rem;
+  background: var(--s1); border-radius: 13px; padding: 0.9rem 1rem;
   display: flex; align-items: center; gap: 0.75rem;
-  cursor: pointer; transition: background 0.12s; flex-shrink: 0;
 }
 .exp-btn:active { background: var(--s2); }
-.exp-btn-icon { font-size: 1.2rem; width: 28px; text-align: center; flex-shrink: 0; }
+.exp-btn-icon { font-size: 1.15rem; width: 28px; text-align: center; }
 .exp-btn-body { flex: 1; }
-.exp-btn-title { font-size: 0.85rem; font-weight: 700; color: var(--t); }
+.exp-btn-title { font-size: 0.85rem; font-weight: 700; }
 .exp-btn-sub { font-size: 0.66rem; color: var(--t2); margin-top: 2px; }
 .exp-arrow { color: var(--t3); font-size: 0.9rem; }
 
-/* ── SETTINGS ── */
+/* SETTINGS */
 #settings-pane {
   overflow-y: auto;
-  padding: 0.8rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
-  gap: 0.7rem; display: flex; flex-direction: column;
+  padding: 0.75rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 0.65rem;
 }
 .s-back {
   font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
-  text-transform: uppercase; color: var(--t2); display: block; flex-shrink: 0;
-  text-align: left;
+  text-transform: uppercase; color: var(--t2); text-align: left;
 }
 .s-title {
-  font-size: 1.15rem; font-weight: 800; color: var(--t);
-  letter-spacing: -0.02em; flex-shrink: 0; margin-bottom: 0.15rem;
+  font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em;
+  margin-bottom: 0.1rem;
 }
 .s-sec-lbl {
   font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--t3); flex-shrink: 0;
-  margin-top: 0.25rem;
+  text-transform: uppercase; color: var(--t3); margin-top: 0.2rem;
 }
 .s-card {
-  background: var(--s1); border: 1px solid var(--b);
-  border-radius: 14px; overflow: hidden; flex-shrink: 0;
+  background: var(--s1); border-radius: 14px; overflow: hidden;
 }
 .s-row {
   display: flex; align-items: center; gap: 0.7rem;
-  padding: 0.85rem 0.95rem; border-bottom: 1px solid var(--b);
+  padding: 0.85rem 0.95rem;
 }
-.s-row:last-child { border-bottom: none; }
-.s-row-icon { font-size: 1.05rem; width: 26px; text-align: center; flex-shrink: 0; }
+.s-row-icon { font-size: 1.05rem; width: 26px; text-align: center; }
 .s-row-body { flex: 1; min-width: 0; }
-.s-row-title { font-size: 0.85rem; font-weight: 600; color: var(--t); }
+.s-row-title { font-size: 0.85rem; font-weight: 600; }
 .s-row-sub { font-size: 0.65rem; color: var(--t2); margin-top: 2px; }
-.s-row-act { font-size: 0.72rem; font-weight: 700; color: var(--red); flex-shrink: 0; }
+.s-row-act { font-size: 0.72rem; font-weight: 700; color: var(--red); }
 .site-row {
   display: flex; align-items: center; gap: 0.65rem;
-  padding: 0.75rem 0.95rem; border-bottom: 1px solid var(--b);
+  padding: 0.75rem 0.95rem;
 }
-.site-row:last-child { border-bottom: none; }
 .site-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
 .site-row-name { flex: 1; min-width: 0; }
 .site-row-title {
-  font-size: 0.82rem; font-weight: 700; color: var(--t);
+  font-size: 0.82rem; font-weight: 700;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .site-row-pc { font-size: 0.63rem; color: var(--t2); margin-top: 1px; }
 .site-row-mi {
   font-size: 0.72rem; font-weight: 700; color: var(--t2);
-  width: 48px; text-align: right; flex-shrink: 0;
+  width: 48px; text-align: right;
 }
 .site-row-del {
   width: 24px; height: 24px; border-radius: 50%;
-  border: 1px solid var(--b2); background: var(--s2);
-  font-size: 0.65rem; color: var(--t3);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  background: var(--s2); font-size: 0.65rem; color: var(--t3);
+  display: flex; align-items: center; justify-content: center;
 }
 .btn-outline {
-  background: var(--s1); border: 1px solid var(--b2);
-  color: var(--t2); font-weight: 600; font-size: 0.85rem;
-  border-radius: 12px; padding: 0.82rem 1rem; width: 100%; flex-shrink: 0;
+  background: var(--s1); color: var(--t2); font-weight: 600;
+  font-size: 0.85rem; border-radius: 12px; padding: 0.82rem 1rem; width: 100%;
 }
 
-/* ── OVERLAY / SHEET ── */
+/* OVERLAY */
 .overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.7);
   z-index: 200; display: none; align-items: flex-end;
@@ -394,67 +369,58 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
   border-radius: 22px 22px 0 0;
   padding: 0 1.15rem calc(1.3rem + env(safe-area-inset-bottom));
   max-height: 85vh; overflow-y: auto;
-  display: flex; flex-direction: column; gap: 0.8rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
   animation: slideUp 0.28s cubic-bezier(0.22,0.9,0.3,1);
 }
 .sheet-handle {
   width: 36px; height: 4px; border-radius: 2px;
-  background: var(--b3); margin: 0.75rem auto 0.1rem; flex-shrink: 0;
+  background: var(--s4); margin: 0.7rem auto 0.1rem;
 }
-.sheet-title { font-size: 1rem; font-weight: 700; color: var(--t); flex-shrink: 0; }
+.sheet-title { font-size: 1rem; font-weight: 700; }
 .sheet-lbl {
   font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--t3);
 }
 .sheet-input {
-  background: var(--s2); border: 1.5px solid var(--b2); border-radius: 12px;
+  background: var(--s2); border: none; border-radius: 12px;
   padding: 0.82rem 0.95rem; font-size: 0.9rem; color: var(--t); width: 100%;
-  transition: border-color 0.15s;
 }
-.sheet-input:focus { border-color: var(--red); outline: none; }
+.sheet-input:focus { outline: none; background: var(--s3); }
 .sheet-input::placeholder { color: var(--t3); }
 .site-search-wrap {
-  border: 1px solid var(--b2); border-radius: 13px; overflow: hidden;
-  background: var(--s2); flex-shrink: 0;
+  border-radius: 13px; overflow: hidden; background: var(--s2);
 }
 .site-search-bar {
-  display: flex; align-items: center; gap: 0.55rem;
-  padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--b);
-  background: var(--s3);
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 0.9rem; background: var(--s3);
 }
 .site-search-bar input {
   flex: 1; font-size: 0.88rem; color: var(--t); background: none;
-  -webkit-user-select: text; user-select: text;
 }
 .site-search-bar input::placeholder { color: var(--t3); }
 .site-list-scroll { max-height: 240px; overflow-y: auto; }
 .site-list-item {
-  display: flex; align-items: center; gap: 0.7rem;
-  padding: 0.75rem 0.9rem; border-bottom: 1px solid var(--b);
-  cursor: pointer; background: var(--s2); transition: background 0.1s;
+  display: flex; align-items: center; gap: 0.65rem;
+  padding: 0.75rem 0.9rem; cursor: pointer; background: var(--s2);
 }
-.site-list-item:last-child { border-bottom: none; }
 .site-list-item:active { background: var(--s3); }
-.site-list-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
-.site-list-name { flex: 1; font-size: 0.84rem; font-weight: 600; color: var(--t); }
-.site-list-mi { font-size: 0.7rem; color: var(--t2); font-weight: 500; }
-.sheet-row { display: flex; gap: 0.6rem; flex-shrink: 0; }
+.site-list-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+.site-list-name { flex: 1; font-size: 0.84rem; font-weight: 600; }
+.site-list-mi { font-size: 0.7rem; color: var(--t2); }
+.sheet-row { display: flex; gap: 0.55rem; }
 .sheet-cancel {
-  flex: 1; background: var(--s2); border: 1px solid var(--b2);
-  color: var(--t2); font-weight: 600; font-size: 0.86rem;
-  border-radius: 12px; padding: 0.85rem;
+  flex: 1; background: var(--s2); color: var(--t2);
+  font-weight: 600; font-size: 0.86rem; border-radius: 12px; padding: 0.85rem;
 }
 .sheet-confirm {
   flex: 2; background: var(--red); color: #fff;
-  font-weight: 700; font-size: 0.86rem;
-  border-radius: 12px; padding: 0.85rem;
+  font-weight: 700; font-size: 0.86rem; border-radius: 12px; padding: 0.85rem;
 }
 
 .toast {
   position: fixed; bottom: calc(1.6rem + env(safe-area-inset-bottom));
   left: 50%; transform: translateX(-50%);
-  background: var(--s3); border: 1px solid var(--b2);
-  color: var(--t); font-size: 0.8rem; font-weight: 600;
+  background: var(--s3); color: var(--t); font-size: 0.8rem; font-weight: 600;
   padding: 0.55rem 1.2rem; border-radius: 22px;
   z-index: 500; white-space: nowrap; display: none;
   pointer-events: none; animation: toastIn 0.2s ease;
@@ -464,8 +430,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-thumb { background: var(--s3); }
+::-webkit-scrollbar { width: 0; }
 </style>
 </head>
 <body>
@@ -474,9 +439,9 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 <!-- AUTH -->
 <div id="auth-screen" class="screen active">
   <div class="auth-logo">
-    <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+    <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
       <circle cx="20" cy="15" r="9" fill="#E74C3C"/>
-      <circle cx="20" cy="15" r="3.5" fill="#0F0F0F"/>
+      <circle cx="20" cy="15" r="3.4" fill="#0C0C0C"/>
       <path d="M20 24 L11 36 Q20 32 29 36 Z" fill="#E74C3C"/>
     </svg>
   </div>
@@ -496,21 +461,22 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 <div id="main-screen" class="screen">
   <div class="topbar">
     <div class="topbar-logo">
-      <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="7.5" r="4.5" fill="white"/>
-        <circle cx="10" cy="7.5" r="1.7" fill="#E74C3C"/>
+        <circle cx="10" cy="7.5" r="1.6" fill="#E74C3C"/>
         <path d="M10 12 L5 19 Q10 16.5 15 19 Z" fill="white"/>
       </svg>
     </div>
     <button class="topbar-date" id="topbar-date">Today</button>
     <button class="topbar-gear" id="settings-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A09A94" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9A9590" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     </button>
   </div>
-  <div class="tabs">
+
+  <div class="tabs" style="margin-bottom: 0.4rem;">
     <button class="tab active" data-tab="day">Today</button>
     <button class="tab" data-tab="log">Log</button>
     <button class="tab" data-tab="export">Export</button>
@@ -763,14 +729,14 @@ auth.onAuthStateChanged(async u => {
 });
 document.getElementById('signout-btn').addEventListener('click', () => auth.signOut());
 
-/* TABS */
+/* TABS — strict separation */
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
 function switchTab(t) {
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
   document.querySelector('[data-tab="' + t + '"]')?.classList.add('active');
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById(t + '-pane')?.classList.add('active');
-  document.getElementById('settings-pane').classList.remove('active');
+  const target = document.getElementById(t + '-pane');
+  if (target) target.classList.add('active');
   curTab = t;
   if (t === 'log') renderLog();
   if (t === 'export') renderExport();
@@ -794,7 +760,6 @@ function updateDate() {
 }
 document.getElementById('topbar-date').addEventListener('click', showDatePicker);
 
-/* LOAD DAY */
 function loadDay(i) {
   const l = logs[i];
   if (l) {
@@ -806,7 +771,6 @@ function loadDay(i) {
   }
 }
 
-/* AUTO SAVE + CORRECT TOTAL */
 async function autoSave() {
   const i = iso(vDate);
   if (!primary) {
@@ -820,22 +784,18 @@ async function autoSave() {
 
 function calcTotal() {
   if (!primary || primary.miles == null) return 0;
-  // Home → Site1
-  let t = primary.miles;
+  let t = primary.miles; // home → site1
   if (second) {
-    // Site1 → Site2
-    if (second.legMiles != null) t += second.legMiles;
-    // Site2 → Home (real distance, not reusing primary.miles)
-    if (second.returnMiles != null) t += second.returnMiles;
-    else if (primary.miles != null) t += primary.miles; // fallback only
+    if (second.legMiles != null) t += second.legMiles; // site1 → site2
+    if (second.returnMiles != null) t += second.returnMiles; // site2 → home
+    else if (primary.miles != null) t += primary.miles;
   } else {
-    // Site1 → Home
-    t += primary.miles;
+    t += primary.miles; // site1 → home
   }
   return r1(t);
 }
 
-/* ── RENDER DAY ── */
+/* RENDER DAY */
 function renderDay() {
   const c = document.getElementById('journey-content');
   const hasPrimary = !!primary, hasSecond = !!second;
@@ -843,10 +803,9 @@ function renderDay() {
 
   let html = '';
 
-  // Top home
   html += `<div class="j-home-row" id="home-top-row">
     <div class="home-box" id="home-top-box">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A09A94" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9590" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         <polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
@@ -858,15 +817,12 @@ function renderDay() {
   </div>`;
 
   html += '<div class="j-spacer"></div>';
-
-  // Sites zone
   html += '<div class="sites-zone" id="sites-zone">';
 
-  // Primary site card
   html += `<div style="position:relative">
     <div class="site-card ${hasPrimary ? 'has-site' : ''}" id="site-card-1">
       <div class="${hasPrimary ? 'site-card-icon' : 'site-card-empty-icon'}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${hasPrimary ? '#E74C3C' : '#5C5650'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${hasPrimary ? '#E74C3C' : '#5A5550'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="10" r="3"/>
           <path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
         </svg>
@@ -877,10 +833,9 @@ function renderDay() {
       </div>
       <div class="site-card-chev">›</div>
     </div>
-    ${hasPrimary && !hasSecond ? `<button class="add-site-plus" id="add-plus-btn" title="Add second site">+</button>` : ''}
+    ${hasPrimary && !hasSecond ? `<button class="add-site-plus" id="add-plus-btn">+</button>` : ''}
   </div>`;
 
-  // Second site card
   if (hasSecond) {
     html += `<div class="site-card has-site" id="site-card-2">
       <div class="site-card-icon">
@@ -893,18 +848,16 @@ function renderDay() {
         <div class="site-card-name">${second.name}</div>
         <div class="site-card-sub">${second.postcode}</div>
       </div>
-      <button style="background:var(--s3);border:1px solid var(--b2);border-radius:50%;width:26px;height:26px;color:var(--t3);font-size:0.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" id="del-second">✕</button>
+      <button style="background:var(--s3);border-radius:50%;width:26px;height:26px;color:var(--t3);font-size:0.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0" id="del-second">✕</button>
     </div>`;
   }
 
-  html += '</div>'; // /sites-zone
-
+  html += '</div>';
   html += '<div class="j-spacer"></div>';
 
-  // Bottom home + total
   html += `<div class="j-home-row right" id="home-bot-row">
     <div class="home-box" id="home-bot-box">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A09A94" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9590" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         <polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
@@ -918,7 +871,6 @@ function renderDay() {
 
   c.innerHTML = html;
 
-  // Bind events
   document.getElementById('site-card-1')?.addEventListener('click', () => showPicker(false));
   document.getElementById('site-card-2')?.addEventListener('click', () => showPicker(true));
   document.getElementById('add-plus-btn')?.addEventListener('click', e => { e.stopPropagation(); showPicker(true); });
@@ -933,7 +885,7 @@ function renderDay() {
   requestAnimationFrame(drawCurves);
 }
 
-/* ── DRAW CURVES (cleaner, stronger paths) ── */
+/* DRAW CURVES */
 function drawCurves() {
   const pane = document.getElementById('day-pane');
   const svg = document.getElementById('track-svg');
@@ -951,11 +903,8 @@ function drawCurves() {
     return {
       cx: r.left + r.width / 2 - paneRect.left,
       cy: r.top + r.height / 2 - paneRect.top,
-      left: r.left - paneRect.left,
-      right: r.right - paneRect.left,
       top: r.top - paneRect.top,
-      bottom: r.bottom - paneRect.top,
-      w: r.width, h: r.height
+      bottom: r.bottom - paneRect.top
     };
   }
 
@@ -963,48 +912,44 @@ function drawCurves() {
   const ht = rel(homeTop), hb = rel(homeBot), c1 = rel(card1);
   const c2 = card2 ? rel(card2) : null;
 
-  const strokeColor = 'rgba(231,76,60,0.55)';
-  const strokeW = 2.6;
+  const strokeColor = 'rgba(231,76,60,0.5)';
+  const strokeW = 2.4;
   let pathsHTML = '';
 
-  function curvePath(x1, y1, x2, y2, flipCtrl) {
+  function curvePath(x1, y1, x2, y2, flip) {
     const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2;
     const dx = x2 - x1, dy = y2 - y1;
     const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-    const bulge = Math.min(dist * 0.42, 70);
-    const perp = flipCtrl ? 1 : -1;
+    const bulge = Math.min(dist * 0.4, 65);
+    const perp = flip ? 1 : -1;
     const px = -dy / dist * bulge * perp;
     const py = dx / dist * bulge * perp;
     return `M ${x1} ${y1} Q ${midX + px} ${midY + py} ${x2} ${y2}`;
   }
 
   function qMid(x1, y1, cpx, cpy, x2, y2) {
-    return {
-      x: 0.25 * x1 + 0.5 * cpx + 0.25 * x2,
-      y: 0.25 * y1 + 0.5 * cpy + 0.25 * y2
-    };
+    return { x: 0.25 * x1 + 0.5 * cpx + 0.25 * x2, y: 0.25 * y1 + 0.5 * cpy + 0.25 * y2 };
   }
-  function getCP(x1, y1, x2, y2, flipCtrl) {
+  function getCP(x1, y1, x2, y2, flip) {
     const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2;
     const dx = x2 - x1, dy = y2 - y1;
     const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-    const bulge = Math.min(dist * 0.42, 70);
-    const perp = flipCtrl ? 1 : -1;
+    const bulge = Math.min(dist * 0.4, 65);
+    const perp = flip ? 1 : -1;
     return { cpx: midX + (-dy / dist * bulge * perp), cpy: midY + (dx / dist * bulge * perp) };
   }
 
   function badge(x, y, text, dim) {
-    const w = text.length > 4 ? 52 : 46;
-    return `<rect x="${x - w / 2}" y="${y - 11}" width="${w}" height="22" rx="11"
-      fill="#1A1A1A" stroke="rgba(255,255,255,0.12)" stroke-width="1.4"/>
-    <text x="${x}" y="${y + 4}" text-anchor="middle" font-family="Inter,sans-serif"
-      font-size="10.5" font-weight="700" fill="${dim ? '#5C5650' : '#E74C3C'}">${text}</text>`;
+    const w = text.length > 4 ? 50 : 44;
+    return `<rect x="${x - w / 2}" y="${y - 10}" width="${w}" height="20" rx="10"
+      fill="#161616"/>
+    <text x="${x}" y="${y + 3.5}" text-anchor="middle" font-family="Inter,sans-serif"
+      font-size="10" font-weight="700" fill="${dim ? '#5A5550' : '#E74C3C'}">${text}</text>`;
   }
 
   const hasPrimary = !!primary, hasSecond = !!second;
 
   if (hasPrimary) {
-    // Home top → card 1
     const x1 = ht.cx, y1 = ht.bottom;
     const x2 = c1.cx, y2 = c1.top;
     const { cpx, cpy } = getCP(x1, y1, x2, y2, false);
@@ -1013,7 +958,6 @@ function drawCurves() {
     pathsHTML += badge(mid1.x, mid1.y, primary.miles != null ? primary.miles + ' mi' : '···', primary.miles == null);
 
     if (hasSecond && c2) {
-      // Card 1 → Card 2
       const lx1 = c1.cx, ly1 = c1.bottom;
       const lx2 = c2.cx, ly2 = c2.top;
       const { cpx: cp2x, cpy: cp2y } = getCP(lx1, ly1, lx2, ly2, true);
@@ -1021,7 +965,6 @@ function drawCurves() {
       pathsHTML += `<path d="${curvePath(lx1, ly1, lx2, ly2, true)}" fill="none" stroke="${strokeColor}" stroke-width="${strokeW}" stroke-linecap="round"/>`;
       pathsHTML += badge(mid2.x, mid2.y, second.legMiles != null ? second.legMiles + ' mi' : '···', second.legMiles == null);
 
-      // Card 2 → Home bottom (real return distance)
       const rx1 = c2.cx, ry1 = c2.bottom;
       const rx2 = hb.cx, ry2 = hb.top;
       const { cpx: cp3x, cpy: cp3y } = getCP(rx1, ry1, rx2, ry2, false);
@@ -1030,7 +973,6 @@ function drawCurves() {
       const ret = second.returnMiles != null ? second.returnMiles : (primary.miles != null ? primary.miles : null);
       pathsHTML += badge(mid3.x, mid3.y, ret != null ? ret + ' mi' : '···', ret == null);
     } else {
-      // Card 1 → Home bottom
       const rx1 = c1.cx, ry1 = c1.bottom;
       const rx2 = hb.cx, ry2 = hb.top;
       const { cpx: cp3x, cpy: cp3y } = getCP(rx1, ry1, rx2, ry2, false);
@@ -1039,12 +981,11 @@ function drawCurves() {
       pathsHTML += badge(mid3.x, mid3.y, primary.miles != null ? primary.miles + ' mi' : '···', primary.miles == null);
     }
   } else {
-    // Empty state: soft dashed curve
     const x1 = ht.cx, y1 = ht.bottom;
     const x2 = hb.cx, y2 = hb.top;
     const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2;
-    pathsHTML += `<path d="M ${x1} ${y1} Q ${midX + 36} ${midY} ${x2} ${y2}" fill="none"
-      stroke="rgba(255,255,255,0.06)" stroke-width="2" stroke-dasharray="5,6" stroke-linecap="round"/>`;
+    pathsHTML += `<path d="M ${x1} ${y1} Q ${midX + 32} ${midY} ${x2} ${y2}" fill="none"
+      stroke="rgba(255,255,255,0.05)" stroke-width="2" stroke-dasharray="5,6" stroke-linecap="round"/>`;
   }
 
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -1066,7 +1007,7 @@ function showPicker(isSecond) {
     <div class="sheet-title">${isSecond ? 'Second site' : 'Select site'}</div>
     <div class="site-search-wrap">
       <div class="site-search-bar">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5C5650" stroke-width="2.2">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A5550" stroke-width="2.2">
           <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
         </svg>
         <input id="sp-s" placeholder="Search…" autocomplete="off">
@@ -1153,18 +1094,10 @@ function renderLog() {
     const l = logs[i];
     const stops = [{ t: 'h', name: 'Home' }];
     if (l.primary) {
-      stops.push({
-        t: 's',
-        name: l.primary.name,
-        mi: l.primary.miles != null ? l.primary.miles + ' mi' : ''
-      });
+      stops.push({ t: 's', name: l.primary.name, mi: l.primary.miles != null ? l.primary.miles + ' mi' : '' });
     }
     if (l.second) {
-      stops.push({
-        t: 's',
-        name: l.second.name,
-        mi: l.second.legMiles != null ? l.second.legMiles + ' mi leg' : ''
-      });
+      stops.push({ t: 's', name: l.second.name, mi: l.second.legMiles != null ? l.second.legMiles + ' mi leg' : '' });
     }
     stops.push({ t: 'h', name: 'Home' });
     return `<div class="log-card">
@@ -1371,7 +1304,6 @@ document.getElementById('edit-home-btn').addEventListener('click', () => {
   }, 50);
 });
 
-/* DATE PICKER */
 function showDatePicker() {
   const i = iso(vDate);
   openSheet(`<div class="sheet-handle"></div>
@@ -1407,7 +1339,7 @@ function closeSheet() {
   document.getElementById('sheet').innerHTML = '';
 }
 
-/* SWIPE LEFT / RIGHT to change day */
+/* SWIPE */
 (function () {
   const pane = document.getElementById('day-pane');
   let startX = 0, startY = 0, tracking = false;
@@ -1426,15 +1358,12 @@ function closeSheet() {
     const t = e.changedTouches[0];
     const dx = t.clientX - startX;
     const dy = t.clientY - startY;
-    // Require clear horizontal swipe
     if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
 
     if (dx < 0) {
-      // swipe left → next day
       vDate.setDate(vDate.getDate() + 1);
-      if (vDate > new Date()) { vDate = new Date(); toast('Can\'t go past today'); }
+      if (vDate > new Date()) { vDate = new Date(); toast("Can't go past today"); }
     } else {
-      // swipe right → previous day
       vDate.setDate(vDate.getDate() - 1);
     }
     loadDay(iso(vDate));
