@@ -14,16 +14,16 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="screen-orientation" content="portrait">
 <title>Journeys</title>
-<!-- APP_VERSION 20260815d -->
-<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-<link rel="apple-touch-icon" sizes="167x167" href="icon-167.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
-<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-<link rel="manifest" href="site.webmanifest?v=20260815d">
+<!-- APP_VERSION 20260815g -->
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=20260815e">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=20260815e">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=20260815e">
+<link rel="apple-touch-icon" sizes="167x167" href="icon-167.png?v=20260815e">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png?v=20260815e">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png?v=20260815e">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=20260815e">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=20260815e">
+<link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -64,35 +64,45 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 /* AUTH */
 #auth-screen{background:var(--bg);align-items:center;justify-content:center;padding:2rem 1.5rem}
-.auth-logo{width:68px;height:68px;border-radius:20px;background:var(--dark);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+.auth-logo{width:68px;height:68px;border-radius:20px;background:var(--dark);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;box-shadow:none}
 .auth-wordmark{font-size:1.5rem;font-weight:800;letter-spacing:-0.04em;color:var(--ink);margin-bottom:0.15rem}
 .auth-sub{font-size:0.65rem;font-weight:600;color:var(--ink2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.8rem}
 .auth-form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:0.5rem}
-.auth-field{background:var(--card);border:none;border-radius:14px;padding:0.9rem 1.05rem;font-size:0.9rem;color:var(--ink);width:100%;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.auth-field{background:var(--card);border:none;border-radius:14px;padding:0.9rem 1.05rem;font-size:0.9rem;color:var(--ink);width:100%;box-shadow:none}
 .auth-field:focus{outline:none;box-shadow:0 0 0 2px var(--dark)}
 .auth-field::placeholder{color:var(--ink3)}
 .auth-err{font-size:0.7rem;color:#C0392B;text-align:center;min-height:1rem}
-.btn-primary{background:var(--dark);color:var(--on-accent);font-weight:700;font-size:0.9rem;padding:0.95rem;border-radius:14px;width:100%;box-shadow:0 4px 14px rgba(0,0,0,0.15)}
+.btn-primary{background:var(--dark);color:var(--on-accent);font-weight:700;font-size:0.9rem;padding:0.95rem;border-radius:14px;width:100%;box-shadow:none}
 .btn-primary:active{opacity:0.88}
 .auth-note{font-size:0.62rem;color:var(--ink2);text-align:center;line-height:1.5;margin-top:0.35rem}
 
 /* TOPBAR */
-.topbar{flex-shrink:0;padding:calc(env(safe-area-inset-top) + 0.5rem) 1.1rem 0.4rem;display:flex;align-items:center;justify-content:space-between;gap:0.55rem}
-.topbar-logo{width:34px;height:34px;border-radius:11px;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.topbar-date{font-size:0.78rem;font-weight:700;color:var(--ink);background:var(--card);border-radius:20px;padding:0.4rem 1rem;flex:1;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-.topbar-gear{width:34px;height:34px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.topbar{flex-shrink:0;padding:calc(env(safe-area-inset-top) + 0.65rem) 1.25rem 0.55rem;display:flex;align-items:center;justify-content:center;gap:0.75rem;position:relative}
+.topbar-gear{
+  position:absolute;left:1.25rem;width:44px;height:44px;border-radius:50%;
+  background:var(--card);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:none;
+}
+.topbar-date{
+  font-size:0.95rem;font-weight:700;color:var(--ink);background:var(--card);
+  border-radius:999px;padding:0.65rem 1.5rem;text-align:center;border:none;min-width:42%;
+}
+.topbar-spacer{width:44px;flex-shrink:0;visibility:hidden}
 
-/* TABS – pill style */
-.tabs{flex-shrink:0;display:flex;gap:0.35rem;margin:0 1.1rem 0.45rem;background:var(--card);border-radius:16px;padding:0.25rem}
-.tab{flex:1;padding:0.55rem 0.15rem;text-align:center;font-size:0.68rem;font-weight:700;color:var(--ink2);letter-spacing:0.02em;border-radius:12px;transition:all 0.15s}
-.tab.active{color:var(--on-accent);background:var(--dark);box-shadow:0 3px 10px rgba(0,0,0,0.08)}
+/* TABS – large flat pills like reference */
+.tabs{flex-shrink:0;display:flex;gap:0.45rem;margin:0.15rem 1.25rem 0.55rem;background:transparent;border-radius:0;padding:0;justify-content:center}
+.tab{
+  flex:1;max-width:120px;padding:0.7rem 0.4rem;text-align:center;
+  font-size:0.8rem;font-weight:700;color:var(--ink2);letter-spacing:0.01em;
+  border-radius:999px;transition:all 0.15s;background:var(--card);
+}
+.tab.active{color:var(--on-accent);background:var(--dark);box-shadow:none}
 
 .tab-pane{display:none!important;flex:1;flex-direction:column;overflow:hidden;min-height:0}
 .tab-pane.active{display:flex!important}
 
 /* ═══ DAY ═══ */
 #day-pane{position:relative;touch-action:pan-y;overflow:hidden}
-.day-body{flex:1;display:flex;flex-direction:column;padding:0.35rem 1.1rem 0;min-height:0;overflow:hidden}
+.day-body{flex:1;display:flex;flex-direction:column;padding:0.4rem 1.35rem 0;min-height:0;overflow:hidden;align-items:stretch}
 
 .train{display:flex;flex-direction:column;flex:1;min-height:0;position:relative}
 
@@ -109,9 +119,8 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 .train-node{display:flex;align-items:center;gap:0.7rem;position:relative;z-index:1;flex-shrink:0}
 .train-dot{
-  width:30px;height:30px;border-radius:50%;background:var(--dark);
+  width:32px;height:32px;border-radius:50%;background:var(--dark);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 2px 8px rgba(0,0,0,0.12);
 }
 .train-info{flex:1;min-width:0}
 .train-lbl{font-size:0.55rem;font-weight:600;color:var(--ink2);letter-spacing:0.06em;text-transform:uppercase}
@@ -122,16 +131,15 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .train-badge{
   margin-left:14px;transform:translateX(-50%);
   background:var(--card);color:var(--ink);font-size:0.64rem;font-weight:700;
-  padding:0.22rem 0.6rem;border-radius:14px;white-space:nowrap;
-  box-shadow:0 2px 8px rgba(0,0,0,0.08);z-index:2;
+  padding:0.22rem 0.6rem;border-radius:999px;white-space:nowrap;z-index:2;
 }
 .train-badge.dim{color:var(--ink3)}
 
 .train-site{position:relative;z-index:1;flex-shrink:0}
 .train-card{
-  width:100%;background:var(--card);border-radius:16px;padding:0.75rem 0.9rem 0.75rem 2.35rem;
+  width:100%;background:var(--card);border-radius:22px;padding:0.85rem 1rem 0.85rem 2.35rem;
   display:flex;align-items:center;gap:0.5rem;cursor:pointer;
-  position:relative;box-shadow:0 3px 12px rgba(0,0,0,0.06);
+  position:relative;box-shadow:none;
 }
 .train-card::before{
   content:'';position:absolute;left:13px;top:0;bottom:0;width:3px;
@@ -174,8 +182,8 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .log-month-row{display:flex;align-items:center;justify-content:space-between;padding:0 0.05rem 0.55rem}
 .log-month-lbl{font-size:0.92rem;font-weight:800;color:var(--ink)}
 .mnav{display:flex;gap:0.3rem}
-.mnav-btn{width:30px;height:30px;border-radius:50%;background:var(--card);color:var(--ink);font-size:0.95rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
-.log-card{background:var(--card);border-radius:16px;margin-bottom:0.4rem;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.mnav-btn{width:30px;height:30px;border-radius:50%;background:var(--card);color:var(--ink);font-size:0.95rem;display:flex;align-items:center;justify-content:center;box-shadow:none}
+.log-card{background:var(--card);border-radius:22px;margin-bottom:0.45rem;overflow:hidden}
 .log-card-head{display:flex;align-items:center;justify-content:space-between;padding:0.7rem 0.95rem}
 .log-card-date{font-size:0.66rem;font-weight:700;color:var(--ink2);letter-spacing:0.03em;text-transform:uppercase}
 .log-card-mi{font-size:1.05rem;font-weight:800;color:var(--ink)}
@@ -194,17 +202,17 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 #stats-pane{overflow:hidden}
 .stats-scroll{flex:1;overflow-y:auto;padding:0.5rem 1.1rem calc(0.7rem + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
 .stats-toggle{display:flex;gap:0.3rem;margin-bottom:0.7rem;background:var(--card);border-radius:16px;padding:0.25rem}
-.stats-toggle button{flex:1;padding:0.5rem;font-size:0.68rem;font-weight:700;border-radius:12px;color:var(--ink2)}
+.stats-toggle button{flex:1;padding:0.7rem;font-size:0.8rem;font-weight:700;border-radius:999px;color:var(--ink2);background:transparent}
 .stats-toggle button.on{background:var(--dark);color:var(--on-accent);box-shadow:0 3px 10px rgba(0,0,0,0.08)}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;margin-bottom:0.75rem}
-.stat-box{background:var(--card);border-radius:16px;padding:0.85rem 0.75rem;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.stat-box{background:var(--card);border-radius:22px;padding:0.95rem 0.75rem;text-align:center}
 .stat-box.dark{background:var(--dark)}
 .stat-box.dark .stat-box-num{color:var(--ink)}
 .stat-box.dark .stat-box-lbl{color:rgba(26,26,26,0.55)}
 .stat-box-num{font-size:1.4rem;font-weight:800;color:var(--ink);display:block;letter-spacing:-0.03em}
 .stat-box-lbl{font-size:0.54rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink3);margin-top:4px;display:block}
 .stats-sec{font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink2);margin:0.4rem 0 0.4rem}
-.stats-row{background:var(--card);border-radius:14px;padding:0.7rem 0.95rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:0.35rem;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.stats-row{background:var(--card);border-radius:14px;padding:0.7rem 0.95rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:0.35rem;box-shadow:none}
 .stats-row-date{font-size:0.82rem;font-weight:600;color:var(--ink)}
 .stats-row-mi{font-size:0.9rem;font-weight:800;color:var(--ink)}
 .stats-empty{text-align:center;padding:1.5rem;color:var(--ink2);font-size:0.82rem}
@@ -214,7 +222,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .s-back{font-size:0.64rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink2);text-align:left;padding:0.15rem 0;flex-shrink:0}
 .s-title{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;color:var(--ink);margin-bottom:0.15rem;flex-shrink:0}
 .s-sec{font-size:0.58rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink2);margin-top:0.25rem;flex-shrink:0}
-.s-card{background:var(--card);border-radius:16px;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.s-card{background:var(--card);border-radius:22px;overflow:hidden;flex-shrink:0}
 .s-item{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;cursor:pointer}
 .s-item:active{background:var(--card2)}
 .s-item + .s-item{border-top:1px solid var(--card2)}
@@ -233,8 +241,8 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .loc-name{font-size:0.86rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .loc-pc{font-size:0.6rem;color:var(--ink2);margin-top:2px}
 .loc-mi{font-size:0.7rem;font-weight:700;color:var(--ink2);width:48px;text-align:right}
-.loc-del{width:28px;height:28px;border-radius:50%;background:var(--card);font-size:0.7rem;color:var(--ink3);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-.btn-add-loc{background:var(--dark);color:var(--on-accent);font-weight:700;font-size:0.88rem;border-radius:14px;padding:0.9rem 1rem;width:100%;text-align:center;margin-top:0.5rem;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,0.12)}
+.loc-del{width:28px;height:28px;border-radius:50%;background:var(--card);font-size:0.7rem;color:var(--ink3);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:none}
+.btn-add-loc{background:var(--dark);color:var(--on-accent);font-weight:700;font-size:0.88rem;border-radius:14px;padding:0.9rem 1rem;width:100%;text-align:center;margin-top:0.5rem;flex-shrink:0;box-shadow:none}
 .btn-add-loc:active{opacity:0.9}
 
 
@@ -321,18 +329,12 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 <div id="main-screen" class="screen">
   <div class="topbar">
-    <div class="topbar-logo">
-      <svg width="15" height="15" viewBox="0 0 40 40" fill="none">
-        <path d="M20 5.5c-4.7 0-8.5 3.8-8.5 8.5 0 6.4 8.5 15 8.5 15s8.5-8.6 8.5-15c0-4.7-3.8-8.5-8.5-8.5z" fill="#1A1A1A"/>
-        <circle cx="20" cy="14" r="3.1" fill="#C8E86C"/>
-      </svg>
-    </div>
-    <button class="topbar-date" id="topbar-date">Today</button>
-    <button class="topbar-gear" id="settings-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <button class="topbar-gear" id="settings-btn" aria-label="Settings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     </button>
+    <button class="topbar-date" id="topbar-date">Today</button>
   </div>
 
   <div class="tabs" id="main-tabs">
@@ -1002,6 +1004,21 @@ loadDay(iso(vDate));updateDate();renderDay();toast(iso(vDate)===iso(new Date())?
 })();
 
 if(screen.orientation&&screen.orientation.lock){screen.orientation.lock('portrait').catch(()=>{});}
+
+/* Service worker – same folder as this page */
+(function(){
+  if(!('serviceWorker' in navigator))return;
+  const swUrl=new URL('sw.js',window.location.href).pathname+'?v=20260815f';
+  navigator.serviceWorker.register(swUrl,{scope:new URL('./',window.location.href).pathname,updateViaCache:'none'})
+    .then(reg=>{reg.update().catch(()=>{});})
+    .catch(err=>console.warn('SW register failed',err));
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(refreshing)return;
+    refreshing=true;
+    location.reload();
+  });
+})();
 </script>
 </body>
 </html>
