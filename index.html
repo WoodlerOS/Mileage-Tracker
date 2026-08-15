@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0A0A0A">
+<meta name="theme-color" content="#090909">
 <title>Journeys</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,24 +16,11 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0A0A0A;
-  --s1:#141414;
-  --s2:#1C1C1C;
-  --s3:#252525;
-  --s4:#2E2E2E;
-  --t:#F4F2EE;
-  --t2:#9B9690;
-  --t3:#5E5953;
-  --red:#FF3B2F;
-  --red-dim:rgba(255,59,47,0.18);
+  --bg:#090909;--s1:#131313;--s2:#1B1B1B;--s3:#242424;--s4:#2D2D2D;
+  --t:#F3F1ED;--t2:#98948E;--t3:#5A564F;
+  --red:#FF3B2F;--red-dim:rgba(255,59,47,0.16);
 }
-html,body{
-  background:var(--bg);color:var(--t);
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
-  height:100%;overflow:hidden;
-  -webkit-tap-highlight-color:transparent;
-  -webkit-font-smoothing:antialiased;
-}
+html,body{background:var(--bg);color:var(--t);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;height:100%;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 *{ -webkit-user-select:none;user-select:none }
 input,textarea{ -webkit-user-select:text;user-select:text }
 input,select,textarea,button{font-family:inherit;-webkit-appearance:none;appearance:none}
@@ -45,261 +32,184 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 /* AUTH */
 #auth-screen{background:var(--bg);align-items:center;justify-content:center;padding:2rem 1.5rem}
-.auth-logo{width:64px;height:64px;border-radius:16px;background:var(--s1);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
-.auth-wordmark{font-size:1.4rem;font-weight:800;letter-spacing:-0.04em;margin-bottom:0.2rem}
-.auth-sub{font-size:0.65rem;font-weight:600;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2rem}
-.auth-form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:0.5rem}
-.auth-field{background:var(--s1);border:none;border-radius:12px;padding:0.9rem 1rem;font-size:0.9rem;color:var(--t);width:100%}
+.auth-logo{width:60px;height:60px;border-radius:15px;background:var(--s1);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.auth-wordmark{font-size:1.35rem;font-weight:800;letter-spacing:-0.04em;margin-bottom:0.2rem}
+.auth-sub{font-size:0.62rem;font-weight:600;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.8rem}
+.auth-form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:0.45rem}
+.auth-field{background:var(--s1);border:none;border-radius:12px;padding:0.85rem 1rem;font-size:0.9rem;color:var(--t);width:100%}
 .auth-field:focus{outline:none;background:var(--s2)}
 .auth-field::placeholder{color:var(--t3)}
-.auth-err{font-size:0.72rem;color:var(--red);text-align:center;min-height:1.1rem}
-.btn-red{background:var(--red);color:#fff;font-weight:700;font-size:0.9rem;padding:0.95rem;border-radius:12px;width:100%}
+.auth-err{font-size:0.7rem;color:var(--red);text-align:center;min-height:1rem}
+.btn-red{background:var(--red);color:#fff;font-weight:700;font-size:0.88rem;padding:0.9rem;border-radius:12px;width:100%}
 .btn-red:active{opacity:0.85}
-.auth-note{font-size:0.65rem;color:var(--t3);text-align:center;line-height:1.5;margin-top:0.4rem}
+.auth-note{font-size:0.62rem;color:var(--t3);text-align:center;line-height:1.5;margin-top:0.35rem}
 
 /* TOPBAR */
-.topbar{
-  flex-shrink:0;
-  padding:calc(env(safe-area-inset-top) + 0.55rem) 1rem 0.45rem;
-  display:flex;align-items:center;justify-content:space-between;gap:0.6rem;
-  background:var(--bg);
-}
-.topbar-logo{width:30px;height:30px;border-radius:8px;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.topbar-date{font-size:0.75rem;font-weight:600;color:var(--t2);background:var(--s1);border-radius:20px;padding:0.4rem 1rem;flex:1;text-align:center}
-.topbar-gear{width:34px;height:34px;border-radius:50%;background:var(--s1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar{flex-shrink:0;padding:calc(env(safe-area-inset-top) + 0.5rem) 1rem 0.4rem;display:flex;align-items:center;justify-content:space-between;gap:0.55rem;background:var(--bg)}
+.topbar-logo{width:28px;height:28px;border-radius:7px;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar-date{font-size:0.72rem;font-weight:600;color:var(--t2);background:var(--s1);border-radius:18px;padding:0.38rem 0.95rem;flex:1;text-align:center}
+.topbar-gear{width:32px;height:32px;border-radius:50%;background:var(--s1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
 /* TABS */
-.tabs{flex-shrink:0;display:flex;background:var(--s1);margin:0 1rem 0.5rem;border-radius:12px;padding:3px;gap:2px}
-.tab{flex:1;padding:0.55rem 0.2rem;text-align:center;font-size:0.7rem;font-weight:700;color:var(--t3);letter-spacing:0.04em;text-transform:uppercase;border-radius:10px;transition:all 0.15s}
+.tabs{flex-shrink:0;display:flex;background:var(--s1);margin:0 1rem 0.45rem;border-radius:11px;padding:3px;gap:2px}
+.tab{flex:1;padding:0.5rem 0.15rem;text-align:center;font-size:0.68rem;font-weight:700;color:var(--t3);letter-spacing:0.04em;text-transform:uppercase;border-radius:9px}
 .tab.active{color:var(--t);background:var(--s3)}
 
 /* PANES */
 .tab-pane{display:none!important;flex:1;flex-direction:column;overflow:hidden;min-height:0}
 .tab-pane.active{display:flex!important}
 
-/* ══════════ DAY — TRAIN ROUTE ══════════ */
+/* ═══ DAY ═══ */
 #day-pane{position:relative;touch-action:pan-y}
-.day-scroll{
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding:0.6rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom));
-}
+.day-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0.4rem 1rem calc(1rem + env(safe-area-inset-bottom));display:flex;flex-direction:column}
 
-.route{
-  display:flex;flex-direction:column;
-  position:relative;
-}
+.route{display:flex;flex-direction:column;flex:1;min-height:100%;position:relative}
+.route::before{content:'';position:absolute;left:17px;top:24px;bottom:24px;width:2.5px;background:linear-gradient(to bottom,var(--s3),var(--red),var(--s3));border-radius:2px;z-index:0}
 
-/* Vertical line */
-.route::before{
-  content:'';
-  position:absolute;
-  left:19px;top:28px;bottom:28px;
-  width:3px;
-  background:linear-gradient(to bottom,var(--s3),var(--red),var(--s3));
-  border-radius:2px;
-  z-index:0;
-}
+.route-stop{display:flex;align-items:flex-start;gap:0.85rem;position:relative;z-index:1}
+.route-grow{flex:1;min-height:12px}
 
-.route-stop{
-  display:flex;align-items:flex-start;gap:0.9rem;
-  position:relative;z-index:1;
-}
-
-.route-node{
-  width:40px;height:40px;border-radius:50%;
-  background:var(--s2);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  position:relative;
-}
-.route-node.home{background:var(--s2)}
-.route-node.site{background:var(--red-dim);box-shadow:0 0 0 3px rgba(255,59,47,0.12)}
+.route-node{width:36px;height:36px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.route-node.site{background:var(--red-dim);box-shadow:0 0 0 3px rgba(255,59,47,0.1)}
 .route-node.empty{background:var(--s2);border:2px dashed var(--s4)}
 
-.route-body{flex:1;min-width:0;padding-top:2px}
-.route-label{font-size:0.68rem;font-weight:600;color:var(--t3);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:2px}
-.route-name{font-size:0.95rem;font-weight:700;color:var(--t);line-height:1.25}
-.route-name.muted{color:var(--t3);font-weight:500}
-.route-sub{font-size:0.68rem;color:var(--t2);margin-top:2px}
+.route-body{flex:1;min-width:0;padding-top:1px}
+.route-label{font-size:0.62rem;font-weight:600;color:var(--t3);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:1px}
+.route-name{font-size:0.9rem;font-weight:700;line-height:1.25}
+.route-sub{font-size:0.64rem;color:var(--t2);margin-top:1px}
 
-/* Leg mileage between stops */
-.route-leg{
-  display:flex;align-items:center;gap:0.9rem;
-  padding:0.35rem 0;
-  position:relative;z-index:1;
-}
-.route-leg-spacer{width:40px;flex-shrink:0}
-.route-leg-badge{
-  background:var(--s2);
-  color:var(--red);
-  font-size:0.72rem;font-weight:700;
-  padding:0.28rem 0.7rem;
-  border-radius:20px;
-  letter-spacing:0.02em;
-}
+.route-leg{display:flex;align-items:center;gap:0.85rem;padding:0.25rem 0;position:relative;z-index:1}
+.route-leg-sp{width:36px;flex-shrink:0}
+.route-leg-badge{background:var(--s2);color:var(--red);font-size:0.68rem;font-weight:700;padding:0.22rem 0.65rem;border-radius:16px}
 .route-leg-badge.dim{color:var(--t3)}
 
-/* Site card inside route */
-.route-card{
-  background:var(--s1);
-  border-radius:14px;
-  padding:0.85rem 1rem;
-  margin-top:0.15rem;
-  display:flex;align-items:center;gap:0.7rem;
-  cursor:pointer;
-  transition:background 0.12s;
-}
+.route-card{background:var(--s1);border-radius:13px;padding:0.75rem 0.9rem;margin-top:0.1rem;display:flex;align-items:center;gap:0.6rem;cursor:pointer}
 .route-card:active{background:var(--s2)}
 .route-card.active{background:var(--s2)}
 .route-card-text{flex:1;min-width:0}
-.route-card-name{font-size:0.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.route-card-name.placeholder{color:var(--t3);font-weight:500}
-.route-card-pc{font-size:0.66rem;color:var(--t2);margin-top:2px}
-.route-card-action{
-  width:28px;height:28px;border-radius:50%;
-  background:var(--s3);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--t3);font-size:0.75rem;flex-shrink:0;
-}
+.route-card-name{font-size:0.86rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.route-card-name.ph{color:var(--t3);font-weight:500}
+.route-card-pc{font-size:0.62rem;color:var(--t2);margin-top:1px}
+.route-card-btns{display:flex;gap:0.3rem;flex-shrink:0}
+.route-card-btn{width:26px;height:26px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:0.7rem}
 
-/* Add second site button */
-.add-second{
-  margin:0.5rem 0 0.5rem 52px;
-  background:var(--s1);
-  border-radius:12px;
-  padding:0.7rem 1rem;
-  display:flex;align-items:center;gap:0.6rem;
-  cursor:pointer;
-  color:var(--t2);font-size:0.82rem;font-weight:600;
-}
-.add-second:active{background:var(--s2)}
-.add-second-icon{
-  width:26px;height:26px;border-radius:50%;
-  background:var(--red);
-  color:#fff;font-size:1rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-}
+.add-stop{margin:0.4rem 0 0.4rem 48px;background:var(--s1);border-radius:11px;padding:0.6rem 0.9rem;display:flex;align-items:center;gap:0.55rem;cursor:pointer;color:var(--t2);font-size:0.78rem;font-weight:600}
+.add-stop:active{background:var(--s2)}
+.add-stop-icon{width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:0.95rem;font-weight:700;display:flex;align-items:center;justify-content:center}
 
-/* Total bar */
-.total-bar{
-  margin-top:1.1rem;
-  background:var(--s1);
-  border-radius:14px;
-  padding:1rem 1.15rem;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.total-label{font-size:0.72rem;font-weight:600;color:var(--t2);letter-spacing:0.04em;text-transform:uppercase}
-.total-value{font-size:1.6rem;font-weight:800;color:var(--red);letter-spacing:-0.03em}
-.total-unit{font-size:0.75rem;font-weight:600;color:var(--t3);margin-left:4px}
+.total-bar{margin-top:0.9rem;background:var(--s1);border-radius:13px;padding:0.9rem 1.05rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.total-label{font-size:0.68rem;font-weight:600;color:var(--t2);letter-spacing:0.04em;text-transform:uppercase}
+.total-value{font-size:1.5rem;font-weight:800;color:var(--red);letter-spacing:-0.03em}
+.total-unit{font-size:0.7rem;font-weight:600;color:var(--t3);margin-left:3px}
+.empty-hint{text-align:center;padding:1.5rem 1rem;color:var(--t3);font-size:0.82rem;line-height:1.5;flex-shrink:0}
 
-/* Empty hint */
-.empty-hint{
-  text-align:center;padding:2rem 1rem;
-  color:var(--t3);font-size:0.85rem;line-height:1.5;
-}
-
-/* ══════════ LOG ══════════ */
+/* LOG */
 #log-pane{overflow:hidden}
-.log-scroll{flex:1;overflow-y:auto;padding:0.85rem 1rem calc(1.1rem + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
-.log-month-row{display:flex;align-items:center;justify-content:space-between;padding:0 0.1rem 0.85rem}
-.log-month-lbl{font-size:0.95rem;font-weight:700}
-.mnav{display:flex;gap:0.35rem}
-.mnav-btn{width:30px;height:30px;border-radius:50%;background:var(--s1);color:var(--t2);font-size:0.95rem;display:flex;align-items:center;justify-content:center}
-.log-card{background:var(--s1);border-radius:14px;margin-bottom:0.55rem;overflow:hidden}
-.log-card-head{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0.95rem}
-.log-card-date{font-size:0.72rem;font-weight:700;color:var(--t2);letter-spacing:0.03em;text-transform:uppercase}
-.log-card-mi{font-size:1.05rem;font-weight:800;color:var(--red)}
-.log-card-body{padding:0 0.95rem 0.8rem}
-.log-stop{display:flex;align-items:center;gap:0.55rem;padding:0.3rem 0}
-.log-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.log-dot.h{background:var(--t2)}
-.log-dot.s{background:var(--red)}
-.log-stop-name{font-size:0.8rem;font-weight:600;flex:1}
-.log-stop-mi{font-size:0.7rem;color:var(--t2)}
-.log-actions{display:flex;gap:0.4rem;padding-top:0.5rem}
-.log-act{font-size:0.66rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:0.4rem 0.75rem;border-radius:8px;color:var(--t2);background:var(--s2)}
+.log-scroll{flex:1;overflow-y:auto;padding:0.75rem 1rem calc(1rem + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+.log-month-row{display:flex;align-items:center;justify-content:space-between;padding:0 0.05rem 0.75rem}
+.log-month-lbl{font-size:0.9rem;font-weight:700}
+.mnav{display:flex;gap:0.3rem}
+.mnav-btn{width:28px;height:28px;border-radius:50%;background:var(--s1);color:var(--t2);font-size:0.9rem;display:flex;align-items:center;justify-content:center}
+.log-card{background:var(--s1);border-radius:13px;margin-bottom:0.5rem;overflow:hidden}
+.log-card-head{display:flex;align-items:center;justify-content:space-between;padding:0.7rem 0.9rem}
+.log-card-date{font-size:0.68rem;font-weight:700;color:var(--t2);letter-spacing:0.03em;text-transform:uppercase}
+.log-card-mi{font-size:1rem;font-weight:800;color:var(--red)}
+.log-card-body{padding:0 0.9rem 0.7rem}
+.log-stop{display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0}
+.log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.log-dot.h{background:var(--t2)}.log-dot.s{background:var(--red)}
+.log-stop-name{font-size:0.78rem;font-weight:600;flex:1}
+.log-stop-mi{font-size:0.66rem;color:var(--t2)}
+.log-actions{display:flex;gap:0.35rem;padding-top:0.45rem}
+.log-act{font-size:0.62rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:0.35rem 0.65rem;border-radius:7px;color:var(--t2);background:var(--s2)}
 .log-act.del{color:var(--red)}
-.log-empty{text-align:center;padding:3.5rem 1rem;color:var(--t3);font-size:0.85rem}
+.log-empty{text-align:center;padding:3rem 1rem;color:var(--t3);font-size:0.82rem}
 
-/* ══════════ EXPORT ══════════ */
-#export-pane{overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.65rem}
-.exp-stats{background:var(--s1);border-radius:14px;display:flex;overflow:hidden}
-.exp-stat{flex:1;padding:0.9rem 0.4rem;text-align:center}
-.exp-stat-num{font-size:1.4rem;font-weight:800;color:var(--red);letter-spacing:-0.03em;display:block}
-.exp-stat-lbl{font-size:0.56rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--t3);display:block;margin-top:3px}
-.exp-sec-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:0.3rem}
-.exp-btn{background:var(--s1);border-radius:13px;padding:0.9rem 1rem;display:flex;align-items:center;gap:0.75rem}
+/* EXPORT */
+#export-pane{overflow-y:auto;padding:0.9rem 1rem;display:flex;flex-direction:column;gap:0.55rem}
+.exp-stats{background:var(--s1);border-radius:13px;display:flex}
+.exp-stat{flex:1;padding:0.8rem 0.3rem;text-align:center}
+.exp-stat-num{font-size:1.3rem;font-weight:800;color:var(--red);letter-spacing:-0.03em;display:block}
+.exp-stat-lbl{font-size:0.54rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--t3);display:block;margin-top:2px}
+.exp-sec-lbl{font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:0.2rem}
+.exp-btn{background:var(--s1);border-radius:12px;padding:0.8rem 0.9rem;display:flex;align-items:center;gap:0.65rem}
 .exp-btn:active{background:var(--s2)}
-.exp-btn-icon{font-size:1.15rem;width:28px;text-align:center}
+.exp-btn-icon{font-size:1.1rem;width:26px;text-align:center}
 .exp-btn-body{flex:1}
-.exp-btn-title{font-size:0.85rem;font-weight:700}
-.exp-btn-sub{font-size:0.66rem;color:var(--t2);margin-top:2px}
-.exp-arrow{color:var(--t3);font-size:0.9rem}
+.exp-btn-title{font-size:0.82rem;font-weight:700}
+.exp-btn-sub{font-size:0.62rem;color:var(--t2);margin-top:1px}
+.exp-arrow{color:var(--t3);font-size:0.85rem}
 
-/* ══════════ SETTINGS ══════════ */
-#settings-pane{overflow-y:auto;padding:0.75rem 1rem calc(1.1rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0.6rem}
-.s-back{font-size:0.68rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--t2);text-align:left;padding:0.2rem 0}
-.s-title{font-size:1.2rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.15rem}
-.s-sec-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:0.25rem}
-.s-card{background:var(--s1);border-radius:14px;overflow:hidden}
-.s-row{display:flex;align-items:center;gap:0.7rem;padding:0.85rem 0.95rem}
-.s-row-icon{font-size:1.05rem;width:26px;text-align:center}
-.s-row-body{flex:1;min-width:0}
-.s-row-title{font-size:0.85rem;font-weight:600}
-.s-row-sub{font-size:0.65rem;color:var(--t2);margin-top:2px}
-.s-row-act{font-size:0.72rem;font-weight:700;color:var(--red)}
-.site-row{display:flex;align-items:center;gap:0.65rem;padding:0.7rem 0.95rem}
-.site-dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0}
-.site-row-name{flex:1;min-width:0}
-.site-row-title{font-size:0.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.site-row-pc{font-size:0.63rem;color:var(--t2);margin-top:1px}
-.site-row-mi{font-size:0.72rem;font-weight:700;color:var(--t2);width:48px;text-align:right}
-.site-row-del{width:26px;height:26px;border-radius:50%;background:var(--s2);font-size:0.7rem;color:var(--t3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.btn-outline{background:var(--s1);color:var(--t2);font-weight:600;font-size:0.85rem;border-radius:12px;padding:0.82rem 1rem;width:100%}
+/* ═══ SETTINGS (redesigned) ═══ */
+#settings-pane{overflow-y:auto;padding:0.7rem 1rem calc(1rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0.5rem}
+.s-back{font-size:0.65rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--t2);text-align:left;padding:0.15rem 0}
+.s-title{font-size:1.15rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.1rem}
+.s-sec{font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:0.3rem}
+.s-card{background:var(--s1);border-radius:13px;overflow:hidden}
+.s-item{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;cursor:pointer}
+.s-item:active{background:var(--s2)}
+.s-item + .s-item{border-top:1px solid var(--s2)}
+.s-ico{width:36px;height:36px;border-radius:10px;background:var(--s2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.s-item-body{flex:1;min-width:0}
+.s-item-title{font-size:0.88rem;font-weight:600}
+.s-item-sub{font-size:0.64rem;color:var(--t2);margin-top:1px}
+.s-chev{color:var(--t3);font-size:0.9rem}
+
+/* Locations sub-view */
+#locations-view{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+#locations-view.active{display:flex}
+.loc-list{flex:1;overflow-y:auto;padding:0 0 0.5rem}
+.loc-row{display:flex;align-items:center;gap:0.65rem;padding:0.75rem 0.2rem;border-bottom:1px solid var(--s2)}
+.loc-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0}
+.loc-info{flex:1;min-width:0}
+.loc-name{font-size:0.84rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.loc-pc{font-size:0.62rem;color:var(--t2);margin-top:1px}
+.loc-mi{font-size:0.7rem;font-weight:700;color:var(--t2);width:46px;text-align:right}
+.loc-del{width:28px;height:28px;border-radius:50%;background:var(--s2);font-size:0.7rem;color:var(--t3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-flat{background:var(--s1);color:var(--t);font-weight:600;font-size:0.85rem;border-radius:12px;padding:0.85rem 1rem;width:100%;text-align:center;margin-top:0.3rem}
+.btn-flat:active{background:var(--s2)}
+.btn-flat.red{background:var(--red);color:#fff}
 
 /* OVERLAY */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;display:none;align-items:flex-end}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:flex-end}
 .overlay.open{display:flex;animation:fadeIn 0.18s ease}
-.sheet{width:100%;background:var(--s1);border-radius:22px 22px 0 0;padding:0 1.15rem calc(1.3rem + env(safe-area-inset-bottom));max-height:85vh;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;animation:slideUp 0.28s cubic-bezier(0.22,0.9,0.3,1)}
-.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--s4);margin:0.7rem auto 0.1rem}
-.sheet-title{font-size:1rem;font-weight:700}
-.sheet-lbl{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3)}
-.sheet-input{background:var(--s2);border:none;border-radius:12px;padding:0.82rem 0.95rem;font-size:0.9rem;color:var(--t);width:100%}
+.sheet{width:100%;background:var(--s1);border-radius:20px 20px 0 0;padding:0 1.1rem calc(1.2rem + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;display:flex;flex-direction:column;gap:0.7rem;animation:slideUp 0.26s cubic-bezier(0.22,0.9,0.3,1)}
+.sheet-handle{width:34px;height:4px;border-radius:2px;background:var(--s4);margin:0.65rem auto 0.05rem}
+.sheet-title{font-size:0.98rem;font-weight:700}
+.sheet-lbl{font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3)}
+.sheet-input{background:var(--s2);border:none;border-radius:11px;padding:0.8rem 0.9rem;font-size:0.88rem;color:var(--t);width:100%}
 .sheet-input:focus{outline:none;background:var(--s3)}
 .sheet-input::placeholder{color:var(--t3)}
-.site-search-wrap{border-radius:13px;overflow:hidden;background:var(--s2)}
-.site-search-bar{display:flex;align-items:center;gap:0.5rem;padding:0.7rem 0.9rem;background:var(--s3)}
-.site-search-bar input{flex:1;font-size:0.88rem;color:var(--t);background:none}
+.site-search-wrap{border-radius:12px;overflow:hidden;background:var(--s2)}
+.site-search-bar{display:flex;align-items:center;gap:0.45rem;padding:0.65rem 0.85rem;background:var(--s3)}
+.site-search-bar input{flex:1;font-size:0.86rem;color:var(--t);background:none}
 .site-search-bar input::placeholder{color:var(--t3)}
-.site-list-scroll{max-height:240px;overflow-y:auto}
-.site-list-item{display:flex;align-items:center;gap:0.65rem;padding:0.75rem 0.9rem;cursor:pointer;background:var(--s2)}
+.site-list-scroll{max-height:200px;overflow-y:auto}
+.site-list-item{display:flex;align-items:center;gap:0.6rem;padding:0.7rem 0.85rem;cursor:pointer;background:var(--s2)}
 .site-list-item:active{background:var(--s3)}
 .site-list-dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
-.site-list-name{flex:1;font-size:0.84rem;font-weight:600}
-.site-list-mi{font-size:0.7rem;color:var(--t2)}
-.sheet-row{display:flex;gap:0.55rem}
-.sheet-cancel{flex:1;background:var(--s2);color:var(--t2);font-weight:600;font-size:0.86rem;border-radius:12px;padding:0.85rem}
-.sheet-confirm{flex:2;background:var(--red);color:#fff;font-weight:700;font-size:0.86rem;border-radius:12px;padding:0.85rem}
+.site-list-name{flex:1;font-size:0.82rem;font-weight:600}
+.site-list-mi{font-size:0.66rem;color:var(--t2)}
+.sheet-row{display:flex;gap:0.5rem}
+.sheet-cancel{flex:1;background:var(--s2);color:var(--t2);font-weight:600;font-size:0.84rem;border-radius:11px;padding:0.8rem}
+.sheet-confirm{flex:2;background:var(--red);color:#fff;font-weight:700;font-size:0.84rem;border-radius:11px;padding:0.8rem}
+.manual-btn{background:var(--s2);color:var(--t2);font-weight:600;font-size:0.8rem;border-radius:11px;padding:0.7rem;text-align:center;width:100%}
+.manual-btn:active{background:var(--s3)}
 
-.toast{position:fixed;bottom:calc(1.6rem + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--s3);color:var(--t);font-size:0.8rem;font-weight:600;padding:0.55rem 1.2rem;border-radius:22px;z-index:500;white-space:nowrap;display:none;pointer-events:none;animation:toastIn 0.2s ease}
+.toast{position:fixed;bottom:calc(1.5rem + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--s3);color:var(--t);font-size:0.78rem;font-weight:600;padding:0.5rem 1.15rem;border-radius:20px;z-index:500;white-space:nowrap;display:none;pointer-events:none;animation:toastIn 0.2s ease}
 
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
 ::-webkit-scrollbar{width:0}
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- AUTH -->
 <div id="auth-screen" class="screen active">
   <div class="auth-logo">
-    <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-      <circle cx="20" cy="15" r="9" fill="#FF3B2F"/>
-      <circle cx="20" cy="15" r="3.4" fill="#0A0A0A"/>
-      <path d="M20 24 L11 36 Q20 32 29 36 Z" fill="#FF3B2F"/>
-    </svg>
+    <svg width="32" height="32" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="15" r="9" fill="#FF3B2F"/><circle cx="20" cy="15" r="3.3" fill="#090909"/><path d="M20 24 L11 36 Q20 32 29 36 Z" fill="#FF3B2F"/></svg>
   </div>
   <div class="auth-wordmark">Journeys</div>
   <div class="auth-sub">Mileage Tracker</div>
@@ -313,37 +223,23 @@ button{cursor:pointer;border:none;background:none;color:inherit}
   </div>
 </div>
 
-<!-- MAIN -->
 <div id="main-screen" class="screen">
   <div class="topbar">
-    <div class="topbar-logo">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="7.5" r="4.5" fill="white"/>
-        <circle cx="10" cy="7.5" r="1.6" fill="#FF3B2F"/>
-        <path d="M10 12 L5 19 Q10 16.5 15 19 Z" fill="white"/>
-      </svg>
-    </div>
+    <div class="topbar-logo"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7.5" r="4.5" fill="white"/><circle cx="10" cy="7.5" r="1.5" fill="#FF3B2F"/><path d="M10 12 L5 19 Q10 16.5 15 19 Z" fill="white"/></svg></div>
     <button class="topbar-date" id="topbar-date">Today</button>
-    <button class="topbar-gear" id="settings-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9B9690" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-      </svg>
-    </button>
+    <button class="topbar-gear" id="settings-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#98948E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
 
-  <div class="tabs">
+  <div class="tabs" id="main-tabs">
     <button class="tab active" data-tab="day">Today</button>
     <button class="tab" data-tab="log">Log</button>
     <button class="tab" data-tab="export">Export</button>
   </div>
 
-  <!-- DAY -->
   <div id="day-pane" class="tab-pane active">
     <div class="day-scroll" id="day-scroll"></div>
   </div>
 
-  <!-- LOG -->
   <div id="log-pane" class="tab-pane">
     <div class="log-scroll">
       <div class="log-month-row">
@@ -357,7 +253,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     </div>
   </div>
 
-  <!-- EXPORT -->
   <div id="export-pane" class="tab-pane">
     <div class="exp-stats">
       <div class="exp-stat"><span class="exp-stat-num" id="es-wmi">—</span><span class="exp-stat-lbl">Week mi</span></div>
@@ -366,61 +261,62 @@ button{cursor:pointer;border:none;background:none;color:inherit}
       <div class="exp-stat"><span class="exp-stat-num" id="es-md">—</span><span class="exp-stat-lbl">Month days</span></div>
     </div>
     <div class="exp-sec-lbl">Download</div>
-    <div class="exp-btn" id="ex-wcsv">
-      <div class="exp-btn-icon">📊</div>
-      <div class="exp-btn-body"><div class="exp-btn-title">Weekly CSV</div><div class="exp-btn-sub">Current week, one row per day</div></div>
-      <div class="exp-arrow">›</div>
-    </div>
-    <div class="exp-btn" id="ex-mcsv">
-      <div class="exp-btn-icon">📅</div>
-      <div class="exp-btn-body"><div class="exp-btn-title">Monthly CSV</div><div class="exp-btn-sub">Full month summary</div></div>
-      <div class="exp-arrow">›</div>
-    </div>
+    <div class="exp-btn" id="ex-wcsv"><div class="exp-btn-icon">📊</div><div class="exp-btn-body"><div class="exp-btn-title">Weekly CSV</div><div class="exp-btn-sub">Current week</div></div><div class="exp-arrow">›</div></div>
+    <div class="exp-btn" id="ex-mcsv"><div class="exp-btn-icon">📅</div><div class="exp-btn-body"><div class="exp-btn-title">Monthly CSV</div><div class="exp-btn-sub">Full month</div></div><div class="exp-arrow">›</div></div>
     <div class="exp-sec-lbl">Copy as text</div>
-    <div class="exp-btn" id="ex-wtxt">
-      <div class="exp-btn-icon">📋</div>
-      <div class="exp-btn-body"><div class="exp-btn-title">Copy this week</div><div class="exp-btn-sub">Paste into email or expenses</div></div>
-      <div class="exp-arrow">›</div>
-    </div>
-    <div class="exp-btn" id="ex-mtxt">
-      <div class="exp-btn-icon">📝</div>
-      <div class="exp-btn-body"><div class="exp-btn-title">Copy this month</div><div class="exp-btn-sub">Plain text, all logged days</div></div>
-      <div class="exp-arrow">›</div>
-    </div>
+    <div class="exp-btn" id="ex-wtxt"><div class="exp-btn-icon">📋</div><div class="exp-btn-body"><div class="exp-btn-title">Copy this week</div><div class="exp-btn-sub">Paste into email</div></div><div class="exp-arrow">›</div></div>
+    <div class="exp-btn" id="ex-mtxt"><div class="exp-btn-icon">📝</div><div class="exp-btn-body"><div class="exp-btn-title">Copy this month</div><div class="exp-btn-sub">All logged days</div></div><div class="exp-arrow">›</div></div>
   </div>
 
-  <!-- SETTINGS -->
+  <!-- SETTINGS (main) -->
   <div id="settings-pane" class="tab-pane">
     <button class="s-back" id="settings-back">← Back</button>
     <div class="s-title">Settings</div>
 
-    <div class="s-sec-lbl">Account</div>
+    <div class="s-sec">Account</div>
     <div class="s-card">
-      <div class="s-row">
-        <div class="s-row-icon">👤</div>
-        <div class="s-row-body">
-          <div class="s-row-title" id="s-email">—</div>
-          <div class="s-row-sub">Signed in</div>
+      <div class="s-item" style="cursor:default">
+        <div class="s-ico">👤</div>
+        <div class="s-item-body">
+          <div class="s-item-title" id="s-email">—</div>
+          <div class="s-item-sub">Signed in</div>
         </div>
-        <button class="s-row-act" id="signout-btn">Sign out</button>
+        <button class="s-item-title" style="color:var(--red);font-size:0.75rem;font-weight:700" id="signout-btn">Sign out</button>
       </div>
     </div>
 
-    <div class="s-sec-lbl">Home postcode</div>
+    <div class="s-sec">Home</div>
     <div class="s-card">
-      <div class="s-row">
-        <div class="s-row-icon">🏠</div>
-        <div class="s-row-body">
-          <div class="s-row-title" id="s-home-pc">BL5 2RX</div>
-          <div class="s-row-sub">Journey start &amp; end</div>
+      <div class="s-item" id="edit-home-btn">
+        <div class="s-ico">🏠</div>
+        <div class="s-item-body">
+          <div class="s-item-title" id="s-home-pc">BL5 2RX</div>
+          <div class="s-item-sub">Default start &amp; end</div>
         </div>
-        <button class="s-row-act" id="edit-home-btn">Edit</button>
+        <div class="s-chev">›</div>
       </div>
     </div>
 
-    <div class="s-sec-lbl">Sites</div>
-    <div class="s-card" id="sites-list"></div>
-    <button class="btn-outline" id="add-site-btn">+ Add site</button>
+    <div class="s-sec">Locations</div>
+    <div class="s-card">
+      <div class="s-item" id="open-locations">
+        <div class="s-ico">📍</div>
+        <div class="s-item-body">
+          <div class="s-item-title">Manage locations</div>
+          <div class="s-item-sub" id="s-loc-count">0 saved</div>
+        </div>
+        <div class="s-chev">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATIONS SUBMENU -->
+  <div id="locations-view" class="tab-pane">
+    <button class="s-back" id="locations-back">← Settings</button>
+    <div class="s-title">Locations</div>
+    <div class="s-sec">Saved sites</div>
+    <div class="loc-list" id="loc-list"></div>
+    <button class="btn-flat" id="add-loc-btn">+ Add location</button>
   </div>
 </div>
 </div>
@@ -429,709 +325,457 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 <div class="toast" id="toast"></div>
 
 <script>
-const INVITE = 'J2026';
-const FC = {
-  apiKey: "AIzaSyBPVj8TRblvCM4yeJVHL_EFUd71yiow9PI",
-  authDomain: "mileage-tracker-d0d31.firebaseapp.com",
-  projectId: "mileage-tracker-d0d31",
-  storageBucket: "mileage-tracker-d0d31.firebasestorage.app",
-  messagingSenderId: "825371829472",
-  appId: "1:825371829472:web:7b53c4e13d086b0e0cdc85"
-};
+const INVITE='J2026';
+const FC={apiKey:"AIzaSyBPVj8TRblvCM4yeJVHL_EFUd71yiow9PI",authDomain:"mileage-tracker-d0d31.firebaseapp.com",projectId:"mileage-tracker-d0d31",storageBucket:"mileage-tracker-d0d31.firebasestorage.app",messagingSenderId:"825371829472",appId:"1:825371829472:web:7b53c4e13d086b0e0cdc85"};
 firebase.initializeApp(FC);
-const auth = firebase.auth(), db = firebase.firestore();
-try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch (e) {}
-const ORS = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImYzZjEzMzA4MzcyZTRmYWFhZGQxMDA2NWVhZTdjNmQ2IiwiaCI6Im11cm11cjY0In0=';
+const auth=firebase.auth(),db=firebase.firestore();
+try{db.enablePersistence({synchronizeTabs:true}).catch(()=>{});}catch(e){}
+const ORS='eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImYzZjEzMzA4MzcyZTRmYWFhZGQxMDA2NWVhZTdjNmQ2IiwiaCI6Im11cm11cjY0In0=';
 
-const DS = [
-  { id: 'rluh', name: 'Royal Liverpool University Hospital', postcode: 'L7 8YE', miles: null },
-  { id: 'lhch', name: 'Liverpool Heart & Chest Hospital', postcode: 'L14 3PE', miles: null },
-  { id: 'coch', name: 'Countess of Chester Hospital', postcode: 'CH2 1UL', miles: null },
-  { id: 'arrowe', name: 'Arrowe Park Hospital', postcode: 'CH49 5PE', miles: null },
-  { id: 'whiston', name: 'Whiston Hospital', postcode: 'L35 5DR', miles: null },
-  { id: 'mri', name: 'Manchester Royal Infirmary', postcode: 'M13 9WL', miles: null },
-  { id: 'nmgh', name: 'North Manchester General Hospital', postcode: 'M8 5RB', miles: null },
-  { id: 'oldham', name: 'Royal Oldham Hospital', postcode: 'OL1 2JH', miles: null },
-  { id: 'stepping', name: 'Stepping Hill Hospital', postcode: 'SK2 7JE', miles: null },
-  { id: 'tameside', name: 'Tameside General Hospital', postcode: 'OL6 9RW', miles: null },
-  { id: 'christie', name: 'The Christie', postcode: 'M20 4BX', miles: null },
-  { id: 'spireliv', name: 'Spire Liverpool', postcode: 'L18 1HQ', miles: null },
-  { id: 'lgi', name: 'Leeds General Infirmary', postcode: 'LS1 3EX', miles: null },
-  { id: 'barnsley', name: 'Barnsley Hospital', postcode: 'S75 2EP', miles: null },
-  { id: 'leicester', name: 'Leicester Royal Infirmary', postcode: 'LE1 5WW', miles: null },
-  { id: 'spirehull', name: 'Spire Hull & East Riding', postcode: 'HU10 7AZ', miles: null },
-  { id: 'hudds', name: 'Huddersfield Royal Infirmary', postcode: 'HD3 3EA', miles: null },
-  { id: 'sthelens', name: 'St Helens Hospital', postcode: 'WA9 3DA', miles: null },
+const DS=[
+  {id:'rluh',name:'Royal Liverpool University Hospital',postcode:'L7 8YE',miles:null},
+  {id:'lhch',name:'Liverpool Heart & Chest Hospital',postcode:'L14 3PE',miles:null},
+  {id:'coch',name:'Countess of Chester Hospital',postcode:'CH2 1UL',miles:null},
+  {id:'arrowe',name:'Arrowe Park Hospital',postcode:'CH49 5PE',miles:null},
+  {id:'whiston',name:'Whiston Hospital',postcode:'L35 5DR',miles:null},
+  {id:'mri',name:'Manchester Royal Infirmary',postcode:'M13 9WL',miles:null},
+  {id:'nmgh',name:'North Manchester General Hospital',postcode:'M8 5RB',miles:null},
+  {id:'oldham',name:'Royal Oldham Hospital',postcode:'OL1 2JH',miles:null},
+  {id:'stepping',name:'Stepping Hill Hospital',postcode:'SK2 7JE',miles:null},
+  {id:'tameside',name:'Tameside General Hospital',postcode:'OL6 9RW',miles:null},
+  {id:'christie',name:'The Christie',postcode:'M20 4BX',miles:null},
+  {id:'spireliv',name:'Spire Liverpool',postcode:'L18 1HQ',miles:null},
+  {id:'lgi',name:'Leeds General Infirmary',postcode:'LS1 3EX',miles:null},
+  {id:'barnsley',name:'Barnsley Hospital',postcode:'S75 2EP',miles:null},
+  {id:'leicester',name:'Leicester Royal Infirmary',postcode:'LE1 5WW',miles:null},
+  {id:'spirehull',name:'Spire Hull & East Riding',postcode:'HU10 7AZ',miles:null},
+  {id:'hudds',name:'Huddersfield Royal Infirmary',postcode:'HD3 3EA',miles:null},
+  {id:'sthelens',name:'St Helens Hospital',postcode:'WA9 3DA',miles:null},
 ];
 
-let user = null, sites = [], homePC = 'BL5 2RX', logs = {};
-let vDate = new Date(), logMon = new Date(), curTab = 'day';
-let primary = null, second = null;
+let user=null,sites=[],homePC='BL5 2RX',logs={};
+let vDate=new Date(),logMon=new Date(),curTab='day';
+// stops: array of {id,name,postcode,fromPrev}  (fromPrev = miles from previous point)
+let stops=[];
+let dayHome=null; // optional override for the day
 
-const pad = n => String(n).padStart(2, '0');
-const iso = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-const r1 = n => Math.round(n * 10) / 10;
-const fmtD = i => new Date(i + 'T00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-const fmtS = i => new Date(i + 'T00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const r1=n=>Math.round(n*10)/10;
+const fmtD=i=>new Date(i+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+const fmtS=i=>new Date(i+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+const effectiveHome=()=>dayHome||homePC;
 
-let _tt = null;
-function toast(m) {
-  const e = document.getElementById('toast');
-  e.textContent = m; e.style.display = 'block';
-  clearTimeout(_tt); _tt = setTimeout(() => e.style.display = 'none', 2400);
-}
+let _tt=null;
+function toast(m){const e=document.getElementById('toast');e.textContent=m;e.style.display='block';clearTimeout(_tt);_tt=setTimeout(()=>e.style.display='none',2400);}
 
-const _dc = {};
-async function pcXY(pc) {
-  const k = 'c:' + pc.trim().toUpperCase();
-  if (_dc[k]) return _dc[k];
-  try {
-    const r = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(pc.trim()));
-    const j = await r.json();
-    if (j.status === 200) {
-      const c = [j.result.longitude, j.result.latitude];
-      _dc[k] = c; return c;
-    }
-  } catch (e) {}
-  return null;
-}
-async function miles(a, b) {
-  const k = a + '|' + b;
-  if (_dc[k] != null) return _dc[k];
-  try {
-    const [ca, cb] = await Promise.all([pcXY(a), pcXY(b)]);
-    if (!ca || !cb) return null;
-    const r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json', {
-      method: 'POST',
-      headers: { 'Authorization': ORS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ coordinates: [ca, cb] })
-    });
-    const j = await r.json();
-    if (j.routes && j.routes[0]) {
-      const m = r1(j.routes[0].summary.distance / 1609.344);
-      _dc[k] = m; _dc[b + '|' + a] = m;
-      return m;
-    }
-  } catch (e) {}
-  return null;
-}
+const _dc={};
+async function pcXY(pc){const k='c:'+pc.trim().toUpperCase();if(_dc[k])return _dc[k];try{const r=await fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(pc.trim()));const j=await r.json();if(j.status===200){const c=[j.result.longitude,j.result.latitude];_dc[k]=c;return c;}}catch(e){}return null;}
+async function miles(a,b){const k=a+'|'+b;if(_dc[k]!=null)return _dc[k];try{const[ca,cb]=await Promise.all([pcXY(a),pcXY(b)]);if(!ca||!cb)return null;const r=await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json',{method:'POST',headers:{'Authorization':ORS,'Content-Type':'application/json'},body:JSON.stringify({coordinates:[ca,cb]})});const j=await r.json();if(j.routes&&j.routes[0]){const m=r1(j.routes[0].summary.distance/1609.344);_dc[k]=m;_dc[b+'|'+a]=m;return m;}}catch(e){}return null;}
 
-async function save(d) {
-  if (!user) return;
-  try { await db.collection('users').doc(user.uid).set(d, { merge: true }); } catch (e) {}
-}
-async function load() {
-  if (!user) return;
-  try {
-    const s = await db.collection('users').doc(user.uid).get();
-    if (s.exists) {
-      const d = s.data();
-      sites = (d.sites && d.sites.length) ? d.sites : DS.map(x => ({ ...x }));
-      homePC = d.homePC || 'BL5 2RX';
-      logs = d.logs || {};
-    } else {
-      sites = DS.map(x => ({ ...x }));
-      homePC = 'BL5 2RX';
-      logs = {};
-      await save({ sites, homePC, logs: {}, approved: true });
-    }
-  } catch (e) {
-    sites = DS.map(x => ({ ...x }));
-    homePC = 'BL5 2RX';
-    logs = {};
-  }
-}
+async function save(d){if(!user)return;try{await db.collection('users').doc(user.uid).set(d,{merge:true});}catch(e){}}
+async function load(){if(!user)return;try{const s=await db.collection('users').doc(user.uid).get();if(s.exists){const d=s.data();sites=(d.sites&&d.sites.length)?d.sites:DS.map(x=>({...x}));homePC=d.homePC||'BL5 2RX';logs=d.logs||{};}else{sites=DS.map(x=>({...x}));homePC='BL5 2RX';logs={};await save({sites,homePC,logs:{},approved:true});}}catch(e){sites=DS.map(x=>({...x}));homePC='BL5 2RX';logs={};}}
 
 /* AUTH */
-document.getElementById('auth-btn').addEventListener('click', async () => {
-  const em = document.getElementById('ae').value.trim();
-  const pw = document.getElementById('ap').value;
-  const inv = document.getElementById('ai').value.trim().toUpperCase();
-  const err = document.getElementById('aerr'); err.textContent = '';
-  if (!em || !pw) { err.textContent = 'Enter email and password.'; return; }
-  try { await auth.signInWithEmailAndPassword(em, pw); }
-  catch (e) {
-    if (['auth/user-not-found', 'auth/invalid-credential', 'auth/wrong-password'].includes(e.code)) {
-      if (inv !== INVITE) { err.textContent = 'New accounts require the invite code.'; return; }
-      try { await auth.createUserWithEmailAndPassword(em, pw); }
-      catch (e2) { err.textContent = e2.message || 'Could not create account.'; }
-    } else { err.textContent = e.message || 'Could not sign in.'; }
-  }
+document.getElementById('auth-btn').addEventListener('click',async()=>{
+  const em=document.getElementById('ae').value.trim(),pw=document.getElementById('ap').value,inv=document.getElementById('ai').value.trim().toUpperCase();
+  const err=document.getElementById('aerr');err.textContent='';
+  if(!em||!pw){err.textContent='Enter email and password.';return;}
+  try{await auth.signInWithEmailAndPassword(em,pw);}
+  catch(e){if(['auth/user-not-found','auth/invalid-credential','auth/wrong-password'].includes(e.code)){if(inv!==INVITE){err.textContent='New accounts require the invite code.';return;}try{await auth.createUserWithEmailAndPassword(em,pw);}catch(e2){err.textContent=e2.message||'Could not create account.';}}else{err.textContent=e.message||'Could not sign in.';}}
 });
-[['ae','ap'],['ap','ai'],['ai',null]].forEach(([id,next]) => {
-  document.getElementById(id).addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      if (next) document.getElementById(next).focus();
-      else document.getElementById('auth-btn').click();
-    }
-  });
-});
+[['ae','ap'],['ap','ai'],['ai',null]].forEach(([id,next])=>{document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter'){if(next)document.getElementById(next).focus();else document.getElementById('auth-btn').click();}});});
 
-auth.onAuthStateChanged(async u => {
-  user = u;
-  if (u) {
-    document.getElementById('auth-screen').classList.remove('active');
-    document.getElementById('main-screen').classList.add('active');
-    document.getElementById('s-email').textContent = u.email || '';
-    await load();
-    updateDate();
-    loadDay(iso(vDate));
-    renderDay();
-    prefetch();
-  } else {
-    document.getElementById('auth-screen').classList.add('active');
-    document.getElementById('main-screen').classList.remove('active');
-  }
+auth.onAuthStateChanged(async u=>{
+  user=u;
+  if(u){document.getElementById('auth-screen').classList.remove('active');document.getElementById('main-screen').classList.add('active');document.getElementById('s-email').textContent=u.email||'';await load();updateDate();loadDay(iso(vDate));renderDay();prefetch();}
+  else{document.getElementById('auth-screen').classList.add('active');document.getElementById('main-screen').classList.remove('active');}
 });
-document.getElementById('signout-btn').addEventListener('click', () => auth.signOut());
+document.getElementById('signout-btn').addEventListener('click',()=>auth.signOut());
 
 /* TABS */
-document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
-function switchTab(t) {
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.querySelector('[data-tab="' + t + '"]')?.classList.add('active');
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  const target = document.getElementById(t + '-pane');
-  if (target) target.classList.add('active');
-  curTab = t;
-  if (t === 'log') renderLog();
-  if (t === 'export') renderExport();
-  if (t === 'day') renderDay();
+document.querySelectorAll('#main-tabs .tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+function switchTab(t){
+  document.querySelectorAll('#main-tabs .tab').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#main-tabs [data-tab="'+t+'"]')?.classList.add('active');
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('locations-view').classList.remove('active');
+  const target=document.getElementById(t+'-pane');
+  if(target)target.classList.add('active');
+  curTab=t;
+  if(t==='log')renderLog();
+  if(t==='export')renderExport();
+  if(t==='day')renderDay();
 }
-document.getElementById('settings-btn').addEventListener('click', () => {
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+document.getElementById('settings-btn').addEventListener('click',()=>{
+  document.querySelectorAll('#main-tabs .tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('locations-view').classList.remove('active');
   document.getElementById('settings-pane').classList.add('active');
-  curTab = 'settings';
-  document.getElementById('s-home-pc').textContent = homePC;
-  renderSites();
+  curTab='settings';
+  document.getElementById('s-home-pc').textContent=homePC;
+  document.getElementById('s-loc-count').textContent=sites.length+' saved';
 });
-document.getElementById('settings-back').addEventListener('click', () => switchTab('day'));
+document.getElementById('settings-back').addEventListener('click',()=>switchTab('day'));
+
+/* Locations submenu */
+document.getElementById('open-locations').addEventListener('click',()=>{
+  document.getElementById('settings-pane').classList.remove('active');
+  document.getElementById('locations-view').classList.add('active');
+  curTab='locations';
+  renderLocations();
+});
+document.getElementById('locations-back').addEventListener('click',()=>{
+  document.getElementById('locations-view').classList.remove('active');
+  document.getElementById('settings-pane').classList.add('active');
+  curTab='settings';
+  document.getElementById('s-loc-count').textContent=sites.length+' saved';
+});
+
+function renderLocations(){
+  const el=document.getElementById('loc-list');
+  if(!sites.length){el.innerHTML='<div style="padding:2rem 0;text-align:center;color:var(--t3);font-size:0.85rem">No locations yet</div>';return;}
+  el.innerHTML=sites.map((s,i)=>`<div class="loc-row">
+    <div class="loc-dot"></div>
+    <div class="loc-info"><div class="loc-name">${s.name}</div><div class="loc-pc">${s.postcode}</div></div>
+    <div class="loc-mi">${s.miles!=null?s.miles+' mi':'···'}</div>
+    <button class="loc-del" data-i="${i}">✕</button>
+  </div>`).join('');
+  el.querySelectorAll('.loc-del').forEach(btn=>{
+    btn.onclick=async()=>{
+      const i=parseInt(btn.dataset.i,10);
+      if(!confirm('Remove "'+sites[i].name+'"?'))return;
+      sites.splice(i,1);await save({sites});renderLocations();
+    };
+  });
+}
+
+document.getElementById('add-loc-btn').addEventListener('click',()=>{
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Add location</div>
+    <div><div class="sheet-lbl" style="margin-bottom:0.25rem">Name</div><input id="nl-n" class="sheet-input" placeholder="Hospital or site name"></div>
+    <div><div class="sheet-lbl" style="margin-bottom:0.25rem">Postcode</div><input id="nl-p" class="sheet-input" placeholder="e.g. BL4 0JR" style="text-transform:uppercase"></div>
+    <div class="sheet-row"><button class="sheet-cancel" id="nl-x">Cancel</button><button class="sheet-confirm" id="nl-ok">Add</button></div>`);
+  setTimeout(()=>{
+    document.getElementById('nl-x').onclick=closeSheet;
+    document.getElementById('nl-ok').onclick=async()=>{
+      const n=document.getElementById('nl-n').value.trim(),p=document.getElementById('nl-p').value.trim().toUpperCase();
+      if(!n||!p){toast('Enter name and postcode');return;}
+      const ns={id:'c_'+Date.now(),name:n,postcode:p,miles:null};
+      sites.push(ns);closeSheet();renderLocations();
+      const m=await miles(homePC,p);if(m!=null)ns.miles=m;
+      await save({sites});renderLocations();toast('Location added');
+    };
+    document.getElementById('nl-n').focus();
+  },40);
+});
 
 /* DATE */
-function updateDate() {
-  const i = iso(vDate), today = iso(new Date());
-  document.getElementById('topbar-date').textContent = i === today ? 'Today' : fmtS(i);
-}
-document.getElementById('topbar-date').addEventListener('click', showDatePicker);
+function updateDate(){const i=iso(vDate),today=iso(new Date());document.getElementById('topbar-date').textContent=i===today?'Today':fmtS(i);}
+document.getElementById('topbar-date').addEventListener('click',showDatePicker);
 
-function loadDay(i) {
-  const l = logs[i];
-  if (l) {
-    primary = l.primary || null;
-    second = l.second || null;
-  } else {
-    primary = null;
-    second = null;
-  }
-}
-
-async function autoSave() {
-  const i = iso(vDate);
-  if (!primary) {
-    delete logs[i];
-  } else {
-    logs[i] = { primary, second, total: calcTotal(), date: i, saved: new Date().toISOString() };
-  }
-  await save({ logs });
+function loadDay(i){
+  const l=logs[i];
+  if(l){
+    // migrate old format if needed
+    if(l.stops){stops=l.stops;}
+    else if(l.primary){
+      stops=[{id:l.primary.id,name:l.primary.name,postcode:l.primary.postcode,fromPrev:l.primary.miles}];
+      if(l.second)stops.push({id:l.second.id,name:l.second.name,postcode:l.second.postcode,fromPrev:l.second.legMiles});
+      if(l.third)stops.push({id:l.third.id,name:l.third.name,postcode:l.third.postcode,fromPrev:l.third.legMiles});
+    }else{stops=[];}
+    dayHome=l.dayHome||null;
+  }else{stops=[];dayHome=null;}
 }
 
-function calcTotal() {
-  if (!primary || primary.miles == null) return 0;
-  let t = primary.miles;
-  if (second) {
-    if (second.legMiles != null) t += second.legMiles;
-    if (second.returnMiles != null) t += second.returnMiles;
-    else t += primary.miles;
-  } else {
-    t += primary.miles;
-  }
+async function autoSave(){
+  const i=iso(vDate);
+  if(!stops.length){delete logs[i];}
+  else{logs[i]={stops,dayHome,total:calcTotal(),date:i,saved:new Date().toISOString()};}
+  await save({logs});
+}
+
+function calcTotal(){
+  if(!stops.length)return 0;
+  let t=0;
+  stops.forEach(s=>{if(s.fromPrev!=null)t+=s.fromPrev;});
+  // return home
+  const last=stops[stops.length-1];
+  if(last.returnMiles!=null)t+=last.returnMiles;
+  else if(stops[0].fromPrev!=null && stops.length===1)t+=stops[0].fromPrev;
   return r1(t);
 }
 
-/* ══════════ RENDER DAY — TRAIN ROUTE ══════════ */
-function renderDay() {
-  const el = document.getElementById('day-scroll');
-  const hasP = !!primary;
-  const hasS = !!second;
-  const tot = hasP ? calcTotal() : null;
+/* RENDER DAY */
+function renderDay(){
+  const el=document.getElementById('day-scroll');
+  const h=effectiveHome();
+  const n=stops.length;
+  let html='<div class="route">';
 
-  let html = '<div class="route">';
-
-  // HOME (top)
-  html += `
-  <div class="route-stop">
-    <div class="route-node home">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9B9690" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-    </div>
-    <div class="route-body">
-      <div class="route-label">Start</div>
-      <div class="route-name">Home</div>
-      <div class="route-sub">${homePC}</div>
-    </div>
+  // START HOME
+  html+=`<div class="route-stop" id="home-top">
+    <div class="route-node"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98948E" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="route-body"><div class="route-label">Start</div><div class="route-name">Home</div><div class="route-sub">${h}${dayHome?' · today only':''}</div></div>
   </div>`;
 
-  // LEG 1 badge
-  if (hasP) {
-    const m1 = primary.miles != null ? primary.miles + ' mi' : '···';
-    html += `<div class="route-leg"><div class="route-leg-spacer"></div>
-      <div class="route-leg-badge ${primary.miles == null ? 'dim' : ''}">${m1}</div></div>`;
-  } else {
-    html += `<div class="route-leg"><div class="route-leg-spacer"></div></div>`;
-  }
-
-  // SITE 1
-  html += `
-  <div class="route-stop">
-    <div class="route-node ${hasP ? 'site' : 'empty'}">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${hasP ? '#FF3B2F' : '#5E5953'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
-      </svg>
-    </div>
-    <div class="route-body">
-      <div class="route-label">Site 1</div>
-      <div class="route-card ${hasP ? 'active' : ''}" id="card-1">
-        <div class="route-card-text">
-          <div class="route-card-name ${hasP ? '' : 'placeholder'}">${hasP ? primary.name : 'Tap to select site'}</div>
-          <div class="route-card-pc">${hasP ? primary.postcode : 'Choose destination'}</div>
-        </div>
-        <div class="route-card-action">›</div>
-      </div>
-    </div>
-  </div>`;
-
-  // LEG 2 + SITE 2
-  if (hasS) {
-    const m2 = second.legMiles != null ? second.legMiles + ' mi' : '···';
-    html += `<div class="route-leg"><div class="route-leg-spacer"></div>
-      <div class="route-leg-badge ${second.legMiles == null ? 'dim' : ''}">${m2}</div></div>`;
-
-    html += `
+  if(!n){
+    html+=`<div class="route-grow"></div>
+    <div class="route-leg"><div class="route-leg-sp"></div></div>
     <div class="route-stop">
-      <div class="route-node site">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF3B2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
-        </svg>
+      <div class="route-node empty"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5A564F" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg></div>
+      <div class="route-body"><div class="route-label">Site</div>
+        <div class="route-card" id="card-0"><div class="route-card-text"><div class="route-card-name ph">Tap to select site</div><div class="route-card-pc">Choose destination</div></div><div class="route-card-btns"><div class="route-card-btn">›</div></div></div>
       </div>
-      <div class="route-body">
-        <div class="route-label">Site 2</div>
-        <div class="route-card active" id="card-2">
-          <div class="route-card-text">
-            <div class="route-card-name">${second.name}</div>
-            <div class="route-card-pc">${second.postcode}</div>
+    </div>
+    <div class="route-grow"></div>
+    <div class="route-leg"><div class="route-leg-sp"></div></div>`;
+  }else{
+    stops.forEach((s,i)=>{
+      // leg badge
+      const m=s.fromPrev!=null?s.fromPrev+' mi':'···';
+      html+=`<div class="route-grow"></div>
+      <div class="route-leg"><div class="route-leg-sp"></div><div class="route-leg-badge ${s.fromPrev==null?'dim':''}">${m}</div></div>`;
+
+      // stop card
+      html+=`<div class="route-stop">
+        <div class="route-node site"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF3B2F" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg></div>
+        <div class="route-body"><div class="route-label">Site ${i+1}</div>
+          <div class="route-card active" data-idx="${i}">
+            <div class="route-card-text"><div class="route-card-name">${s.name}</div><div class="route-card-pc">${s.postcode}</div></div>
+            <div class="route-card-btns"><button class="route-card-btn del-stop" data-idx="${i}">✕</button></div>
           </div>
-          <button class="route-card-action" id="del-second">✕</button>
         </div>
-      </div>
-    </div>`;
-  } else if (hasP) {
-    html += `<div class="add-second" id="add-second">
-      <div class="add-second-icon">+</div>
-      Add second site
-    </div>`;
-  }
+      </div>`;
+    });
 
-  // RETURN LEG
-  if (hasP) {
-    let retTxt = '···';
-    let dim = true;
-    if (hasS && second.returnMiles != null) {
-      retTxt = second.returnMiles + ' mi';
-      dim = false;
-    } else if (!hasS && primary.miles != null) {
-      retTxt = primary.miles + ' mi';
-      dim = false;
+    // add next if <3
+    if(n<3){
+      html+=`<div class="add-stop" id="add-stop"><div class="add-stop-icon">+</div>Add site ${n+1}</div>`;
     }
-    html += `<div class="route-leg"><div class="route-leg-spacer"></div>
-      <div class="route-leg-badge ${dim ? 'dim' : ''}">${retTxt}</div></div>`;
-  } else {
-    html += `<div class="route-leg"><div class="route-leg-spacer"></div></div>`;
+
+    // return leg
+    const last=stops[n-1];
+    let ret=last.returnMiles!=null?last.returnMiles+' mi':(n===1&&stops[0].fromPrev!=null?stops[0].fromPrev+' mi':'···');
+    let dim=last.returnMiles==null&&!(n===1&&stops[0].fromPrev!=null);
+    html+=`<div class="route-grow"></div>
+    <div class="route-leg"><div class="route-leg-sp"></div><div class="route-leg-badge ${dim?'dim':''}">${ret}</div></div>`;
   }
 
-  // HOME (bottom)
-  html += `
-  <div class="route-stop">
-    <div class="route-node home">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9B9690" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-    </div>
-    <div class="route-body">
-      <div class="route-label">End</div>
-      <div class="route-name">Home</div>
-      <div class="route-sub">${homePC}</div>
-    </div>
+  // END HOME
+  html+=`<div class="route-stop" id="home-bot">
+    <div class="route-node"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98948E" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="route-body"><div class="route-label">End</div><div class="route-name">Home</div><div class="route-sub">${h}${dayHome?' · today only':''}</div></div>
   </div>`;
 
-  html += '</div>'; // .route
+  html+='</div>';
 
-  // TOTAL
-  if (tot) {
-    html += `<div class="total-bar">
-      <div class="total-label">Total distance</div>
-      <div><span class="total-value">${tot}</span><span class="total-unit">mi</span></div>
-    </div>`;
-  } else {
-    html += `<div class="empty-hint">Select a site to start logging<br>your journey for this day</div>`;
-  }
+  const tot=n?calcTotal():null;
+  if(tot)html+=`<div class="total-bar"><div class="total-label">Total distance</div><div><span class="total-value">${tot}</span><span class="total-unit">mi</span></div></div>`;
+  else html+=`<div class="empty-hint">Select a site to start logging<br>your journey for this day</div>`;
 
-  el.innerHTML = html;
+  el.innerHTML=html;
 
-  // Bind
-  document.getElementById('card-1')?.addEventListener('click', () => showPicker(false));
-  document.getElementById('card-2')?.addEventListener('click', () => showPicker(true));
-  document.getElementById('add-second')?.addEventListener('click', () => showPicker(true));
-  document.getElementById('del-second')?.addEventListener('click', async e => {
-    e.stopPropagation();
-    second = null;
-    renderDay();
-    await autoSave();
+  // binds
+  document.getElementById('card-0')?.addEventListener('click',()=>showPicker(0));
+  document.querySelectorAll('.route-card[data-idx]').forEach(c=>{
+    c.addEventListener('click',e=>{if(e.target.closest('.del-stop'))return;showPicker(parseInt(c.dataset.idx));});
   });
+  document.querySelectorAll('.del-stop').forEach(b=>{
+    b.addEventListener('click',async e=>{
+      e.stopPropagation();
+      const i=parseInt(b.dataset.idx);
+      stops.splice(i,1);
+      // recalculate fromPrev chain
+      await recalcStops();
+      renderDay();await autoSave();
+    });
+  });
+  document.getElementById('add-stop')?.addEventListener('click',()=>showPicker(stops.length));
+
+  // long press on homes
+  setupLongPress(document.getElementById('home-top'),()=>editDayHome());
+  setupLongPress(document.getElementById('home-bot'),()=>editDayHome());
 }
 
-/* SITE PICKER */
-function showPicker(isSecond) {
-  const listHtml = () => {
-    const q = (document.getElementById('sp-s')?.value || '').trim().toLowerCase();
-    const f = q ? sites.filter(s => s.name.toLowerCase().includes(q) || s.postcode.toLowerCase().includes(q)) : sites;
-    return f.map(s => `<div class="site-list-item" data-id="${s.id}">
-      <div class="site-list-dot"></div>
-      <div class="site-list-name">${s.name}</div>
-      <div class="site-list-mi">${s.miles != null ? s.miles + ' mi' : ''}</div>
-    </div>`).join('');
+function setupLongPress(el,fn){
+  if(!el)return;
+  let timer=null;
+  el.addEventListener('touchstart',e=>{timer=setTimeout(()=>{timer=null;fn();},550);},{passive:true});
+  el.addEventListener('touchend',()=>{if(timer)clearTimeout(timer);});
+  el.addEventListener('touchmove',()=>{if(timer)clearTimeout(timer);});
+  el.addEventListener('mousedown',()=>{timer=setTimeout(()=>{timer=null;fn();},550);});
+  el.addEventListener('mouseup',()=>{if(timer)clearTimeout(timer);});
+  el.addEventListener('mouseleave',()=>{if(timer)clearTimeout(timer);});
+}
+
+async function recalcStops(){
+  const h=effectiveHome();
+  for(let i=0;i<stops.length;i++){
+    const prev=i===0?h:stops[i-1].postcode;
+    const m=await miles(prev,stops[i].postcode);
+    stops[i].fromPrev=m;
+  }
+  if(stops.length){
+    const last=stops[stops.length-1];
+    last.returnMiles=await miles(last.postcode,h);
+  }
+}
+
+/* PICKER */
+function showPicker(idx){
+  const listHtml=()=>{
+    const q=(document.getElementById('sp-s')?.value||'').trim().toLowerCase();
+    const f=q?sites.filter(s=>s.name.toLowerCase().includes(q)||s.postcode.toLowerCase().includes(q)):sites;
+    return f.map(s=>`<div class="site-list-item" data-id="${s.id}"><div class="site-list-dot"></div><div class="site-list-name">${s.name}</div><div class="site-list-mi">${s.miles!=null?s.miles+' mi':''}</div></div>`).join('');
   };
-  openSheet(`<div class="sheet-handle"></div>
-    <div class="sheet-title">${isSecond ? 'Second site' : 'Select site'}</div>
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">${idx===0&&!stops.length?'Select site':'Site '+(idx+1)}</div>
     <div class="site-search-wrap">
-      <div class="site-search-bar">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5E5953" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-        <input id="sp-s" placeholder="Search…" autocomplete="off">
-      </div>
+      <div class="site-search-bar"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5A564F" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input id="sp-s" placeholder="Search saved…" autocomplete="off"></div>
       <div class="site-list-scroll" id="sp-list">${listHtml()}</div>
     </div>
+    <button class="manual-btn" id="manual-btn">Enter address manually</button>
     <button class="sheet-cancel" id="sp-x">Cancel</button>`);
-  setTimeout(() => {
-    document.getElementById('sp-x')?.addEventListener('click', closeSheet);
-    document.getElementById('sp-s')?.addEventListener('input', () => {
-      document.getElementById('sp-list').innerHTML = listHtml();
-      bindItems();
-    });
-    document.getElementById('sp-s')?.focus();
+  setTimeout(()=>{
+    document.getElementById('sp-x').onclick=closeSheet;
+    document.getElementById('sp-s').oninput=()=>{document.getElementById('sp-list').innerHTML=listHtml();bindItems();};
+    document.getElementById('sp-s').focus();
+    document.getElementById('manual-btn').onclick=()=>{closeSheet();setTimeout(()=>showManual(idx),100);};
     bindItems();
-  }, 40);
-
-  function bindItems() {
-    document.querySelectorAll('.site-list-item').forEach(el => {
-      el.onclick = async () => {
-        const s = sites.find(x => x.id === el.dataset.id);
-        if (!s) return;
+  },40);
+  function bindItems(){
+    document.querySelectorAll('.site-list-item').forEach(el=>{
+      el.onclick=async()=>{
+        const s=sites.find(x=>x.id===el.dataset.id);if(!s)return;
         closeSheet();
-        if (isSecond) {
-          second = { id: s.id, name: s.name, postcode: s.postcode, legMiles: null, returnMiles: null };
-          renderDay();
-          await autoSave();
-          if (primary) {
-            const [leg, ret] = await Promise.all([
-              miles(primary.postcode, s.postcode),
-              miles(s.postcode, homePC)
-            ]);
-            if (leg != null) second.legMiles = leg;
-            if (ret != null) second.returnMiles = ret;
-            renderDay();
-            await autoSave();
-          }
-        } else {
-          primary = { id: s.id, name: s.name, postcode: s.postcode, miles: s.miles };
-          second = null;
-          renderDay();
-          await autoSave();
-          if (primary.miles == null) {
-            const m = await miles(homePC, s.postcode);
-            if (m != null) {
-              primary.miles = m;
-              s.miles = m;
-              renderDay();
-              await autoSave();
-              await save({ sites });
-            }
-          }
-        }
+        await applyStop(idx,{id:s.id,name:s.name,postcode:s.postcode});
       };
     });
   }
 }
 
-async function prefetch() {
-  for (const s of sites) {
-    if (s.miles == null) {
-      const m = await miles(homePC, s.postcode);
-      if (m != null) s.miles = m;
-    }
-  }
-  await save({ sites });
-}
-
-/* LOG */
-function renderLog() {
-  const y = logMon.getFullYear(), m = logMon.getMonth();
-  document.getElementById('log-month-lbl').textContent = logMon.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-  const pfx = y + '-' + pad(m + 1);
-  const keys = Object.keys(logs).filter(k => k.startsWith(pfx)).sort((a, b) => b.localeCompare(a));
-  const el = document.getElementById('log-list');
-  if (!keys.length) {
-    el.innerHTML = '<div class="log-empty">No journeys logged this month</div>';
-    return;
-  }
-  el.innerHTML = keys.map(i => {
-    const l = logs[i];
-    const stops = [{ t: 'h', name: 'Home' }];
-    if (l.primary) stops.push({ t: 's', name: l.primary.name, mi: l.primary.miles != null ? l.primary.miles + ' mi' : '' });
-    if (l.second) stops.push({ t: 's', name: l.second.name, mi: l.second.legMiles != null ? l.second.legMiles + ' mi' : '' });
-    stops.push({ t: 'h', name: 'Home' });
-    return `<div class="log-card">
-      <div class="log-card-head">
-        <span class="log-card-date">${fmtD(i)}</span>
-        <span class="log-card-mi">${l.total || 0} mi</span>
-      </div>
-      <div class="log-card-body">
-        ${stops.map(s => `<div class="log-stop">
-          <div class="log-dot ${s.t}"></div>
-          <div class="log-stop-name">${s.name}</div>
-          <div class="log-stop-mi">${s.mi || ''}</div>
-        </div>`).join('')}
-        <div class="log-actions">
-          <button class="log-act" data-edit="${i}">Edit</button>
-          <button class="log-act del" data-del="${i}">Delete</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  el.querySelectorAll('[data-edit]').forEach(b => {
-    b.onclick = () => {
-      vDate = new Date(b.dataset.edit + 'T00:00');
-      loadDay(b.dataset.edit);
-      updateDate();
-      switchTab('day');
-    };
-  });
-  el.querySelectorAll('[data-del]').forEach(b => {
-    b.onclick = async () => {
-      if (!confirm('Delete this day?')) return;
-      delete logs[b.dataset.del];
-      await save({ logs });
-      renderLog();
-      renderExport();
-      toast('Deleted');
-    };
-  });
-}
-document.getElementById('log-prev').addEventListener('click', () => { logMon.setMonth(logMon.getMonth() - 1); renderLog(); });
-document.getElementById('log-next').addEventListener('click', () => { logMon.setMonth(logMon.getMonth() + 1); renderLog(); });
-
-/* EXPORT */
-function getWK() {
-  const n = new Date(), ws = new Date(n);
-  ws.setDate(n.getDate() - ((n.getDay() + 6) % 7));
-  const k = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(ws); d.setDate(ws.getDate() + i);
-    const ii = iso(d); if (logs[ii]) k.push(ii);
-  }
-  return k;
-}
-function getMK() {
-  const n = new Date();
-  const pfx = n.getFullYear() + '-' + pad(n.getMonth() + 1);
-  return Object.keys(logs).filter(k => k.startsWith(pfx)).sort();
-}
-function renderExport() {
-  const wk = getWK(), mk = getMK();
-  let wm = 0, mm = 0;
-  wk.forEach(k => wm += logs[k].total || 0);
-  mk.forEach(k => mm += logs[k].total || 0);
-  document.getElementById('es-wmi').textContent = r1(wm) || '—';
-  document.getElementById('es-wd').textContent = wk.length || '—';
-  document.getElementById('es-mmi').textContent = r1(mm) || '—';
-  document.getElementById('es-md').textContent = mk.length || '—';
-}
-function buildCSV(keys) {
-  const r = [['Date','Site 1','Postcode 1','Site 2','Postcode 2','Home→Site1 (mi)','Site1→Site2 (mi)','Site2→Home (mi)','Total Miles']];
-  keys.forEach(i => {
-    const l = logs[i]; if (!l) return;
-    const s1 = l.primary, s2 = l.second;
-    const leg1 = s1 && s1.miles != null ? s1.miles : '';
-    const leg2 = s2 && s2.legMiles != null ? s2.legMiles : '';
-    const ret = s2 && s2.returnMiles != null ? s2.returnMiles : (s1 && s1.miles != null ? s1.miles : '');
-    r.push([i, s1 ? s1.name : '', s1 ? s1.postcode : '', s2 ? s2.name : '', s2 ? s2.postcode : '', leg1, leg2, ret, l.total || '']);
-  });
-  return r.map(x => x.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
-}
-function buildTxt(keys) {
-  return keys.map(i => {
-    const l = logs[i]; if (!l) return '';
-    return [fmtD(i), 'Home → ' + (l.primary ? l.primary.name : '?') + (l.second ? ' → ' + l.second.name : '') + ' → Home', 'Total: ' + (l.total || 0) + ' miles'].join('\n');
-  }).join('\n\n');
-}
-function dl(t, n) {
-  const a = document.createElement('a');
-  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(t);
-  a.download = n; a.click();
-}
-document.getElementById('ex-wcsv').addEventListener('click', () => { const k = getWK(); if (!k.length) { toast('No data this week'); return; } dl(buildCSV(k), 'Journeys_week.csv'); });
-document.getElementById('ex-mcsv').addEventListener('click', () => { const k = getMK(); if (!k.length) { toast('No data this month'); return; } dl(buildCSV(k), 'Journeys_month.csv'); });
-document.getElementById('ex-wtxt').addEventListener('click', async () => { const k = getWK(); if (!k.length) { toast('No data this week'); return; } try { await navigator.clipboard.writeText(buildTxt(k)); toast('Week copied!'); } catch (e) { dl(buildTxt(k), 'week.txt'); } });
-document.getElementById('ex-mtxt').addEventListener('click', async () => { const k = getMK(); if (!k.length) { toast('No data this month'); return; } try { await navigator.clipboard.writeText(buildTxt(k)); toast('Month copied!'); } catch (e) { dl(buildTxt(k), 'month.txt'); } });
-
-/* SETTINGS — fixed */
-function renderSites() {
-  const el = document.getElementById('sites-list');
-  if (!el) return;
-  if (!sites.length) {
-    el.innerHTML = '<div class="s-row"><div class="s-row-body"><div class="s-row-sub">No sites yet</div></div></div>';
-    return;
-  }
-  el.innerHTML = sites.map((s, i) => `
-    <div class="site-row">
-      <div class="site-dot"></div>
-      <div class="site-row-name">
-        <div class="site-row-title">${s.name}</div>
-        <div class="site-row-pc">${s.postcode}</div>
-      </div>
-      <div class="site-row-mi">${s.miles != null ? s.miles + ' mi' : '···'}</div>
-      <button class="site-row-del" data-i="${i}">✕</button>
-    </div>`).join('');
-
-  el.querySelectorAll('.site-row-del').forEach(btn => {
-    btn.onclick = async () => {
-      const i = parseInt(btn.dataset.i, 10);
-      if (isNaN(i) || i < 0 || i >= sites.length) return;
-      if (!confirm('Remove "' + sites[i].name + '"?')) return;
-      sites.splice(i, 1);
-      await save({ sites });
-      renderSites();
-    };
-  });
-}
-
-document.getElementById('add-site-btn').addEventListener('click', () => {
-  openSheet(`<div class="sheet-handle"></div>
-    <div class="sheet-title">Add site</div>
-    <div><div class="sheet-lbl" style="margin-bottom:0.3rem">Site name</div>
-      <input id="ns-n" class="sheet-input" placeholder="e.g. Royal Bolton Hospital"></div>
-    <div><div class="sheet-lbl" style="margin-bottom:0.3rem">Postcode</div>
-      <input id="ns-p" class="sheet-input" placeholder="e.g. BL4 0JR" style="text-transform:uppercase"></div>
-    <div class="sheet-row">
-      <button class="sheet-cancel" id="ns-x">Cancel</button>
-      <button class="sheet-confirm" id="ns-ok">Add</button>
-    </div>`);
-  setTimeout(() => {
-    document.getElementById('ns-x').onclick = closeSheet;
-    document.getElementById('ns-ok').onclick = async () => {
-      const n = document.getElementById('ns-n').value.trim();
-      const p = document.getElementById('ns-p').value.trim().toUpperCase();
-      if (!n || !p) { toast('Enter name and postcode'); return; }
-      const ns = { id: 'c_' + Date.now(), name: n, postcode: p, miles: null };
-      sites.push(ns);
+function showManual(idx){
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Manual address</div>
+    <div><div class="sheet-lbl" style="margin-bottom:0.25rem">Name / description</div><input id="mn-n" class="sheet-input" placeholder="e.g. Client office"></div>
+    <div><div class="sheet-lbl" style="margin-bottom:0.25rem">Postcode</div><input id="mn-p" class="sheet-input" placeholder="e.g. M1 1AE" style="text-transform:uppercase"></div>
+    <div class="sheet-row"><button class="sheet-cancel" id="mn-x">Cancel</button><button class="sheet-confirm" id="mn-ok">Add</button></div>`);
+  setTimeout(()=>{
+    document.getElementById('mn-x').onclick=closeSheet;
+    document.getElementById('mn-ok').onclick=async()=>{
+      const n=document.getElementById('mn-n').value.trim(),p=document.getElementById('mn-p').value.trim().toUpperCase();
+      if(!n||!p){toast('Enter name and postcode');return;}
       closeSheet();
-      renderSites();
-      const m = await miles(homePC, p);
-      if (m != null) ns.miles = m;
-      await save({ sites });
-      renderSites();
-      toast('Site added');
+      await applyStop(idx,{id:'m_'+Date.now(),name:n,postcode:p});
     };
-    document.getElementById('ns-n').focus();
-  }, 40);
-});
+    document.getElementById('mn-n').focus();
+  },40);
+}
 
-document.getElementById('edit-home-btn').addEventListener('click', () => {
-  openSheet(`<div class="sheet-handle"></div>
-    <div class="sheet-title">Home postcode</div>
+async function applyStop(idx,stop){
+  if(idx>=stops.length)stops.push(stop);
+  else stops[idx]=stop;
+  // trim if somehow over
+  if(stops.length>3)stops=stops.slice(0,3);
+  await recalcStops();
+  renderDay();
+  await autoSave();
+}
+
+function editDayHome(){
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Home for this day</div>
+    <div class="sheet-lbl">Leave blank to use default (${homePC})</div>
+    <input id="dh" class="sheet-input" value="${dayHome||''}" placeholder="${homePC}" style="text-transform:uppercase">
+    <div class="sheet-row"><button class="sheet-cancel" id="dh-x">Cancel</button><button class="sheet-confirm" id="dh-ok">Save</button></div>`);
+  setTimeout(()=>{
+    document.getElementById('dh-x').onclick=closeSheet;
+    document.getElementById('dh-ok').onclick=async()=>{
+      const p=document.getElementById('dh').value.trim().toUpperCase();
+      dayHome=p||null;
+      closeSheet();
+      if(stops.length)await recalcStops();
+      renderDay();await autoSave();
+      toast(dayHome?'Day home set':'Using default home');
+    };
+    document.getElementById('dh').select();
+  },40);
+}
+
+document.getElementById('edit-home-btn').addEventListener('click',()=>{
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Default home postcode</div>
     <input id="hp" class="sheet-input" value="${homePC}" style="text-transform:uppercase">
-    <div class="sheet-row">
-      <button class="sheet-cancel" id="hp-x">Cancel</button>
-      <button class="sheet-confirm" id="hp-ok">Save</button>
-    </div>`);
-  setTimeout(() => {
-    document.getElementById('hp-x').onclick = closeSheet;
-    document.getElementById('hp-ok').onclick = async () => {
-      const p = document.getElementById('hp').value.trim().toUpperCase();
-      if (!p) return;
-      homePC = p;
-      sites.forEach(s => s.miles = null);
-      document.getElementById('s-home-pc').textContent = homePC;
-      await save({ homePC, sites });
-      closeSheet();
-      prefetch();
-      toast('Home updated — recalculating…');
+    <div class="sheet-row"><button class="sheet-cancel" id="hp-x">Cancel</button><button class="sheet-confirm" id="hp-ok">Save</button></div>`);
+  setTimeout(()=>{
+    document.getElementById('hp-x').onclick=closeSheet;
+    document.getElementById('hp-ok').onclick=async()=>{
+      const p=document.getElementById('hp').value.trim().toUpperCase();if(!p)return;
+      homePC=p;sites.forEach(s=>s.miles=null);
+      document.getElementById('s-home-pc').textContent=homePC;
+      await save({homePC,sites});closeSheet();prefetch();toast('Home updated');
     };
     document.getElementById('hp').select();
-  }, 40);
+  },40);
 });
 
-function showDatePicker() {
-  const i = iso(vDate);
-  openSheet(`<div class="sheet-handle"></div>
-    <div class="sheet-title">Go to date</div>
+async function prefetch(){for(const s of sites){if(s.miles==null){const m=await miles(homePC,s.postcode);if(m!=null)s.miles=m;}}await save({sites});}
+
+/* LOG */
+function renderLog(){
+  const y=logMon.getFullYear(),m=logMon.getMonth();
+  document.getElementById('log-month-lbl').textContent=logMon.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+  const pfx=y+'-'+pad(m+1);
+  const keys=Object.keys(logs).filter(k=>k.startsWith(pfx)).sort((a,b)=>b.localeCompare(a));
+  const el=document.getElementById('log-list');
+  if(!keys.length){el.innerHTML='<div class="log-empty">No journeys logged this month</div>';return;}
+  el.innerHTML=keys.map(i=>{
+    const l=logs[i];
+    let stps=l.stops||[];
+    if(!stps.length&&l.primary){stps=[{name:l.primary.name,fromPrev:l.primary.miles}];if(l.second)stps.push({name:l.second.name,fromPrev:l.second.legMiles});}
+    const stopsHtml=[{t:'h',name:'Home'}].concat(stps.map(s=>({t:'s',name:s.name,mi:s.fromPrev!=null?s.fromPrev+' mi':''}))).concat([{t:'h',name:'Home'}]);
+    return `<div class="log-card"><div class="log-card-head"><span class="log-card-date">${fmtD(i)}</span><span class="log-card-mi">${l.total||0} mi</span></div>
+    <div class="log-card-body">${stopsHtml.map(s=>`<div class="log-stop"><div class="log-dot ${s.t}"></div><div class="log-stop-name">${s.name}</div><div class="log-stop-mi">${s.mi||''}</div></div>`).join('')}
+    <div class="log-actions"><button class="log-act" data-edit="${i}">Edit</button><button class="log-act del" data-del="${i}">Delete</button></div></div></div>`;
+  }).join('');
+  el.querySelectorAll('[data-edit]').forEach(b=>{b.onclick=()=>{vDate=new Date(b.dataset.edit+'T00:00');loadDay(b.dataset.edit);updateDate();switchTab('day');};});
+  el.querySelectorAll('[data-del]').forEach(b=>{b.onclick=async()=>{if(!confirm('Delete this day?'))return;delete logs[b.dataset.del];await save({logs});renderLog();renderExport();toast('Deleted');};});
+}
+document.getElementById('log-prev').addEventListener('click',()=>{logMon.setMonth(logMon.getMonth()-1);renderLog();});
+document.getElementById('log-next').addEventListener('click',()=>{logMon.setMonth(logMon.getMonth()+1);renderLog();});
+
+/* EXPORT */
+function getWK(){const n=new Date(),ws=new Date(n);ws.setDate(n.getDate()-((n.getDay()+6)%7));const k=[];for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);const ii=iso(d);if(logs[ii])k.push(ii);}return k;}
+function getMK(){const n=new Date();const pfx=n.getFullYear()+'-'+pad(n.getMonth()+1);return Object.keys(logs).filter(k=>k.startsWith(pfx)).sort();}
+function renderExport(){const wk=getWK(),mk=getMK();let wm=0,mm=0;wk.forEach(k=>wm+=logs[k].total||0);mk.forEach(k=>mm+=logs[k].total||0);document.getElementById('es-wmi').textContent=r1(wm)||'—';document.getElementById('es-wd').textContent=wk.length||'—';document.getElementById('es-mmi').textContent=r1(mm)||'—';document.getElementById('es-md').textContent=mk.length||'—';}
+function buildCSV(keys){
+  const r=[['Date','Site 1','PC 1','Site 2','PC 2','Site 3','PC 3','Total Miles']];
+  keys.forEach(i=>{const l=logs[i];if(!l)return;let st=l.stops||[];if(!st.length&&l.primary){st=[{name:l.primary.name,postcode:l.primary.postcode}];if(l.second)st.push({name:l.second.name,postcode:l.second.postcode});}
+    r.push([i,st[0]?.name||'',st[0]?.postcode||'',st[1]?.name||'',st[1]?.postcode||'',st[2]?.name||'',st[2]?.postcode||'',l.total||'']);});
+  return r.map(x=>x.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+}
+function buildTxt(keys){return keys.map(i=>{const l=logs[i];if(!l)return'';let st=l.stops||[];if(!st.length&&l.primary){st=[{name:l.primary.name}];if(l.second)st.push({name:l.second.name});}
+  return [fmtD(i),'Home → '+st.map(s=>s.name).join(' → ')+' → Home','Total: '+(l.total||0)+' miles'].join('\n');}).join('\n\n');}
+function dl(t,n){const a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(t);a.download=n;a.click();}
+document.getElementById('ex-wcsv').addEventListener('click',()=>{const k=getWK();if(!k.length){toast('No data this week');return;}dl(buildCSV(k),'Journeys_week.csv');});
+document.getElementById('ex-mcsv').addEventListener('click',()=>{const k=getMK();if(!k.length){toast('No data this month');return;}dl(buildCSV(k),'Journeys_month.csv');});
+document.getElementById('ex-wtxt').addEventListener('click',async()=>{const k=getWK();if(!k.length){toast('No data this week');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Week copied!');}catch(e){dl(buildTxt(k),'week.txt');}});
+document.getElementById('ex-mtxt').addEventListener('click',async()=>{const k=getMK();if(!k.length){toast('No data this month');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Month copied!');}catch(e){dl(buildTxt(k),'month.txt');}});
+
+function showDatePicker(){
+  const i=iso(vDate);
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Go to date</div>
     <input id="dp" class="sheet-input" type="date" value="${i}" max="${iso(new Date())}">
-    <div class="sheet-row">
-      <button class="sheet-cancel" id="dp-x">Cancel</button>
-      <button class="sheet-confirm" id="dp-ok">Go</button>
-    </div>`);
-  setTimeout(() => {
-    document.getElementById('dp-x').onclick = closeSheet;
-    document.getElementById('dp-ok').onclick = () => {
-      const v = document.getElementById('dp').value;
-      if (!v) return;
-      vDate = new Date(v + 'T00:00');
-      loadDay(iso(vDate));
-      updateDate();
-      closeSheet();
-      switchTab('day');
-    };
-  }, 40);
+    <div class="sheet-row"><button class="sheet-cancel" id="dp-x">Cancel</button><button class="sheet-confirm" id="dp-ok">Go</button></div>`);
+  setTimeout(()=>{document.getElementById('dp-x').onclick=closeSheet;document.getElementById('dp-ok').onclick=()=>{const v=document.getElementById('dp').value;if(!v)return;vDate=new Date(v+'T00:00');loadDay(iso(vDate));updateDate();closeSheet();switchTab('day');};},40);
 }
 
-function openSheet(html) {
-  document.getElementById('sheet').innerHTML = html;
-  document.getElementById('overlay').classList.add('open');
-  document.getElementById('overlay').onclick = e => {
-    if (e.target === document.getElementById('overlay')) closeSheet();
-  };
-}
-function closeSheet() {
-  document.getElementById('overlay').classList.remove('open');
-  document.getElementById('sheet').innerHTML = '';
-}
+function openSheet(html){document.getElementById('sheet').innerHTML=html;document.getElementById('overlay').classList.add('open');document.getElementById('overlay').onclick=e=>{if(e.target===document.getElementById('overlay'))closeSheet();};}
+function closeSheet(){document.getElementById('overlay').classList.remove('open');document.getElementById('sheet').innerHTML='';}
 
 /* SWIPE */
-(function () {
-  const pane = document.getElementById('day-pane');
-  let startX = 0, startY = 0, tracking = false;
-  pane.addEventListener('touchstart', e => {
-    if (curTab !== 'day') return;
-    const t = e.changedTouches[0];
-    startX = t.clientX; startY = t.clientY; tracking = true;
-  }, { passive: true });
-  pane.addEventListener('touchend', e => {
-    if (!tracking || curTab !== 'day') return;
-    tracking = false;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - startX, dy = t.clientY - startY;
-    if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
-    if (dx < 0) {
-      vDate.setDate(vDate.getDate() + 1);
-      if (vDate > new Date()) { vDate = new Date(); toast("Can't go past today"); }
-    } else {
-      vDate.setDate(vDate.getDate() - 1);
-    }
-    loadDay(iso(vDate));
-    updateDate();
-    renderDay();
-    toast(iso(vDate) === iso(new Date()) ? 'Today' : fmtS(iso(vDate)));
-  }, { passive: true });
+(function(){const pane=document.getElementById('day-pane');let sx=0,sy=0,tr=false;
+pane.addEventListener('touchstart',e=>{if(curTab!=='day')return;const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;tr=true;},{passive:true});
+pane.addEventListener('touchend',e=>{if(!tr||curTab!=='day')return;tr=false;const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)<55||Math.abs(dx)<Math.abs(dy)*1.4)return;
+if(dx<0){vDate.setDate(vDate.getDate()+1);if(vDate>new Date()){vDate=new Date();toast("Can't go past today");}}else{vDate.setDate(vDate.getDate()-1);}
+loadDay(iso(vDate));updateDate();renderDay();toast(iso(vDate)===iso(new Date())?'Today':fmtS(iso(vDate)));},{passive:true});
 })();
 </script>
 </body>
