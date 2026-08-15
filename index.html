@@ -87,7 +87,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 /* ═══ DAY ═══ */
 #day-pane{position:relative;touch-action:pan-y;overflow:hidden}
-.day-body{flex:1;display:flex;flex-direction:column;padding:0.35rem 1.1rem 0.6rem;min-height:0;overflow:hidden}
+.day-body{flex:1;display:flex;flex-direction:column;padding:0.35rem 1.1rem 0;min-height:0;overflow:hidden}
 
 .train{display:flex;flex-direction:column;flex:1;min-height:0;position:relative}
 
@@ -141,20 +141,29 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .train-card-btn{width:28px;height:28px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;color:var(--ink2);font-size:0.7rem;flex-shrink:0}
 
 .add-stop{
-  margin:0.15rem 0 0.15rem 5px;width:22px;height:22px;border-radius:50%;
-  background:var(--dark);color:#fff;font-size:0.95rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.12);position:relative;z-index:2;
+  margin:0.25rem 0 0.25rem 0;width:50%;max-width:50%;
+  background:transparent;border:2px dashed var(--ink3);border-radius:14px;
+  padding:0.5rem 0.75rem 0.5rem 2.2rem;display:flex;align-items:center;gap:0.4rem;
+  cursor:pointer;color:var(--ink2);font-size:0.74rem;font-weight:600;flex-shrink:0;
+  position:relative;z-index:2;
 }
-.add-stop:active{transform:scale(0.92);opacity:0.85}
+.add-stop::before{
+  content:'';position:absolute;left:13px;top:0;bottom:0;width:3px;
+  background:var(--line);border-radius:2px;
+}
+.add-stop:active{opacity:0.7;transform:scale(0.98)}
+.add-stop-icon{
+  width:18px;height:18px;border-radius:50%;background:var(--dark);color:#fff;
+  font-size:0.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
 
 .total-bar{
-  margin-top:0.45rem;background:var(--dark);border-radius:16px;
-  padding:0.85rem 1.1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
-  box-shadow:0 4px 16px rgba(0,0,0,0.12);
+  margin:0.5rem -1.1rem 0;background:var(--dark);border-radius:20px 20px 0 0;
+  padding:1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
 .total-label{font-size:0.66rem;font-weight:600;color:rgba(255,255,255,0.55);letter-spacing:0.05em;text-transform:uppercase}
-.total-value{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-0.03em}
+.total-value{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-0.03em}
 .total-unit{font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.45);margin-left:3px}
 .empty-hint{text-align:center;padding:0.9rem;color:var(--ink2);font-size:0.82rem;line-height:1.45;flex-shrink:0}
 
@@ -208,7 +217,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .s-item{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;cursor:pointer}
 .s-item:active{background:var(--card2)}
 .s-item + .s-item{border-top:1px solid var(--card2)}
-.s-ico{width:38px;height:38px;border-radius:12px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.s-ico{width:38px;height:38px;border-radius:12px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0}.s-ico svg{display:block}
 .s-item-body{flex:1;min-width:0}
 .s-item-title{font-size:0.9rem;font-weight:600;color:var(--ink)}
 .s-item-sub{font-size:0.62rem;color:var(--ink2);margin-top:2px}
@@ -366,7 +375,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     <div class="s-sec">Account</div>
     <div class="s-card">
       <div class="s-item" style="cursor:default">
-        <div class="s-ico">👤</div>
+        <div class="s-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <div class="s-item-body">
           <div class="s-item-title" id="s-email">—</div>
           <div class="s-item-sub">Signed in</div>
@@ -377,7 +386,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     <div class="s-sec">Home</div>
     <div class="s-card">
       <div class="s-item" id="edit-home-btn">
-        <div class="s-ico">🏠</div>
+        <div class="s-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
         <div class="s-item-body">
           <div class="s-item-title" id="s-home-pc">BL5 2RX</div>
           <div class="s-item-sub">Default start &amp; end</div>
@@ -388,7 +397,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     <div class="s-sec">Locations</div>
     <div class="s-card">
       <div class="s-item" id="open-locations">
-        <div class="s-ico">📍</div>
+        <div class="s-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <div class="s-item-body">
           <div class="s-item-title">Manage locations</div>
           <div class="s-item-sub" id="s-loc-count">0 saved</div>
@@ -399,7 +408,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     <div class="s-sec">Export</div>
     <div class="s-card">
       <div class="s-item" id="s-export-data">
-        <div class="s-ico">📊</div>
+        <div class="s-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
         <div class="s-item-body">
           <div class="s-item-title">Export data</div>
           <div class="s-item-sub">Excel for a week or month</div>
@@ -637,7 +646,7 @@ function renderDay(){
       </div>`;
     });
     if(n<3){
-      html+=`<div class="add-stop" id="add-stop" title="Add site">+</div>`;
+      html+=`<div class="add-stop" id="add-stop"><div class="add-stop-icon">+</div>Add site</div>`;
     }
     const last=stops[n-1];
     let ret=last.returnMiles!=null?last.returnMiles+' mi':(n===1&&stops[0].fromPrev!=null?stops[0].fromPrev+' mi':'···');
@@ -871,8 +880,8 @@ function exportExcel(keys,label){
 document.getElementById('s-export-data').addEventListener('click',()=>{
   openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Export data</div>
     <div class="s-card" style="box-shadow:none;background:var(--card2)">
-      <div class="s-item" id="ex-pick-week"><div class="s-ico">📅</div><div class="s-item-body"><div class="s-item-title">Week</div><div class="s-item-sub">Choose a week to export</div></div><div class="s-chev">›</div></div>
-      <div class="s-item" id="ex-pick-month"><div class="s-ico">🗓️</div><div class="s-item-body"><div class="s-item-title">Month</div><div class="s-item-sub">Choose a month to export</div></div><div class="s-chev">›</div></div>
+      <div class="s-item" id="ex-pick-week"><div class="s-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="s-item-body"><div class="s-item-title">Week</div><div class="s-item-sub">Choose a week to export</div></div><div class="s-chev">›</div></div>
+      <div class="s-item" id="ex-pick-month"><div class="s-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg></div><div class="s-item-body"><div class="s-item-title">Month</div><div class="s-item-sub">Choose a month to export</div></div><div class="s-chev">›</div></div>
     </div>
     <button class="sheet-cancel" id="ex-cancel">Cancel</button>`);
   setTimeout(()=>{
