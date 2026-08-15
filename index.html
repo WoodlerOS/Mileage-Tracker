@@ -66,7 +66,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 /* TOPBAR */
 .topbar{flex-shrink:0;padding:calc(env(safe-area-inset-top) + 0.45rem) 1rem 0.35rem;display:flex;align-items:center;justify-content:space-between;gap:0.55rem;background:var(--bg)}
-.topbar-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;background:linear-gradient(165deg,#161E2F,#B51A2B);display:flex;align-items:center;justify-content:center}
+.topbar-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#B51A2B;display:flex;align-items:center;justify-content:center}
 .topbar-date{font-size:0.72rem;font-weight:600;color:var(--t2);background:var(--s2);border-radius:18px;padding:0.35rem 0.9rem;flex:1;text-align:center}
 .topbar-gear{width:32px;height:32px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
@@ -84,21 +84,21 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 
 .train{display:flex;flex-direction:column;flex:1;min-height:0;position:relative}
 
-/* continuous line */
+/* continuous line – runs through everything edge to edge */
 .train-rail{
-  position:absolute;left:15px;top:18px;bottom:18px;width:3px;
+  position:absolute;left:14px;top:16px;bottom:16px;width:3px;
   background:var(--s4);border-radius:2px;z-index:0;overflow:hidden;
 }
 .train-rail::after{
-  content:'';position:absolute;left:0;width:100%;height:30%;
-  background:linear-gradient(to bottom,transparent,rgba(212,42,60,0.7),transparent);
+  content:'';position:absolute;left:0;width:100%;height:28%;
+  background:linear-gradient(to bottom,transparent,rgba(212,42,60,0.75),transparent);
   animation:flow 2.4s linear infinite;
 }
-@keyframes flow{0%{top:-30%}100%{top:100%}}
+@keyframes flow{0%{top:-28%}100%{top:100%}}
 
-.train-node{display:flex;align-items:center;gap:0.75rem;position:relative;z-index:1;flex-shrink:0}
+.train-node{display:flex;align-items:center;gap:0.7rem;position:relative;z-index:1;flex-shrink:0}
 .train-dot{
-  width:32px;height:32px;border-radius:10px;background:var(--s3);
+  width:30px;height:30px;border-radius:9px;background:var(--s3);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .train-info{flex:1;min-width:0}
@@ -106,32 +106,32 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .train-name{font-size:0.88rem;font-weight:700}
 .train-sub{font-size:0.6rem;color:var(--t2);margin-top:1px}
 
-/* segment between nodes – badge centred on the rail */
+/* segment – badge sits centred on the rail between stops */
 .train-seg{
-  flex:1;min-height:28px;position:relative;z-index:1;
+  flex:1;min-height:26px;position:relative;z-index:2;
   display:flex;align-items:center;
 }
-.train-seg-sp{width:32px;flex-shrink:0;position:relative}
 .train-badge{
-  position:absolute;left:50%;transform:translateX(-50%);
+  margin-left:14px;transform:translateX(-50%);
   background:var(--s2);color:var(--red2);font-size:0.64rem;font-weight:700;
   padding:0.2rem 0.55rem;border-radius:12px;white-space:nowrap;
-  border:1.5px solid rgba(181,26,43,0.35);z-index:2;
+  border:1.5px solid rgba(181,26,43,0.4);z-index:2;
 }
 .train-badge.dim{color:var(--t3);border-color:var(--s4)}
 
-/* site card – no left icon, rail feeds into it */
-.train-site{
-  display:flex;align-items:stretch;gap:0.75rem;position:relative;z-index:1;flex-shrink:0;
-}
-.train-site-sp{width:32px;flex-shrink:0}
+/* site cards – full width, line runs through left edge */
+.train-site{position:relative;z-index:1;flex-shrink:0;padding-left:0}
 .train-card{
-  flex:1;background:var(--s1);border-radius:13px;padding:0.7rem 0.85rem;
-  display:flex;align-items:center;gap:0.55rem;cursor:pointer;
-  border-left:3px solid var(--red);
+  width:100%;background:var(--s1);border-radius:12px;padding:0.7rem 0.85rem 0.7rem 2.4rem;
+  display:flex;align-items:center;gap:0.5rem;cursor:pointer;
+  position:relative;
+}
+.train-card::before{
+  content:'';position:absolute;left:13px;top:0;bottom:0;width:3px;
+  background:var(--red);border-radius:2px;z-index:1;
 }
 .train-card:active{background:var(--s2)}
-.train-card.empty{border-left-color:var(--s4)}
+.train-card.empty::before{background:var(--s4)}
 .train-card-text{flex:1;min-width:0}
 .train-card-name{font-size:0.84rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .train-card-name.ph{color:var(--t3);font-weight:500}
@@ -139,9 +139,14 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .train-card-btn{width:26px;height:26px;border-radius:8px;background:var(--s3);display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:0.7rem;flex-shrink:0}
 
 .add-stop{
-  margin:0.3rem 0 0.3rem 44px;background:var(--s1);border-radius:11px;
-  padding:0.5rem 0.85rem;display:flex;align-items:center;gap:0.45rem;
+  margin:0.3rem 0;background:var(--s1);border-radius:11px;
+  padding:0.5rem 0.85rem 0.5rem 2.4rem;display:flex;align-items:center;gap:0.45rem;
   cursor:pointer;color:var(--t2);font-size:0.76rem;font-weight:600;flex-shrink:0;
+  position:relative;
+}
+.add-stop::before{
+  content:'';position:absolute;left:13px;top:0;bottom:0;width:3px;
+  background:var(--s4);border-radius:2px;
 }
 .add-stop:active{background:var(--s2)}
 .add-stop-icon{width:20px;height:20px;border-radius:6px;background:var(--red);color:#fff;font-size:0.85rem;font-weight:700;display:flex;align-items:center;justify-content:center}
@@ -202,7 +207,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .exp-arrow{color:var(--t3);font-size:0.85rem}
 
 /* SETTINGS */
-#settings-pane{overflow:hidden;padding:0.5rem 1rem calc(0.6rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0.35rem}
+#settings-pane{overflow-y:auto;padding:0.5rem 1rem calc(0.6rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0.35rem;-webkit-overflow-scrolling:touch}
 .s-back{font-size:0.62rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--t2);text-align:left;padding:0.1rem 0;flex-shrink:0}
 .s-title{font-size:1.1rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.05rem;flex-shrink:0}
 .s-sec{font-size:0.56rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:0.15rem;flex-shrink:0}
@@ -319,7 +324,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     <button class="tab active" data-tab="day">Today</button>
     <button class="tab" data-tab="log">Log</button>
     <button class="tab" data-tab="stats">Stats</button>
-    <button class="tab" data-tab="export">Export</button>
   </div>
 
   <div id="day-pane" class="tab-pane active">
@@ -349,18 +353,6 @@ button{cursor:pointer;border:none;background:none;color:inherit}
       <div class="stats-sec" id="stats-list-lbl">Journeys</div>
       <div id="stats-list"></div>
     </div>
-  </div>
-
-  <div id="export-pane" class="tab-pane">
-    <div class="exp-sec-lbl">Excel</div>
-    <div class="exp-btn" id="ex-wxlsx"><div class="exp-btn-icon">📊</div><div class="exp-btn-body"><div class="exp-btn-title">Export week to Excel</div><div class="exp-btn-sub">Formatted workbook</div></div><div class="exp-arrow">›</div></div>
-    <div class="exp-btn" id="ex-mxlsx"><div class="exp-btn-icon">📅</div><div class="exp-btn-body"><div class="exp-btn-title">Export month to Excel</div><div class="exp-btn-sub">Summary + detail table</div></div><div class="exp-arrow">›</div></div>
-    <div class="exp-sec-lbl">CSV</div>
-    <div class="exp-btn" id="ex-wcsv"><div class="exp-btn-icon">📄</div><div class="exp-btn-body"><div class="exp-btn-title">Weekly CSV</div><div class="exp-btn-sub">Plain spreadsheet</div></div><div class="exp-arrow">›</div></div>
-    <div class="exp-btn" id="ex-mcsv"><div class="exp-btn-icon">📄</div><div class="exp-btn-body"><div class="exp-btn-title">Monthly CSV</div><div class="exp-btn-sub">Plain spreadsheet</div></div><div class="exp-arrow">›</div></div>
-    <div class="exp-sec-lbl">Copy as text</div>
-    <div class="exp-btn" id="ex-wtxt"><div class="exp-btn-icon">📋</div><div class="exp-btn-body"><div class="exp-btn-title">Copy this week</div><div class="exp-btn-sub">Paste into email</div></div><div class="exp-arrow">›</div></div>
-    <div class="exp-btn" id="ex-mtxt"><div class="exp-btn-icon">📝</div><div class="exp-btn-body"><div class="exp-btn-title">Copy this month</div><div class="exp-btn-sub">All logged days</div></div><div class="exp-arrow">›</div></div>
   </div>
 
   <div id="settings-pane" class="tab-pane">
@@ -395,6 +387,57 @@ button{cursor:pointer;border:none;background:none;color:inherit}
         <div class="s-item-body">
           <div class="s-item-title">Manage locations</div>
           <div class="s-item-sub" id="s-loc-count">0 saved</div>
+        </div>
+        <div class="s-chev">›</div>
+      </div>
+    </div>
+    <div class="s-sec">Export</div>
+    <div class="s-card">
+      <div class="s-item" id="s-ex-wxlsx">
+        <div class="s-ico">📊</div>
+        <div class="s-item-body">
+          <div class="s-item-title">Export week to Excel</div>
+          <div class="s-item-sub">Formatted workbook</div>
+        </div>
+        <div class="s-chev">›</div>
+      </div>
+      <div class="s-item" id="s-ex-mxlsx">
+        <div class="s-ico">📅</div>
+        <div class="s-item-body">
+          <div class="s-item-title">Export month to Excel</div>
+          <div class="s-item-sub">Summary + detail</div>
+        </div>
+        <div class="s-chev">›</div>
+      </div>
+      <div class="s-item" id="s-ex-wcsv">
+        <div class="s-ico">📄</div>
+        <div class="s-item-body">
+          <div class="s-item-title">Weekly CSV</div>
+          <div class="s-item-sub">Plain spreadsheet</div>
+        </div>
+        <div class="s-chev">›</div>
+      </div>
+      <div class="s-item" id="s-ex-mcsv">
+        <div class="s-ico">📄</div>
+        <div class="s-item-body">
+          <div class="s-item-title">Monthly CSV</div>
+          <div class="s-item-sub">Plain spreadsheet</div>
+        </div>
+        <div class="s-chev">›</div>
+      </div>
+      <div class="s-item" id="s-ex-wtxt">
+        <div class="s-ico">📋</div>
+        <div class="s-item-body">
+          <div class="s-item-title">Copy this week</div>
+          <div class="s-item-sub">Paste into email</div>
+        </div>
+        <div class="s-chev">›</div>
+      </div>
+      <div class="s-item" id="s-ex-mtxt">
+        <div class="s-ico">📝</div>
+        <div class="s-item-body">
+          <div class="s-item-title">Copy this month</div>
+          <div class="s-item-sub">All logged days</div>
         </div>
         <div class="s-chev">›</div>
       </div>
@@ -491,7 +534,6 @@ function switchTab(t){
   curTab=t;
   if(t==='log')renderLog();
   if(t==='stats')renderStats();
-  if(t==='export'){}
   if(t==='day')renderDay();
 }
 document.getElementById('settings-btn').addEventListener('click',()=>{
@@ -600,22 +642,20 @@ function renderDay(){
   </div>`;
 
   if(!n){
-    html+=`<div class="train-seg"><div class="train-seg-sp"></div></div>
+    html+=`<div class="train-seg"></div>
     <div class="train-site">
-      <div class="train-site-sp"></div>
       <div class="train-card empty" id="card-0">
         <div class="train-card-text"><div class="train-card-name ph">Tap to select site</div><div class="train-card-pc">Choose destination</div></div>
         <div class="train-card-btn">›</div>
       </div>
     </div>
-    <div class="train-seg"><div class="train-seg-sp"></div></div>`;
+    <div class="train-seg"></div>`;
   }else{
     stops.forEach((s,i)=>{
       const m=s.fromPrev!=null?s.fromPrev+' mi':'···';
       const dim=s.fromPrev==null;
-      html+=`<div class="train-seg"><div class="train-seg-sp"><div class="train-badge ${dim?'dim':''}">${m}</div></div></div>
+      html+=`<div class="train-seg"><div class="train-badge ${dim?'dim':''}">${m}</div></div>
       <div class="train-site">
-        <div class="train-site-sp"></div>
         <div class="train-card" data-idx="${i}">
           <div class="train-card-text"><div class="train-card-name">${s.name}</div><div class="train-card-pc">${s.postcode}</div></div>
           <button class="train-card-btn del-stop" data-idx="${i}">✕</button>
@@ -629,7 +669,7 @@ function renderDay(){
     const last=stops[n-1];
     let ret=last.returnMiles!=null?last.returnMiles+' mi':(n===1&&stops[0].fromPrev!=null?stops[0].fromPrev+' mi':'···');
     let dim=last.returnMiles==null&&!(n===1&&stops[0].fromPrev!=null);
-    html+=`<div class="train-seg"><div class="train-seg-sp"><div class="train-badge ${dim?'dim':''}">${ret}</div></div></div>`;
+    html+=`<div class="train-seg"><div class="train-badge ${dim?'dim':''}">${ret}</div></div>`;
   }
 
   // HOME END
@@ -885,12 +925,12 @@ function exportExcel(keys,label){
   toast('Excel exported');
 }
 
-document.getElementById('ex-wxlsx').addEventListener('click',()=>exportExcel(getWK(),'This_Week'));
-document.getElementById('ex-mxlsx').addEventListener('click',()=>exportExcel(getMK(),'This_Month'));
-document.getElementById('ex-wcsv').addEventListener('click',()=>{const k=getWK();if(!k.length){toast('No data this week');return;}dl(buildCSV(k),'Journeys_week.csv');});
-document.getElementById('ex-mcsv').addEventListener('click',()=>{const k=getMK();if(!k.length){toast('No data this month');return;}dl(buildCSV(k),'Journeys_month.csv');});
-document.getElementById('ex-wtxt').addEventListener('click',async()=>{const k=getWK();if(!k.length){toast('No data this week');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Week copied!');}catch(e){dl(buildTxt(k),'week.txt');}});
-document.getElementById('ex-mtxt').addEventListener('click',async()=>{const k=getMK();if(!k.length){toast('No data this month');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Month copied!');}catch(e){dl(buildTxt(k),'month.txt');}});
+document.getElementById('s-ex-wxlsx').addEventListener('click',()=>exportExcel(getWK(),'This_Week'));
+document.getElementById('s-ex-mxlsx').addEventListener('click',()=>exportExcel(getMK(),'This_Month'));
+document.getElementById('s-ex-wcsv').addEventListener('click',()=>{const k=getWK();if(!k.length){toast('No data this week');return;}dl(buildCSV(k),'Journeys_week.csv');});
+document.getElementById('s-ex-mcsv').addEventListener('click',()=>{const k=getMK();if(!k.length){toast('No data this month');return;}dl(buildCSV(k),'Journeys_month.csv');});
+document.getElementById('s-ex-wtxt').addEventListener('click',async()=>{const k=getWK();if(!k.length){toast('No data this week');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Week copied!');}catch(e){dl(buildTxt(k),'week.txt');}});
+document.getElementById('s-ex-mtxt').addEventListener('click',async()=>{const k=getMK();if(!k.length){toast('No data this month');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Month copied!');}catch(e){dl(buildTxt(k),'month.txt');}});
 
 function showDatePicker(){
   const i=iso(vDate);
