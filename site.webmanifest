@@ -1,0 +1,30 @@
+{
+  "name": "Journeys",
+  "short_name": "Journeys",
+  "description": "Mileage Tracker",
+  "start_url": "./journeys.html?v=20260815e",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#C8E86C",
+  "icons": [
+    {
+      "src": "icon-192.png?v=20260815e",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png?v=20260815e",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-180.png?v=20260815e",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
