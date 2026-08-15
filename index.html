@@ -4,471 +4,424 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#F2EDE4">
-<title>TRVL</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#141414">
+<title>Journeys</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- iOS icon: inline SVG rendered to canvas then used as apple-touch-icon -->
+<script>
+(function(){
+  try {
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'>
+      <rect width='180' height='180' rx='40' fill='%231A1A1A'/>
+      <circle cx='90' cy='68' r='28' fill='%23C0392B'/>
+      <circle cx='90' cy='68' r='11' fill='%231A1A1A'/>
+      <path d='M90 96 L63 148 Q90 138 117 148 Z' fill='%23C0392B'/>
+    </svg>`;
+    const img = new Image();
+    img.onload = function(){
+      const c = document.createElement('canvas'); c.width=180; c.height=180;
+      c.getContext('2d').drawImage(img,0,0);
+      const link = document.createElement('link');
+      link.rel='apple-touch-icon'; link.href=c.toDataURL('image/png');
+      document.head.appendChild(link);
+    };
+    img.src = 'data:image/svg+xml,' + svg;
+  } catch(e){}
+})();
+</script>
+
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --cream: #F2EDE4;
-  --cream2: #E8E2D8;
-  --cream3: #DDD7CC;
-  --ink: #1A1A1A;
-  --ink2: #5A5550;
-  --ink3: #A09A93;
-  --red: #D94F3D;
-  --red-dim: rgba(217,79,61,0.10);
-  --line: rgba(26,26,26,0.10);
-  --line2: rgba(26,26,26,0.18);
-  --white: #FAFAF8;
+  --bg: #141414;
+  --surface: #1E1E1E;
+  --surface2: #272727;
+  --surface3: #303030;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.15);
+  --text: #F0EDE8;
+  --text2: #908A84;
+  --text3: #504A46;
+  --red: #C0392B;
+  --red2: #8B1A1A;
+  --red-glow: rgba(192,57,43,0.18);
+  --line: rgba(255,255,255,0.07);
 }
 html, body {
-  background: var(--cream);
-  color: var(--ink);
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Inter', -apple-system, sans-serif;
-  min-height: 100vh;
+  height: 100%; overflow: hidden;
   -webkit-tap-highlight-color: transparent;
-  overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
 }
-input, select, textarea, button { font-family: inherit; -webkit-appearance: none; }
+* { -webkit-user-select: none; user-select: none; }
+input, textarea { -webkit-user-select: text; user-select: text; }
+input, select, textarea, button { font-family: inherit; -webkit-appearance: none; appearance: none; }
 button { cursor: pointer; border: none; background: none; }
-input, select { border: none; outline: none; background: none; color: var(--ink); }
 
-#app { min-height: 100vh; display: flex; flex-direction: column; }
-.screen { display: none; flex-direction: column; min-height: 100vh; }
+#app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+.screen { display: none; flex-direction: column; height: 100%; overflow: hidden; }
 .screen.active { display: flex; }
 
 /* ── AUTH ── */
 #auth-screen {
-  background: var(--cream); align-items: center; justify-content: center; padding: 2.5rem 2rem;
+  background: var(--bg);
+  align-items: center; justify-content: center;
+  padding: 2rem 1.5rem;
+  gap: 0;
 }
-.auth-box { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 2rem; }
-.auth-logo {
-  font-family: 'DM Serif Display', serif;
-  font-size: 3.5rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1;
+.auth-logo-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  margin-bottom: 2.5rem;
 }
-.auth-logo span { color: var(--red); }
-.auth-tagline { font-size: 0.8rem; font-weight: 500; color: var(--ink2); margin-top: -1.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
-.auth-fields { display: flex; flex-direction: column; gap: 0.65rem; }
+.auth-icon {
+  width: 72px; height: 72px; border-radius: 18px;
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 0.25rem;
+}
+.auth-wordmark { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); }
+.auth-sub { font-size: 0.72rem; font-weight: 500; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; }
+.auth-form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 0.65rem; }
 .auth-field {
-  background: var(--white); border: 1.5px solid var(--line2);
-  border-radius: 12px; padding: 0.9rem 1rem;
-  font-size: 0.9rem; color: var(--ink); width: 100%;
+  background: var(--surface); border: 1.5px solid var(--border2);
+  border-radius: 12px; padding: 0.85rem 1rem;
+  font-size: 0.9rem; color: var(--text); width: 100%;
   transition: border-color 0.15s;
 }
-.auth-field:focus { border-color: var(--ink); outline: none; }
-.auth-field::placeholder { color: var(--ink3); }
-.btn-ink {
-  background: var(--ink); color: var(--cream);
-  font-weight: 700; font-size: 0.88rem; letter-spacing: 0.02em;
-  padding: 0.95rem; border-radius: 12px; border: none;
-  transition: opacity 0.15s, transform 0.1s;
+.auth-field:focus { border-color: var(--red); outline: none; }
+.auth-field::placeholder { color: var(--text3); }
+.auth-err { font-size: 0.72rem; color: var(--red); text-align: center; min-height: 1.1rem; }
+.btn-red {
+  background: var(--red); color: #fff;
+  font-weight: 700; font-size: 0.88rem; letter-spacing: 0.01em;
+  padding: 0.9rem; border-radius: 12px; border: none;
+  transition: opacity 0.15s, transform 0.1s; width: 100%;
 }
-.btn-ink:active { transform: scale(0.97); opacity: 0.85; }
-.auth-error { color: var(--red); font-size: 0.75rem; text-align: center; min-height: 1rem; }
+.btn-red:active { transform: scale(0.97); opacity: 0.85; }
+.auth-invite-note {
+  font-size: 0.68rem; color: var(--text3); text-align: center;
+  margin-top: 0.5rem; line-height: 1.5;
+}
 
-/* ── MAIN SHELL ── */
-#main-screen { background: var(--cream); }
+/* ── MAIN ── */
+#main-screen { background: var(--bg); }
 
-/* ── TOPBAR ── */
+/* Topbar */
 .topbar {
-  padding: calc(env(safe-area-inset-top) + 1rem) 1.25rem 0.85rem;
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--cream);
+  flex-shrink: 0;
+  padding: calc(env(safe-area-inset-top) + 0.75rem) 1rem 0.6rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
-.topbar-logo {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.6rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1;
+.topbar-left { display: flex; align-items: center; gap: 0.6rem; }
+.topbar-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--red); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.topbar-logo span { color: var(--red); }
-.topbar-date-btn {
-  font-size: 0.72rem; font-weight: 700; color: var(--ink2);
-  letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 0.45rem 0.9rem; border-radius: 20px;
-  border: 1.5px solid var(--line2); background: var(--white);
-  transition: background 0.12s, border-color 0.12s;
+.topbar-wordmark { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); }
+.topbar-date {
+  font-size: 0.7rem; font-weight: 600; color: var(--text2);
+  letter-spacing: 0.04em; background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 0.35rem 0.75rem; cursor: pointer;
 }
-.topbar-date-btn:active { background: var(--cream2); }
-.topbar-settings {
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 1.5px solid var(--line2); background: var(--white);
-  display: flex; align-items: center; justify-content: center;
+.topbar-gear {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 
-/* ── TABS ── */
-.nav-tabs {
-  display: flex; padding: 0 1.25rem;
-  border-bottom: 1px solid var(--line2); background: var(--cream);
+/* Tabs */
+.tabs {
+  flex-shrink: 0;
+  display: flex; background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
-.nav-tab {
-  flex: 1; padding: 0.7rem 0.25rem; text-align: center;
-  font-size: 0.7rem; font-weight: 700; color: var(--ink3);
+.tab {
+  flex: 1; padding: 0.65rem 0.25rem; text-align: center;
+  font-size: 0.68rem; font-weight: 700; color: var(--text3);
   letter-spacing: 0.06em; text-transform: uppercase;
   border-bottom: 2px solid transparent;
   transition: color 0.15s, border-color 0.15s;
 }
-.nav-tab.active { color: var(--red); border-bottom-color: var(--red); }
+.tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+/* Tab content areas — all fill remaining height, no scroll except log/export */
+.tab-pane { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
+.tab-pane.active { display: flex; }
 
 /* ── DAY TAB ── */
-#tab-day {
+#day-pane {
+  position: relative;
+  align-items: stretch;
+  padding: 0;
+}
+
+/* Journey layout: three rows — home top, site centre, home bottom */
+.journey-outer {
   flex: 1; display: flex; flex-direction: column;
-  overflow: hidden; position: relative;
-}
-
-/* Stats row */
-.stats-strip {
-  display: flex; padding: 1rem 1.25rem 0;
-  gap: 0; border-bottom: 1px solid var(--line);
-  background: var(--cream);
-}
-.stat-pill {
-  flex: 1; text-align: center; padding: 0.6rem 0 0.75rem;
-  border-right: 1px solid var(--line);
-}
-.stat-pill:last-child { border-right: none; }
-.stat-num {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.9rem; line-height: 1; color: var(--ink); letter-spacing: -0.02em;
-  display: block;
-}
-.stat-num.red { color: var(--red); }
-.stat-lbl {
-  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--ink3); margin-top: 2px; display: block;
-}
-
-/* ── CURVED JOURNEY CANVAS ── */
-.journey-canvas {
-  flex: 1; position: relative; overflow: hidden;
+  padding: 1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
+  gap: 0;
   min-height: 0;
-}
-.journey-canvas svg.track-svg {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  pointer-events: none;
+  justify-content: space-between;
 }
 
-/* Home icons — fixed positions */
-.home-node {
-  position: absolute;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
+/* Node row */
+.node-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  flex-shrink: 0;
 }
-.home-node.top-left { top: 1.5rem; left: 1.5rem; }
-.home-node.bottom-right { bottom: 5rem; right: 1.5rem; }
+.node-row.right { flex-direction: row-reverse; }
 
-.home-icon {
-  width: 44px; height: 44px; border-radius: 50%;
-  border: 2px solid var(--ink);
-  background: var(--white);
+.loc-icon {
+  width: 48px; height: 48px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem;
+  flex-shrink: 0; position: relative;
 }
-.home-label-txt {
-  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--ink2);
-}
+.loc-icon.home-icon { background: var(--surface2); border: 1.5px solid var(--border2); }
+.loc-icon.site-icon { background: var(--red-glow); border: 1.5px solid var(--red); }
+.loc-icon svg { display: block; }
 
-/* Miles badge on curve */
-.miles-pill {
-  position: absolute; left: 50%; transform: translateX(-50%);
-  background: var(--ink); color: var(--cream);
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
-  padding: 0.3rem 0.75rem; border-radius: 20px;
-  white-space: nowrap; pointer-events: none;
-  transition: opacity 0.2s;
+.node-label { font-size: 0.72rem; font-weight: 700; color: var(--text2); letter-spacing: 0.04em; }
+.node-miles {
+  font-size: 1.1rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em;
+  margin-left: auto;
 }
-.miles-pill.faint { background: var(--cream3); color: var(--ink3); }
+.node-miles.right { margin-left: 0; margin-right: auto; }
+.node-total-label { font-size: 0.6rem; font-weight: 600; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 1px; }
 
-/* Site card — centred */
-.site-card-wrap {
-  position: absolute;
-  left: 50%; top: 50%;
+/* Leg connector */
+.leg-wrap {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; min-height: 48px;
+  padding: 0.25rem 0;
+}
+.leg-line {
+  width: 2px; flex: 1;
+  background: linear-gradient(to bottom, var(--border2) 0%, var(--red) 50%, var(--border2) 100%);
+  position: relative; min-height: 32px;
+}
+.leg-miles-badge {
+  position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: calc(100% - 5rem);
-  max-width: 280px;
-  z-index: 10;
+  background: var(--surface2); border: 1.5px solid var(--border2);
+  border-radius: 20px; padding: 0.22rem 0.65rem;
+  font-size: 0.68rem; font-weight: 700; color: var(--red);
+  white-space: nowrap; z-index: 2; letter-spacing: 0.02em;
 }
-.site-card {
-  background: var(--white);
-  border: 1.5px solid var(--line2);
-  border-radius: 20px;
-  padding: 1.25rem 1.2rem 1rem;
-  box-shadow: 0 4px 24px rgba(26,26,26,0.08), 0 1px 4px rgba(26,26,26,0.06);
-  cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.15s;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.site-card:active { transform: scale(0.98); }
-.site-card.selected { border-color: var(--ink); }
-.site-card-eyebrow {
-  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--ink3); margin-bottom: 0.4rem;
-}
-.site-card-name {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.35rem; line-height: 1.2; color: var(--ink);
-  letter-spacing: -0.01em;
-}
-.site-card-postcode {
-  font-size: 0.72rem; font-weight: 600; color: var(--ink2);
-  margin-top: 0.5rem; letter-spacing: 0.04em;
-}
-.site-card-hint {
-  font-size: 0.62rem; color: var(--ink3); margin-top: 0.65rem;
-  font-style: italic;
-}
-.site-card-empty {
-  text-align: center; padding: 0.5rem 0 0.25rem;
-}
-.site-card-empty-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
-.site-card-empty-text {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.15rem; color: var(--ink2); line-height: 1.3;
-}
-.site-card-empty-sub { font-size: 0.7rem; color: var(--ink3); margin-top: 0.3rem; }
+.leg-miles-badge.dim { color: var(--text3); }
 
-/* Second site tag (when two sites) */
-.second-site-tag {
-  position: absolute; left: 50%; transform: translateX(-50%);
-  width: calc(100% - 5rem); max-width: 280px;
-  background: var(--cream2); border: 1.5px solid var(--line2);
-  border-radius: 14px; padding: 0.7rem 1rem;
-  z-index: 9; cursor: pointer;
+/* Site selector card */
+.site-selector-card {
+  background: var(--surface); border: 1.5px solid var(--border2);
+  border-radius: 16px; padding: 0.85rem 1rem;
+  cursor: pointer; transition: border-color 0.15s, background 0.12s;
+  display: flex; align-items: center; gap: 0.75rem;
+  flex-shrink: 0;
 }
-.second-site-tag-name { font-size: 0.82rem; font-weight: 700; color: var(--ink); }
-.second-site-tag-remove {
-  position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--cream3); border: 1px solid var(--line2);
+.site-selector-card:active { background: var(--surface2); }
+.site-selector-card.has-site { border-color: var(--red); }
+.site-card-icon {
+  width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+  background: var(--red-glow); border: 1.5px solid var(--red);
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.65rem; color: var(--ink2);
 }
+.site-card-body { flex: 1; min-width: 0; }
+.site-card-name { font-size: 0.88rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.site-card-sub { font-size: 0.65rem; color: var(--text2); margin-top: 2px; }
+.site-card-arrow { color: var(--text3); font-size: 0.85rem; flex-shrink: 0; }
+.site-card-empty .site-card-name { color: var(--text3); font-weight: 500; }
 
-/* Save bar */
-.save-bar {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--cream) 65%, transparent);
-  display: flex; gap: 0.65rem;
-  z-index: 20;
+/* Second site */
+.second-site-row {
+  display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;
 }
-.btn-save {
-  flex: 1; background: var(--ink); color: var(--cream);
-  font-weight: 700; font-size: 0.85rem; border-radius: 12px;
-  padding: 0.85rem; letter-spacing: 0.02em;
-  transition: opacity 0.15s, transform 0.1s;
+.second-site-chip {
+  flex: 1; background: var(--surface2); border: 1.5px solid var(--border2);
+  border-radius: 10px; padding: 0.55rem 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
 }
-.btn-save:active { transform: scale(0.97); opacity: 0.85; }
-.btn-save:disabled { opacity: 0.25; pointer-events: none; }
-.btn-outline {
-  background: var(--white); color: var(--ink2);
-  font-weight: 600; font-size: 0.82rem; border-radius: 12px;
-  padding: 0.85rem 1.1rem; border: 1.5px solid var(--line2);
-  transition: background 0.12s;
+.second-site-chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.second-site-chip-name { font-size: 0.78rem; font-weight: 600; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.second-site-del {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface3); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; color: var(--text2); flex-shrink: 0;
 }
-.btn-outline:active { background: var(--cream2); }
+.add-second-btn {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text3); border: 1.5px dashed var(--border2); border-radius: 10px;
+  padding: 0.45rem 0.75rem; white-space: nowrap;
+  transition: color 0.12s, border-color 0.12s;
+}
+.add-second-btn:active { color: var(--red); border-color: var(--red); }
 
 /* ── LOG TAB ── */
-#tab-log { display: none; flex: 1; overflow-y: auto; padding: 1rem 1.25rem 4rem; background: var(--cream); }
-.month-nav-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0 1rem; }
-.month-nav-label {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.25rem; color: var(--ink); letter-spacing: -0.01em;
-}
-.month-nav-btns { display: flex; gap: 0.4rem; }
-.mnav-btn {
-  width: 30px; height: 30px; border-radius: 50%;
-  border: 1.5px solid var(--line2); background: var(--white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.9rem; color: var(--ink2);
-}
-.log-entry {
-  background: var(--white); border: 1.5px solid var(--line);
-  border-radius: 16px; margin-bottom: 0.65rem; overflow: hidden;
-  transition: border-color 0.12s;
-}
-.log-entry-head {
+#log-pane { overflow: hidden; }
+.log-scroll { flex: 1; overflow-y: auto; padding: 0.85rem 1rem calc(1rem + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
+.log-month-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0.85rem 1rem; cursor: pointer;
+  padding: 0 0.1rem 0.85rem;
 }
-.log-entry-date { font-size: 0.72rem; font-weight: 700; color: var(--ink2); letter-spacing: 0.04em; text-transform: uppercase; }
-.log-entry-miles { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--red); }
-.log-entry-body { padding: 0 1rem 0.85rem; border-top: 1px solid var(--line); }
-.log-stop-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0; border-bottom: 1px solid var(--line); }
-.log-stop-row:last-child { border-bottom: none; }
-.log-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.log-dot.home { background: var(--ink); }
-.log-dot.site { background: var(--red); }
-.log-stop-name { font-size: 0.8rem; font-weight: 600; color: var(--ink); flex: 1; }
-.log-stop-mi { font-size: 0.7rem; color: var(--ink2); font-weight: 500; }
-.log-entry-actions { display: flex; gap: 0.5rem; padding-top: 0.65rem; }
-.log-act-btn {
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
-  padding: 0.4rem 0.75rem; border-radius: 8px;
-  border: 1.5px solid var(--line2); background: var(--cream);
-  color: var(--ink2); transition: background 0.12s;
+.log-month-label { font-size: 0.9rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.mnav { display: flex; gap: 0.35rem; }
+.mnav-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text2); font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
 }
-.log-act-btn.danger { color: var(--red); border-color: var(--red-dim); }
-.log-empty { text-align: center; padding: 3rem 1rem; color: var(--ink3); }
-.log-empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
-.log-empty-text { font-size: 0.82rem; font-weight: 500; }
+.log-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; margin-bottom: 0.55rem; overflow: hidden;
+}
+.log-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 0.9rem; cursor: pointer;
+}
+.log-card-date { font-size: 0.7rem; font-weight: 700; color: var(--text2); letter-spacing: 0.04em; text-transform: uppercase; }
+.log-card-mi { font-size: 1rem; font-weight: 800; color: var(--red); letter-spacing: -0.02em; }
+.log-card-body { padding: 0 0.9rem 0.75rem; border-top: 1px solid var(--border); }
+.log-stop { display: flex; align-items: center; gap: 0.55rem; padding: 0.35rem 0; border-bottom: 1px solid var(--border); }
+.log-stop:last-of-type { border-bottom: none; }
+.log-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.log-dot.h { background: var(--text2); }
+.log-dot.s { background: var(--red); }
+.log-stop-name { font-size: 0.78rem; font-weight: 600; color: var(--text); flex: 1; }
+.log-stop-mi { font-size: 0.68rem; color: var(--text2); font-weight: 500; }
+.log-actions { display: flex; gap: 0.4rem; padding-top: 0.55rem; }
+.log-act {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 0.38rem 0.7rem; border-radius: 8px;
+  border: 1px solid var(--border2); color: var(--text2); background: var(--surface2);
+}
+.log-act.del { color: var(--red); border-color: rgba(192,57,43,0.3); }
+.log-empty { text-align: center; padding: 3rem 1rem; color: var(--text3); font-size: 0.82rem; }
 
 /* ── EXPORT TAB ── */
-#tab-export { display: none; flex: 1; overflow-y: auto; padding: 1.25rem 1.25rem 4rem; background: var(--cream); }
-.export-heading {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.6rem; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 1.25rem;
+#export-pane { overflow-y: auto; padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom)); gap: 0.75rem; }
+.exp-stats {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; display: flex; overflow: hidden; flex-shrink: 0;
 }
-.export-summary-card {
-  background: var(--ink); border-radius: 20px; padding: 1.25rem;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;
-}
-.escard-item {}
-.escard-num {
-  font-family: 'DM Serif Display', serif;
-  font-size: 2rem; color: var(--cream); line-height: 1;
-}
-.escard-lbl { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(242,237,228,0.5); margin-top: 3px; }
-.export-section-label {
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--ink3); margin-bottom: 0.5rem; padding: 0 0.1rem;
-}
-.export-btn-row { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
-.export-item {
-  background: var(--white); border: 1.5px solid var(--line);
-  border-radius: 14px; padding: 0.9rem 1rem;
-  display: flex; align-items: center; gap: 0.85rem; cursor: pointer;
-  transition: border-color 0.12s, background 0.12s;
-}
-.export-item:active { background: var(--cream2); }
-.export-item-icon { font-size: 1.3rem; width: 38px; text-align: center; flex-shrink: 0; }
-.export-item-text { flex: 1; }
-.export-item-title { font-size: 0.85rem; font-weight: 700; color: var(--ink); }
-.export-item-sub { font-size: 0.68rem; color: var(--ink2); margin-top: 1px; }
-.export-arrow { color: var(--ink3); font-size: 0.9rem; }
-
-/* ── SETTINGS PANEL ── */
-#settings-panel {
-  display: none; flex: 1; overflow-y: auto;
-  padding: 1.25rem 1.25rem 4rem; background: var(--cream);
-  flex-direction: column; gap: 1.25rem;
-}
-.settings-back {
-  display: flex; align-items: center; gap: 0.5rem;
-  font-size: 0.75rem; font-weight: 700; color: var(--ink2);
-  letter-spacing: 0.04em; text-transform: uppercase;
-  margin-bottom: 0.25rem; width: fit-content;
-}
-.settings-heading {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.6rem; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 0.5rem;
-}
-.settings-section { display: flex; flex-direction: column; gap: 0.4rem; }
-.settings-section-label {
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--ink3); padding: 0 0.1rem;
-}
-.settings-card { background: var(--white); border: 1.5px solid var(--line); border-radius: 16px; overflow: hidden; }
-.settings-row {
+.exp-stat { flex: 1; padding: 0.85rem 0.75rem; text-align: center; border-right: 1px solid var(--border); }
+.exp-stat:last-child { border-right: none; }
+.exp-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--red); letter-spacing: -0.03em; display: block; }
+.exp-stat-lbl { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text3); display: block; margin-top: 2px; }
+.exp-section-lbl { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0 0.1rem; flex-shrink: 0; }
+.exp-btn {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0.85rem 1rem;
   display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.85rem 1rem; border-bottom: 1px solid var(--line);
+  cursor: pointer; transition: background 0.12s; flex-shrink: 0;
+}
+.exp-btn:active { background: var(--surface2); }
+.exp-btn-icon { font-size: 1.2rem; width: 32px; text-align: center; flex-shrink: 0; }
+.exp-btn-body { flex: 1; }
+.exp-btn-title { font-size: 0.84rem; font-weight: 700; color: var(--text); }
+.exp-btn-sub { font-size: 0.67rem; color: var(--text2); margin-top: 1px; }
+.exp-arrow { color: var(--text3); }
+
+/* ── SETTINGS ── */
+#settings-pane { overflow-y: auto; padding: 0.75rem 1rem calc(1rem + env(safe-area-inset-bottom)); gap: 0.75rem; }
+.settings-back {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text2); padding: 0.1rem 0; display: block; width: fit-content;
+  flex-shrink: 0;
+}
+.settings-title { font-size: 1.1rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; flex-shrink: 0; }
+.settings-section-lbl { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); flex-shrink: 0; }
+.settings-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; flex-shrink: 0; }
+.settings-row {
+  display: flex; align-items: center; gap: 0.65rem;
+  padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--border);
 }
 .settings-row:last-child { border-bottom: none; }
-.settings-row-icon { font-size: 1.1rem; width: 28px; text-align: center; flex-shrink: 0; }
+.settings-row-icon { font-size: 1rem; width: 26px; text-align: center; flex-shrink: 0; }
 .settings-row-body { flex: 1; min-width: 0; }
-.settings-row-title { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
-.settings-row-sub { font-size: 0.68rem; color: var(--ink2); margin-top: 1px; }
-.settings-row-action { font-size: 0.72rem; font-weight: 700; color: var(--red); flex-shrink: 0; }
-.site-manage-row {
-  display: flex; align-items: center; gap: 0.65rem;
-  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line);
-}
-.site-manage-row:last-child { border-bottom: none; }
-.site-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
-.site-manage-name { flex: 1; min-width: 0; }
-.site-manage-name-txt { font-size: 0.82rem; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.site-manage-pc { font-size: 0.65rem; color: var(--ink2); font-weight: 500; margin-top: 1px; }
-.site-manage-mi { font-size: 0.72rem; font-weight: 700; color: var(--ink2); width: 44px; text-align: right; flex-shrink: 0; }
-.site-del-btn {
-  width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line2);
-  background: var(--cream); display: flex; align-items: center; justify-content: center;
-  font-size: 0.65rem; color: var(--ink3); flex-shrink: 0;
+.settings-row-title { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+.settings-row-sub { font-size: 0.65rem; color: var(--text2); margin-top: 1px; }
+.settings-row-act { font-size: 0.7rem; font-weight: 700; color: var(--red); flex-shrink: 0; }
+.site-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border); }
+.site-row:last-child { border-bottom: none; }
+.site-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.site-row-name { flex: 1; min-width: 0; }
+.site-row-title { font-size: 0.8rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.site-row-pc { font-size: 0.62rem; color: var(--text2); margin-top: 1px; }
+.site-row-mi { font-size: 0.7rem; font-weight: 700; color: var(--text2); width: 44px; text-align: right; flex-shrink: 0; }
+.site-row-del { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border2); background: var(--surface2); font-size: 0.6rem; color: var(--text3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.btn-outline {
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text2); font-weight: 600; font-size: 0.82rem;
+  border-radius: 12px; padding: 0.78rem 1rem; width: 100%;
+  flex-shrink: 0;
 }
 
 /* ── OVERLAY / SHEET ── */
-.overlay { position: fixed; inset: 0; background: rgba(26,26,26,0.45); z-index: 100; display: none; align-items: flex-end; animation: fadeIn 0.18s ease; }
-.overlay.open { display: flex; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: flex-end; }
+.overlay.open { display: flex; animation: fadeIn 0.18s ease; }
 .sheet {
-  width: 100%; background: var(--white);
-  border-radius: 24px 24px 0 0;
-  padding: 0 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
-  animation: slideUp 0.3s cubic-bezier(0.22,0.9,0.3,1);
-  max-height: 88vh; overflow-y: auto;
-  display: flex; flex-direction: column; gap: 0.85rem;
+  width: 100%; background: var(--surface);
+  border-radius: 22px 22px 0 0;
+  padding: 0 1.1rem calc(1.25rem + env(safe-area-inset-bottom));
+  max-height: 85vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  animation: slideUp 0.28s cubic-bezier(0.22,0.9,0.3,1);
 }
-.sheet-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--line2); margin: 0.75rem auto 0.25rem; flex-shrink: 0; }
-.sheet-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--ink); letter-spacing: -0.01em; }
-.sheet-field-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 0.35rem; }
+.sheet-handle { width: 34px; height: 4px; border-radius: 2px; background: var(--border2); margin: 0.7rem auto 0.15rem; flex-shrink: 0; }
+.sheet-title { font-size: 0.95rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; flex-shrink: 0; }
+.sheet-lbl { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); }
 .sheet-input {
-  background: var(--cream); border: 1.5px solid var(--line2);
-  border-radius: 12px; padding: 0.82rem 1rem;
-  font-size: 0.9rem; color: var(--ink); width: 100%;
+  background: var(--surface2); border: 1.5px solid var(--border2);
+  border-radius: 11px; padding: 0.78rem 0.9rem;
+  font-size: 0.88rem; color: var(--text); width: 100%;
   transition: border-color 0.15s;
 }
-.sheet-input:focus { border-color: var(--ink); outline: none; }
-.sheet-input::placeholder { color: var(--ink3); }
-.site-search-list { border: 1.5px solid var(--line2); border-radius: 14px; overflow: hidden; background: var(--cream); }
-.site-search-input-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--line2); background: var(--white); }
-.site-search-inp { flex: 1; font-size: 0.88rem; color: var(--ink); background: none; }
-.site-search-inp::placeholder { color: var(--ink3); }
-.site-list-scroll { max-height: 220px; overflow-y: auto; }
-.site-list-item {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line); cursor: pointer;
-  background: var(--white); transition: background 0.1s;
-}
+.sheet-input:focus { border-color: var(--red); outline: none; }
+.sheet-input::placeholder { color: var(--text3); }
+.site-search-wrap { border: 1px solid var(--border2); border-radius: 12px; overflow: hidden; background: var(--surface2); flex-shrink: 0; }
+.site-search-bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border); background: var(--surface3); }
+.site-search-bar input { flex: 1; font-size: 0.85rem; color: var(--text); background: none; -webkit-user-select: text; user-select: text; }
+.site-search-bar input::placeholder { color: var(--text3); }
+.site-list-scroll { max-height: 210px; overflow-y: auto; }
+.site-list-item { display: flex; align-items: center; gap: 0.65rem; padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--border); cursor: pointer; background: var(--surface2); transition: background 0.1s; }
 .site-list-item:last-child { border-bottom: none; }
-.site-list-item:active { background: var(--cream2); }
+.site-list-item:active { background: var(--surface3); }
 .site-list-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
-.site-list-name { flex: 1; font-size: 0.84rem; font-weight: 600; color: var(--ink); }
-.site-list-mi { font-size: 0.7rem; color: var(--ink2); font-weight: 500; }
-.sheet-btn-row { display: flex; gap: 0.65rem; }
-.sheet-cancel { flex: 1; background: var(--cream2); border: 1.5px solid var(--line2); color: var(--ink2); font-weight: 600; font-size: 0.85rem; border-radius: 12px; padding: 0.85rem; }
-.sheet-confirm { flex: 2; background: var(--ink); color: var(--cream); font-weight: 700; font-size: 0.85rem; border-radius: 12px; padding: 0.85rem; }
+.site-list-name { flex: 1; font-size: 0.82rem; font-weight: 600; color: var(--text); }
+.site-list-mi { font-size: 0.68rem; color: var(--text2); }
+.sheet-row { display: flex; gap: 0.6rem; flex-shrink: 0; }
+.sheet-cancel { flex: 1; background: var(--surface2); border: 1px solid var(--border2); color: var(--text2); font-weight: 600; font-size: 0.84rem; border-radius: 11px; padding: 0.8rem; }
+.sheet-confirm { flex: 2; background: var(--red); color: #fff; font-weight: 700; font-size: 0.84rem; border-radius: 11px; padding: 0.8rem; }
 
-/* ── TOAST ── */
+/* Toast */
 .toast {
-  position: fixed; bottom: calc(5.5rem + env(safe-area-inset-bottom)); left: 50%;
+  position: fixed; bottom: calc(1.5rem + env(safe-area-inset-bottom)); left: 50%;
   transform: translateX(-50%);
-  background: var(--ink); color: var(--cream);
-  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
-  padding: 0.55rem 1.1rem; border-radius: 20px;
-  z-index: 300; white-space: nowrap; pointer-events: none;
-  animation: toastIn 0.22s cubic-bezier(0.22,0.9,0.3,1);
-  display: none;
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--text); font-size: 0.78rem; font-weight: 600;
+  padding: 0.5rem 1.1rem; border-radius: 20px;
+  z-index: 500; white-space: nowrap; display: none; pointer-events: none;
+  animation: toastIn 0.2s ease;
 }
 
-/* ── LONG PRESS PULSE ── */
-@keyframes longPressRing {
-  0% { box-shadow: 0 0 0 0 rgba(217,79,61,0.4); }
-  70% { box-shadow: 0 0 0 12px rgba(217,79,61,0); }
-  100% { box-shadow: 0 0 0 0 rgba(217,79,61,0); }
-}
-.site-card.pressing { animation: longPressRing 0.7s ease; }
-
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
-@keyframes toastIn { from { opacity:0; transform:translate(-50%,10px); } to { opacity:1; transform:translate(-50%,0); } }
-
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+@keyframes slideUp { from { transform:translateY(100%) } to { transform:translateY(0) } }
+@keyframes toastIn { from { opacity:0; transform:translate(-50%,8px) } to { opacity:1; transform:translate(-50%,0) } }
 ::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--surface3); }
 </style>
 </head>
 <body>
@@ -476,200 +429,208 @@ input, select { border: none; outline: none; background: none; color: var(--ink)
 
 <!-- AUTH -->
 <div id="auth-screen" class="screen active">
-  <div class="auth-box">
-    <div>
-      <div class="auth-logo">TRV<span>L</span></div>
-      <div class="auth-tagline">Mileage Tracker</div>
+  <div class="auth-logo-wrap">
+    <div class="auth-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="16" r="9" fill="#C0392B"/>
+        <circle cx="22" cy="16" r="3.5" fill="#141414"/>
+        <path d="M22 25 L12 40 Q22 35 32 40 Z" fill="#C0392B"/>
+      </svg>
     </div>
-    <div class="auth-fields">
-      <input id="auth-email" class="auth-field" type="email" placeholder="Email" autocomplete="username">
-      <input id="auth-pass" class="auth-field" type="password" placeholder="Password" autocomplete="current-password">
-    </div>
-    <div>
-      <div id="auth-error" class="auth-error" style="margin-bottom:0.5rem"></div>
-      <button class="btn-ink" id="auth-btn" style="width:100%">Sign in</button>
-    </div>
+    <div class="auth-wordmark">Journeys</div>
+    <div class="auth-sub">Mileage Tracker</div>
+  </div>
+  <div class="auth-form">
+    <input id="auth-email" class="auth-field" type="email" placeholder="Email" autocomplete="username">
+    <input id="auth-pass" class="auth-field" type="password" placeholder="Password" autocomplete="current-password">
+    <input id="auth-invite" class="auth-field" type="text" placeholder="Invite code" autocomplete="off">
+    <div id="auth-err" class="auth-err"></div>
+    <button class="btn-red" id="auth-btn">Sign in / Register</button>
+    <div class="auth-invite-note">New accounts require an invite code.<br>Contact your administrator to get access.</div>
   </div>
 </div>
 
 <!-- MAIN -->
 <div id="main-screen" class="screen">
-
   <div class="topbar">
-    <div class="topbar-logo">TRV<span>L</span></div>
-    <button class="topbar-date-btn" id="topbar-date-btn">Today</button>
-    <button class="topbar-settings" id="settings-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5A5550" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="topbar-left">
+      <div class="topbar-icon">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="7" r="4.5" fill="white"/>
+          <circle cx="10" cy="7" r="1.8" fill="#C0392B"/>
+          <path d="M10 11.5 L5 18.5 Q10 16 15 18.5 Z" fill="white"/>
+        </svg>
+      </div>
+      <span class="topbar-wordmark">Journeys</span>
+    </div>
+    <button class="topbar-date" id="topbar-date">Today</button>
+    <button class="topbar-gear" id="settings-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#908A84" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     </button>
   </div>
 
-  <div class="nav-tabs">
-    <button class="nav-tab active" data-tab="day">Today</button>
-    <button class="nav-tab" data-tab="log">Log</button>
-    <button class="nav-tab" data-tab="export">Export</button>
+  <div class="tabs">
+    <button class="tab active" data-tab="day">Today</button>
+    <button class="tab" data-tab="log">Log</button>
+    <button class="tab" data-tab="export">Export</button>
   </div>
 
-  <!-- DAY TAB -->
-  <div id="tab-day">
-    <div class="stats-strip" id="stats-strip">
-      <div class="stat-pill">
-        <span class="stat-num red" id="stat-today">—</span>
-        <span class="stat-lbl">Miles today</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-num" id="stat-sites">0</span>
-        <span class="stat-lbl">Sites visited</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-num" id="stat-month">—</span>
-        <span class="stat-lbl">Month total</span>
-      </div>
-    </div>
+  <!-- DAY -->
+  <div id="day-pane" class="tab-pane active">
+    <div class="journey-outer">
 
-    <div class="journey-canvas" id="journey-canvas">
-      <!-- SVG track drawn by JS -->
-      <svg class="track-svg" id="track-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-
-      <!-- Home top-left -->
-      <div class="home-node top-left">
-        <div class="home-icon">🏠</div>
-        <div class="home-label-txt">Home</div>
-      </div>
-
-      <!-- Home bottom-right -->
-      <div class="home-node bottom-right">
-        <div class="home-icon">🏠</div>
-        <div class="home-label-txt">Home</div>
-      </div>
-
-      <!-- Miles outbound badge -->
-      <div class="miles-pill faint" id="miles-out" style="top:28%">···</div>
-
-      <!-- Miles return badge -->
-      <div class="miles-pill faint" id="miles-ret" style="top:65%">···</div>
-
-      <!-- Site card (primary) -->
-      <div class="site-card-wrap" id="site-card-wrap">
-        <div class="site-card" id="site-card" tabindex="0">
-          <div class="site-card-empty" id="site-card-inner">
-            <div class="site-card-empty-icon">🏥</div>
-            <div class="site-card-empty-text">Tap to select<br>your site</div>
-            <div class="site-card-empty-sub">Long-press to add a second site</div>
-          </div>
+      <!-- Home top -->
+      <div class="node-row">
+        <div class="loc-icon home-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#908A84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div>
+          <div class="node-label">Home</div>
+          <div style="font-size:0.62rem;color:var(--text3)" id="home-pc-label">BL5 2RX</div>
         </div>
       </div>
 
-      <!-- Second site card (shown when added) -->
-      <div class="second-site-tag" id="second-site-tag" style="display:none;top:calc(50% + 100px)">
-        <div class="site-manage-name-txt second-site-name" id="second-site-name">—</div>
-        <button class="second-site-tag-remove" id="second-site-remove">✕</button>
-      </div>
-
-      <!-- Second site miles badge -->
-      <div class="miles-pill faint" id="miles-out2" style="display:none;top:calc(50% + 62px)">···</div>
-
-      <!-- Save bar -->
-      <div class="save-bar">
-        <button class="btn-outline" id="clear-day-btn">Clear</button>
-        <button class="btn-save" id="save-day-btn" disabled>Save day</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- LOG TAB -->
-  <div id="tab-log">
-    <div class="month-nav-row">
-      <div class="month-nav-label" id="log-month-label">August 2026</div>
-      <div class="month-nav-btns">
-        <button class="mnav-btn" id="log-prev">‹</button>
-        <button class="mnav-btn" id="log-next">›</button>
-      </div>
-    </div>
-    <div id="log-list"></div>
-  </div>
-
-  <!-- EXPORT TAB -->
-  <div id="tab-export">
-    <div class="export-heading">Export</div>
-    <div class="export-summary-card" id="export-summary-card">
-      <div class="escard-item">
-        <div class="escard-num" id="exp-month-mi">—</div>
-        <div class="escard-lbl">Month miles</div>
-      </div>
-      <div class="escard-item">
-        <div class="escard-num" id="exp-month-days">—</div>
-        <div class="escard-lbl">Days logged</div>
-      </div>
-      <div class="escard-item">
-        <div class="escard-num" id="exp-week-mi">—</div>
-        <div class="escard-lbl">Week miles</div>
-      </div>
-      <div class="escard-item">
-        <div class="escard-num" id="exp-week-days">—</div>
-        <div class="escard-lbl">Week days</div>
-      </div>
-    </div>
-    <div class="export-section-label">Download / Copy</div>
-    <div class="export-btn-row">
-      <div class="export-item" id="exp-week-csv"><div class="export-item-icon">📊</div><div class="export-item-text"><div class="export-item-title">Weekly CSV</div><div class="export-item-sub">Current week, one row per day</div></div><div class="export-arrow">→</div></div>
-      <div class="export-item" id="exp-month-csv"><div class="export-item-icon">📅</div><div class="export-item-text"><div class="export-item-title">Monthly CSV</div><div class="export-item-sub">Full month summary</div></div><div class="export-arrow">→</div></div>
-      <div class="export-item" id="exp-week-txt"><div class="export-item-icon">📋</div><div class="export-item-text"><div class="export-item-title">Copy week as text</div><div class="export-item-sub">Paste into email or expenses form</div></div><div class="export-arrow">→</div></div>
-      <div class="export-item" id="exp-month-txt"><div class="export-item-icon">📝</div><div class="export-item-text"><div class="export-item-title">Copy month as text</div><div class="export-item-sub">Full month, plain text</div></div><div class="export-arrow">→</div></div>
-    </div>
-  </div>
-
-  <!-- SETTINGS PANEL -->
-  <div id="settings-panel">
-    <button class="settings-back" id="settings-back-btn">← Back</button>
-    <div class="settings-heading">Settings</div>
-    <div class="settings-section">
-      <div class="settings-section-label">Account</div>
-      <div class="settings-card">
-        <div class="settings-row">
-          <div class="settings-row-icon">👤</div>
-          <div class="settings-row-body">
-            <div class="settings-row-title" id="settings-email-txt">—</div>
-            <div class="settings-row-sub">Signed in</div>
-          </div>
-          <button class="settings-row-action" id="signout-btn">Sign out</button>
+      <!-- Leg 1 line -->
+      <div class="leg-wrap">
+        <div class="leg-line">
+          <div class="leg-miles-badge dim" id="leg1-badge">—</div>
         </div>
       </div>
-    </div>
-    <div class="settings-section">
-      <div class="settings-section-label">Home postcode</div>
-      <div class="settings-card">
-        <div class="settings-row">
-          <div class="settings-row-icon">🏠</div>
-          <div class="settings-row-body">
-            <div class="settings-row-title" id="home-pc-display">BL5 2RX</div>
-            <div class="settings-row-sub">Journey start &amp; end</div>
+
+      <!-- Primary site card -->
+      <div class="site-selector-card site-card-empty" id="site-card" tabindex="0">
+        <div class="site-card-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="10" r="3"/>
+            <path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 13-8 13S4 15.25 4 10a8 8 0 0 1 8-8z"/>
+          </svg>
+        </div>
+        <div class="site-card-body">
+          <div class="site-card-name" id="site-card-name">Tap to select site</div>
+          <div class="site-card-sub" id="site-card-sub">Hold to add a second visit</div>
+        </div>
+        <div class="site-card-arrow">›</div>
+      </div>
+
+      <!-- Second site (hidden until added) -->
+      <div id="second-site-area" style="display:none;flex-direction:column;gap:0;">
+        <div class="leg-wrap" style="min-height:32px">
+          <div class="leg-line" style="min-height:24px">
+            <div class="leg-miles-badge dim" id="leg2-badge">—</div>
           </div>
-          <button class="settings-row-action" id="edit-home-btn">Edit</button>
+        </div>
+        <div class="second-site-row">
+          <div class="second-site-chip" id="second-site-chip">
+            <div class="second-site-chip-dot"></div>
+            <div class="second-site-chip-name" id="second-site-name">—</div>
+          </div>
+          <button class="second-site-del" id="second-site-del">✕</button>
         </div>
       </div>
+
+      <!-- Leg return line -->
+      <div class="leg-wrap">
+        <div class="leg-line">
+          <div class="leg-miles-badge dim" id="leg-ret-badge">—</div>
+        </div>
+      </div>
+
+      <!-- Home bottom + total miles -->
+      <div class="node-row right">
+        <div class="loc-icon home-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#908A84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div style="text-align:right">
+          <div class="node-label" style="text-align:right">Home</div>
+          <div class="node-total-label" id="total-label">—</div>
+        </div>
+        <div style="text-align:right">
+          <div class="node-miles right" id="total-miles">—</div>
+          <div class="node-total-label" style="text-align:right">total mi</div>
+        </div>
+      </div>
+
+      <!-- Add second site button (shown when primary selected, no second yet) -->
+      <div style="display:flex;justify-content:center;margin-top:0.5rem">
+        <button class="add-second-btn" id="add-second-btn" style="display:none">+ Add second site</button>
+      </div>
+
     </div>
-    <div class="settings-section">
-      <div class="settings-section-label">Sites</div>
-      <div class="settings-card" id="sites-settings-list"></div>
-      <button class="btn-outline" id="add-site-btn" style="margin-top:0.4rem;width:100%;">+ Add site</button>
+  </div>
+
+  <!-- LOG -->
+  <div id="log-pane" class="tab-pane">
+    <div class="log-scroll">
+      <div class="log-month-row">
+        <div class="log-month-label" id="log-month-label">—</div>
+        <div class="mnav">
+          <button class="mnav-btn" id="log-prev">‹</button>
+          <button class="mnav-btn" id="log-next">›</button>
+        </div>
+      </div>
+      <div id="log-list"></div>
     </div>
+  </div>
+
+  <!-- EXPORT -->
+  <div id="export-pane" class="tab-pane">
+    <div class="exp-stats" id="exp-stats">
+      <div class="exp-stat"><span class="exp-stat-num" id="es-wmi">—</span><span class="exp-stat-lbl">Week mi</span></div>
+      <div class="exp-stat"><span class="exp-stat-num" id="es-wdays">—</span><span class="exp-stat-lbl">Week days</span></div>
+      <div class="exp-stat"><span class="exp-stat-num" id="es-mmi">—</span><span class="exp-stat-lbl">Month mi</span></div>
+      <div class="exp-stat"><span class="exp-stat-num" id="es-mdays">—</span><span class="exp-stat-lbl">Month days</span></div>
+    </div>
+    <div class="exp-section-lbl">Download</div>
+    <div class="exp-btn" id="ex-wcsv"><div class="exp-btn-icon">📊</div><div class="exp-btn-body"><div class="exp-btn-title">Weekly CSV</div><div class="exp-btn-sub">Current week, one row per day</div></div><div class="exp-arrow">›</div></div>
+    <div class="exp-btn" id="ex-mcsv"><div class="exp-btn-icon">📅</div><div class="exp-btn-body"><div class="exp-btn-title">Monthly CSV</div><div class="exp-btn-sub">Full month summary</div></div><div class="exp-arrow">›</div></div>
+    <div class="exp-section-lbl">Copy as text</div>
+    <div class="exp-btn" id="ex-wtxt"><div class="exp-btn-icon">📋</div><div class="exp-btn-body"><div class="exp-btn-title">Copy this week</div><div class="exp-btn-sub">Paste into email or expenses</div></div><div class="exp-arrow">›</div></div>
+    <div class="exp-btn" id="ex-mtxt"><div class="exp-btn-icon">📝</div><div class="exp-btn-body"><div class="exp-btn-title">Copy this month</div><div class="exp-btn-sub">Plain text, all logged days</div></div><div class="exp-arrow">›</div></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings-pane" class="tab-pane" style="flex-direction:column">
+    <button class="settings-back" id="settings-back">← Back</button>
+    <div class="settings-title">Settings</div>
+    <div class="settings-section-lbl">Account</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div class="settings-row-icon">👤</div>
+        <div class="settings-row-body"><div class="settings-row-title" id="s-email">—</div><div class="settings-row-sub">Signed in</div></div>
+        <button class="settings-row-act" id="signout-btn">Sign out</button>
+      </div>
+    </div>
+    <div class="settings-section-lbl">Home postcode</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div class="settings-row-icon">🏠</div>
+        <div class="settings-row-body"><div class="settings-row-title" id="s-home-pc">BL5 2RX</div><div class="settings-row-sub">Journey start &amp; end point</div></div>
+        <button class="settings-row-act" id="edit-home-btn">Edit</button>
+      </div>
+    </div>
+    <div class="settings-section-lbl">Sites</div>
+    <div class="settings-card" id="sites-list"></div>
+    <button class="btn-outline" id="add-site-btn">+ Add site</button>
   </div>
 
 </div><!-- /main-screen -->
 </div><!-- /app -->
 
-<!-- OVERLAY -->
-<div id="overlay" class="overlay">
-  <div class="sheet" id="sheet"></div>
-</div>
-
-<div id="toast" class="toast"></div>
+<div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ── Firebase ──
+const INVITE_CODE = 'JOURNEYS2025';
+
 const firebaseConfig = {
   apiKey: "AIzaSyBPVj8TRblvCM4yeJVHL_EFUd71yiow9PI",
   authDomain: "mileage-tracker-d0d31.firebaseapp.com",
@@ -681,462 +642,273 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch(e) {}
+try { db.enablePersistence({synchronizeTabs:true}).catch(()=>{}); } catch(e) {}
 
-const ORS_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImYzZjEzMzA4MzcyZTRmYWFhZGQxMDA2NWVhZTdjNmQ2IiwiaCI6Im11cm11cjY0In0=';
+const ORS = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImYzZjEzMzA4MzcyZTRmYWFhZGQxMDA2NWVhZTdjNmQ2IiwiaCI6Im11cm11cjY0In0=';
 
 const DEFAULT_SITES = [
-  { id:'rluh',    name:'Royal Liverpool University Hospital', postcode:'L7 8YE',   miles:null },
-  { id:'lhch',    name:'Liverpool Heart & Chest Hospital',   postcode:'L14 3PE',  miles:null },
-  { id:'coch',    name:'Countess of Chester Hospital',       postcode:'CH2 1UL',  miles:null },
-  { id:'arrowe',  name:'Arrowe Park Hospital',               postcode:'CH49 5PE', miles:null },
-  { id:'whiston', name:'Whiston Hospital',                   postcode:'L35 5DR',  miles:null },
-  { id:'mri',     name:'Manchester Royal Infirmary',         postcode:'M13 9WL',  miles:null },
-  { id:'nmgh',    name:'North Manchester General Hospital',  postcode:'M8 5RB',   miles:null },
-  { id:'oldham',  name:'Royal Oldham Hospital',              postcode:'OL1 2JH',  miles:null },
-  { id:'stepping',name:'Stepping Hill Hospital',             postcode:'SK2 7JE',  miles:null },
-  { id:'tameside',name:'Tameside General Hospital',          postcode:'OL6 9RW',  miles:null },
-  { id:'christie',name:'The Christie',                       postcode:'M20 4BX',  miles:null },
-  { id:'spireliv',name:'Spire Liverpool',                    postcode:'L18 1HQ',  miles:null },
-  { id:'lgi',     name:'Leeds General Infirmary',            postcode:'LS1 3EX',  miles:null },
-  { id:'barnsley',name:'Barnsley Hospital',                  postcode:'S75 2EP',  miles:null },
-  { id:'leicester',name:'Leicester Royal Infirmary',         postcode:'LE1 5WW',  miles:null },
-  { id:'spirehull',name:'Spire Hull & East Riding',          postcode:'HU10 7AZ', miles:null },
-  { id:'hudds',   name:'Huddersfield Royal Infirmary',       postcode:'HD3 3EA',  miles:null },
-  { id:'sthelens',name:'St Helens Hospital',                 postcode:'WA9 3DA',  miles:null },
+  {id:'rluh',name:'Royal Liverpool University Hospital',postcode:'L7 8YE',miles:null},
+  {id:'lhch',name:'Liverpool Heart & Chest Hospital',postcode:'L14 3PE',miles:null},
+  {id:'coch',name:'Countess of Chester Hospital',postcode:'CH2 1UL',miles:null},
+  {id:'arrowe',name:'Arrowe Park Hospital',postcode:'CH49 5PE',miles:null},
+  {id:'whiston',name:'Whiston Hospital',postcode:'L35 5DR',miles:null},
+  {id:'mri',name:'Manchester Royal Infirmary',postcode:'M13 9WL',miles:null},
+  {id:'nmgh',name:'North Manchester General Hospital',postcode:'M8 5RB',miles:null},
+  {id:'oldham',name:'Royal Oldham Hospital',postcode:'OL1 2JH',miles:null},
+  {id:'stepping',name:'Stepping Hill Hospital',postcode:'SK2 7JE',miles:null},
+  {id:'tameside',name:'Tameside General Hospital',postcode:'OL6 9RW',miles:null},
+  {id:'christie',name:'The Christie',postcode:'M20 4BX',miles:null},
+  {id:'spireliv',name:'Spire Liverpool',postcode:'L18 1HQ',miles:null},
+  {id:'lgi',name:'Leeds General Infirmary',postcode:'LS1 3EX',miles:null},
+  {id:'barnsley',name:'Barnsley Hospital',postcode:'S75 2EP',miles:null},
+  {id:'leicester',name:'Leicester Royal Infirmary',postcode:'LE1 5WW',miles:null},
+  {id:'spirehull',name:'Spire Hull & East Riding',postcode:'HU10 7AZ',miles:null},
+  {id:'hudds',name:'Huddersfield Royal Infirmary',postcode:'HD3 3EA',miles:null},
+  {id:'sthelens',name:'St Helens Hospital',postcode:'WA9 3DA',miles:null},
 ];
 
-// ── State ──
-let currentUser = null;
-let sites = [];
-let homePostcode = 'BL5 2RX';
-let savedLogs = {};
-let viewDate = new Date();
-let logMonth = new Date();
-let currentTab = 'day';
+let user=null, sites=[], homePC='BL5 2RX', logs={};
+let viewDate=new Date(), logMonth=new Date(), curTab='day';
+let primary=null, second=null;
 
-// Day state
-let primarySite = null;   // { id, name, postcode, miles }
-let secondSite = null;    // { id, name, postcode, miles }
-let dayNotes = '';
+const pad=n=>String(n).padStart(2,'0');
+const isoDate=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const r1=n=>Math.round(n*10)/10;
+function fmtDate(iso){return new Date(iso+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});}
+function fmtShort(iso){return new Date(iso+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
 
-// ── Utils ──
-const pad = n => String(n).padStart(2,'0');
-function isoDate(d) { return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-function formatDate(iso) { return new Date(iso+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); }
-function formatDateShort(iso) { return new Date(iso+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); }
-function r1(n) { return Math.round(n*10)/10; }
+let _tt=null;
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.style.display='block';clearTimeout(_tt);_tt=setTimeout(()=>el.style.display='none',2400);}
 
-// ── Toast ──
-let _toastT = null;
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.style.display = 'block';
-  clearTimeout(_toastT);
-  _toastT = setTimeout(() => el.style.display = 'none', 2400);
-}
+const _dc={};
+async function pcCoords(pc){const k='c:'+pc.trim().toUpperCase();if(_dc[k])return _dc[k];try{const r=await fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(pc.trim()));const j=await r.json();if(j.status===200){const c=[j.result.longitude,j.result.latitude];_dc[k]=c;return c;}}catch(e){}return null;}
+async function getMiles(a,b){const k=a+'|'+b;if(_dc[k]!=null)return _dc[k];try{const[ca,cb]=await Promise.all([pcCoords(a),pcCoords(b)]);if(!ca||!cb)return null;const r=await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json',{method:'POST',headers:{'Authorization':ORS,'Content-Type':'application/json'},body:JSON.stringify({coordinates:[ca,cb]})});const j=await r.json();if(j.routes&&j.routes[0]){const m=r1(j.routes[0].summary.distance/1609.344);_dc[k]=m;_dc[b+'|'+a]=m;return m;}}catch(e){}return null;}
 
-// ── Distance via ORS ──
-const _distCache = {};
-async function pcToCoords(pc) {
-  const k = pc.trim().toUpperCase();
-  if (_distCache['c:'+k]) return _distCache['c:'+k];
+async function saveCloud(data){if(!user)return;try{await db.collection('users').doc(user.uid).set(data,{merge:true});}catch(e){}}
+async function loadCloud(){if(!user)return;try{const s=await db.collection('users').doc(user.uid).get();if(s.exists){const d=s.data();sites=(d.sites&&d.sites.length)?d.sites:DEFAULT_SITES.map(x=>({...x}));homePC=d.homePC||'BL5 2RX';logs=d.logs||{};}else{sites=DEFAULT_SITES.map(x=>({...x}));homePC='BL5 2RX';logs={};await saveCloud({sites,homePC,logs:{},approved:true});}}catch(e){sites=DEFAULT_SITES.map(x=>({...x}));homePC='BL5 2RX';logs={};}}
+
+/* Auth with invite code for new registrations */
+document.getElementById('auth-btn').addEventListener('click', async ()=>{
+  const em=document.getElementById('auth-email').value.trim();
+  const pw=document.getElementById('auth-pass').value;
+  const inv=document.getElementById('auth-invite').value.trim().toUpperCase();
+  const err=document.getElementById('auth-err');
+  err.textContent='';
+  if(!em||!pw){err.textContent='Enter email and password.';return;}
   try {
-    const r = await fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(k));
-    const j = await r.json();
-    if (j.status === 200) {
-      const c = [j.result.longitude, j.result.latitude];
-      _distCache['c:'+k] = c; return c;
-    }
-  } catch(e) {}
-  return null;
-}
-async function getMiles(pcA, pcB) {
-  const key = pcA+'|'+pcB;
-  if (_distCache[key] != null) return _distCache[key];
-  try {
-    const [ca, cb] = await Promise.all([pcToCoords(pcA), pcToCoords(pcB)]);
-    if (!ca || !cb) return null;
-    const r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json', {
-      method:'POST',
-      headers:{'Authorization':ORS_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({coordinates:[ca,cb]})
-    });
-    const j = await r.json();
-    if (j.routes && j.routes[0]) {
-      const m = r1(j.routes[0].summary.distance / 1609.344);
-      _distCache[key] = m; _distCache[pcB+'|'+pcA] = m; return m;
-    }
-  } catch(e) {}
-  return null;
-}
-
-// ── Firestore ──
-async function saveCloud(data) {
-  if (!currentUser) return;
-  try { await db.collection('users').doc(currentUser.uid).set(data,{merge:true}); } catch(e){}
-}
-async function loadCloud() {
-  if (!currentUser) return;
-  try {
-    const snap = await db.collection('users').doc(currentUser.uid).get();
-    if (snap.exists) {
-      const d = snap.data();
-      sites = (d.sites && d.sites.length) ? d.sites : DEFAULT_SITES.map(s=>({...s}));
-      homePostcode = d.homePostcode || 'BL5 2RX';
-      savedLogs = d.logs || {};
+    await auth.signInWithEmailAndPassword(em,pw);
+  } catch(e) {
+    if(e.code==='auth/user-not-found'||e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'){
+      if(inv!==INVITE_CODE){err.textContent='New accounts require a valid invite code.';return;}
+      try{await auth.createUserWithEmailAndPassword(em,pw);}
+      catch(e2){err.textContent=e2.message||'Could not create account.';}
     } else {
-      sites = DEFAULT_SITES.map(s=>({...s}));
-      homePostcode = 'BL5 2RX'; savedLogs = {};
-      await saveCloud({sites, homePostcode, logs:{}});
+      err.textContent=e.message||'Could not sign in.';
     }
-  } catch(e) { sites = DEFAULT_SITES.map(s=>({...s})); homePostcode='BL5 2RX'; savedLogs={}; }
-}
-
-// ── Auth ──
-document.getElementById('auth-btn').addEventListener('click', async () => {
-  const em = document.getElementById('auth-email').value.trim();
-  const pw = document.getElementById('auth-pass').value;
-  const err = document.getElementById('auth-error');
-  err.textContent = '';
-  if (!em || !pw) { err.textContent = 'Enter email and password.'; return; }
-  try { await auth.signInWithEmailAndPassword(em, pw); }
-  catch(e) {
-    try { await auth.createUserWithEmailAndPassword(em, pw); }
-    catch(e2) { err.textContent = e2.message || 'Could not sign in.'; }
   }
 });
-['auth-email','auth-pass'].forEach((id,i,arr) => {
-  document.getElementById(id).addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      if (i < arr.length-1) document.getElementById(arr[i+1]).focus();
-      else document.getElementById('auth-btn').click();
-    }
+['auth-email','auth-pass','auth-invite'].forEach((id,i,arr)=>{
+  document.getElementById(id).addEventListener('keydown',e=>{
+    if(e.key==='Enter'){if(i<arr.length-1)document.getElementById(arr[i+1]).focus();else document.getElementById('auth-btn').click();}
   });
 });
 
-auth.onAuthStateChanged(async user => {
-  currentUser = user;
-  if (user) {
+auth.onAuthStateChanged(async u=>{
+  user=u;
+  if(u){
     document.getElementById('auth-screen').classList.remove('active');
     document.getElementById('main-screen').classList.add('active');
-    document.getElementById('settings-email-txt').textContent = user.email || '';
+    document.getElementById('s-email').textContent=u.email||'';
     await loadCloud();
-    updateTopbarDate();
-    loadDayData(isoDate(viewDate));
-    renderDayView();
-    prefetchMiles();
+    updateDate();
+    loadDay(isoDate(viewDate));
+    renderDay();
+    prefetch();
   } else {
     document.getElementById('auth-screen').classList.add('active');
     document.getElementById('main-screen').classList.remove('active');
   }
 });
-document.getElementById('signout-btn').addEventListener('click', () => auth.signOut());
+document.getElementById('signout-btn').addEventListener('click',()=>auth.signOut());
 
-// ── Tabs ──
-document.querySelectorAll('.nav-tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const t = btn.dataset.tab;
-    switchTab(t);
-  });
+/* Tabs */
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>switchTab(btn.dataset.tab));
 });
-function switchTab(t) {
-  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   document.querySelector(`[data-tab="${t}"]`)?.classList.add('active');
-  document.getElementById('tab-day').style.display = t === 'day' ? 'flex' : 'none';
-  document.getElementById('tab-log').style.display = t === 'log' ? 'block' : 'none';
-  document.getElementById('tab-export').style.display = t === 'export' ? 'flex' : 'none';
-  document.getElementById('settings-panel').style.display = 'none';
-  currentTab = t;
-  if (t === 'log') renderLogView();
-  if (t === 'export') renderExportView();
-  if (t === 'day') renderDayView();
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById(t+'-pane')?.classList.add('active');
+  document.getElementById('settings-pane').classList.remove('active');
+  curTab=t;
+  if(t==='log')renderLog();
+  if(t==='export')renderExport();
 }
-document.getElementById('tab-day').style.display = 'flex';
-document.getElementById('tab-log').style.display = 'none';
-document.getElementById('tab-export').style.display = 'none';
-
-document.getElementById('settings-btn').addEventListener('click', () => {
-  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-  ['tab-day','tab-log','tab-export'].forEach(id => document.getElementById(id).style.display = 'none');
-  document.getElementById('settings-panel').style.display = 'flex';
-  currentTab = 'settings';
-  renderSettingsSites();
-  document.getElementById('home-pc-display').textContent = homePostcode;
+document.getElementById('settings-btn').addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('settings-pane').classList.add('active');
+  curTab='settings';
+  renderSites();
+  document.getElementById('s-home-pc').textContent=homePC;
 });
-document.getElementById('settings-back-btn').addEventListener('click', () => {
-  switchTab('day');
-});
+document.getElementById('settings-back').addEventListener('click',()=>switchTab('day'));
 
-// ── Topbar date ──
-function updateTopbarDate() {
-  const iso = isoDate(viewDate);
-  const todayIso = isoDate(new Date());
-  document.getElementById('topbar-date-btn').textContent = iso === todayIso ? 'Today' : formatDateShort(iso);
+/* Date */
+function updateDate(){
+  const iso=isoDate(viewDate);
+  const today=isoDate(new Date());
+  document.getElementById('topbar-date').textContent=iso===today?'Today':fmtShort(iso);
+  document.getElementById('home-pc-label').textContent=homePC;
 }
-document.getElementById('topbar-date-btn').addEventListener('click', showDatePicker);
+document.getElementById('topbar-date').addEventListener('click',showDatePicker);
 
-// ── Day data ──
-function loadDayData(iso) {
-  const log = savedLogs[iso];
-  if (log) {
-    primarySite = log.primarySite || null;
-    secondSite = log.secondSite || null;
-    dayNotes = log.notes || '';
-  } else {
-    primarySite = null; secondSite = null; dayNotes = '';
+/* Load day */
+function loadDay(iso){
+  const log=logs[iso];
+  if(log){primary=log.primary||null;second=log.second||null;}
+  else{primary=null;second=null;}
+}
+
+/* Auto-save day */
+async function autoSave(){
+  const iso=isoDate(viewDate);
+  if(!primary){delete logs[iso];}
+  else{
+    const t=calcTotal();
+    logs[iso]={primary,second,total:t,date:iso,saved:new Date().toISOString()};
   }
+  await saveCloud({logs});
 }
 
-// ── Draw curved SVG track ──
-function drawTrack() {
-  const canvas = document.getElementById('journey-canvas');
-  const svg = document.getElementById('track-svg');
-  const W = canvas.offsetWidth, H = canvas.offsetHeight;
-  if (!W || !H) return;
-
-  // Home TL dot centre
-  const x1 = 46, y1 = 46;
-  // Home BR dot centre
-  const x2 = W - 46, y2 = H - 105;
-  // Site card centre
-  const cx = W / 2, cy = H / 2 - 20;
-
-  // Bezier: Home TL → site card top, curving through left side
-  const cp1x = x1 + 20, cp1y = cy - 60;
-  const cp2x = cx - 60, cp2y = cy - 20;
-
-  // Bezier: site card bottom → Home BR, curving through right side
-  const cp3x = cx + 60, cp3y = cy + 20;
-  const cp4x = x2 - 20, cp4y = cy + 60;
-
-  const pathD1 = `M ${x1} ${y1} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${cx} ${cy - 52}`;
-  const pathD2 = `M ${cx} ${cy + 52} C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${x2} ${y2}`;
-
-  svg.innerHTML = `
-    <defs>
-      <marker id="dot1" markerWidth="6" markerHeight="6" refX="3" refY="3">
-        <circle cx="3" cy="3" r="2.5" fill="rgba(26,26,26,0.25)"/>
-      </marker>
-    </defs>
-    <path d="${pathD1}" fill="none" stroke="rgba(26,26,26,0.15)" stroke-width="2" stroke-dasharray="5,4"/>
-    <path d="${pathD2}" fill="none" stroke="rgba(26,26,26,0.15)" stroke-width="2" stroke-dasharray="5,4"/>
-  `;
-
-  // Position badges at midpoint of each bezier
-  const mid1x = bezierPoint(x1, cp1x, cp2x, cx, 0.5);
-  const mid1y = bezierPoint(y1, cp1y, cp2y, cy - 52, 0.5);
-  const mid2x = bezierPoint(cx, cp3x, cp4x, x2, 0.5);
-  const mid2y = bezierPoint(cy + 52, cp3y, cp4y, y2, 0.5);
-
-  const outEl = document.getElementById('miles-out');
-  const retEl = document.getElementById('miles-ret');
-  outEl.style.top = (mid1y - 12) + 'px';
-  outEl.style.left = (mid1x) + 'px';
-  outEl.style.transform = 'translateX(-50%)';
-  retEl.style.top = (mid2y - 12) + 'px';
-  retEl.style.left = (mid2x) + 'px';
-  retEl.style.transform = 'translateX(-50%)';
-
-  // Second site line (straight drop below card)
-  if (secondSite) {
-    const siteCardEl = document.getElementById('site-card-wrap');
-    const cardBottom = canvas.offsetHeight / 2 + 20;
-    const tag = document.getElementById('second-site-tag');
-    tag.style.top = (cardBottom + 40) + 'px';
-    const mi2 = document.getElementById('miles-out2');
-    mi2.style.top = (cardBottom + 12) + 'px';
-    mi2.style.left = '50%';
-    mi2.style.transform = 'translateX(-50%)';
-    // Draw connecting line segment
-    const extraLine = `<line x1="${cx}" y1="${cy+52}" x2="${cx}" y2="${cardBottom+40}" stroke="rgba(26,26,26,0.15)" stroke-width="2" stroke-dasharray="5,4"/>`;
-    svg.innerHTML += extraLine;
-  }
+function calcTotal(){
+  let t=0;
+  if(primary&&primary.miles!=null) t+=primary.miles*2;
+  if(second&&second.miles!=null) t+=second.miles;
+  return t?r1(t):0;
 }
 
-function bezierPoint(p0, p1, p2, p3, t) {
-  return Math.pow(1-t,3)*p0 + 3*Math.pow(1-t,2)*t*p1 + 3*(1-t)*Math.pow(t,2)*p2 + Math.pow(t,3)*p3;
-}
-
-// ── Render day view ──
-function renderDayView() {
-  if (currentTab !== 'day' && currentTab !== 'settings') {
-    if (document.getElementById('tab-day').style.display !== 'flex') return;
-  }
-
-  // Stats
-  const iso = isoDate(viewDate);
-  const todayTotal = primarySite ? computeTotalMiles() : '—';
-  const mTotal = monthMilesTotal(iso);
-  document.getElementById('stat-today').textContent = typeof todayTotal === 'number' ? todayTotal : '—';
-  document.getElementById('stat-sites').textContent = (primarySite ? 1 : 0) + (secondSite ? 1 : 0);
-  document.getElementById('stat-month').textContent = mTotal || '—';
+/* Render day */
+function renderDay(){
+  const hasPrimary=!!primary;
+  const hasSecond=!!second;
 
   // Site card
-  const cardEl = document.getElementById('site-card-inner');
-  if (primarySite) {
-    document.getElementById('site-card').classList.add('selected');
-    cardEl.innerHTML = `
-      <div class="site-card-eyebrow">Site visited</div>
-      <div class="site-card-name">${primarySite.name}</div>
-      <div class="site-card-postcode">${primarySite.postcode}</div>
-      <div class="site-card-hint">Tap to change · Long-press to add 2nd site</div>
-    `;
+  const card=document.getElementById('site-card');
+  const nm=document.getElementById('site-card-name');
+  const sub=document.getElementById('site-card-sub');
+  if(hasPrimary){
+    card.classList.remove('site-card-empty');
+    card.classList.add('has-site');
+    nm.textContent=primary.name;
+    nm.style.color='';
+    sub.textContent=primary.postcode+' · Hold to add 2nd';
   } else {
-    document.getElementById('site-card').classList.remove('selected');
-    cardEl.innerHTML = `
-      <div class="site-card-empty">
-        <div class="site-card-empty-icon">🏥</div>
-        <div class="site-card-empty-text">Tap to select<br>your site</div>
-        <div class="site-card-empty-sub">Long-press to add a second site</div>
-      </div>
-    `;
+    card.classList.add('site-card-empty');
+    card.classList.remove('has-site');
+    nm.textContent='Tap to select site';
+    nm.style.color='var(--text3)';
+    sub.textContent='Long-press to add a second visit';
   }
 
-  // Second site
-  const tag = document.getElementById('second-site-tag');
-  const mi2 = document.getElementById('miles-out2');
-  if (secondSite) {
-    tag.style.display = 'block';
-    document.getElementById('second-site-name').textContent = secondSite.name;
-    mi2.style.display = 'block';
-    updateMilesBadge('miles-out2', secondSite.miles);
-  } else {
-    tag.style.display = 'none';
-    mi2.style.display = 'none';
+  // Second site area
+  const sa=document.getElementById('second-site-area');
+  sa.style.display=hasSecond?'flex':'none';
+  if(hasSecond){
+    document.getElementById('second-site-name').textContent=second.name;
   }
+
+  // Add second btn
+  const asb=document.getElementById('add-second-btn');
+  asb.style.display=(hasPrimary&&!hasSecond)?'block':'none';
 
   // Miles badges
-  updateMilesBadge('miles-out', primarySite ? primarySite.miles : null);
-  updateMilesBadge('miles-ret', primarySite ? primarySite.miles : null);
+  setBadge('leg1-badge',primary?primary.miles:null);
+  setBadge('leg2-badge',second?second.miles:null);
+  setBadge('leg-ret-badge',primary?primary.miles:null);
 
-  // Save button
-  document.getElementById('save-day-btn').disabled = !primarySite;
-
-  // Draw curve
-  requestAnimationFrame(drawTrack);
+  // Total
+  const tot=primary?calcTotal():null;
+  document.getElementById('total-miles').textContent=tot||'—';
 }
 
-function updateMilesBadge(id, miles) {
-  const el = document.getElementById(id);
-  if (miles != null) {
-    el.textContent = miles + ' mi';
-    el.classList.remove('faint');
-  } else {
-    el.textContent = primarySite ? '···' : '—';
-    el.classList.add('faint');
-  }
+function setBadge(id,miles){
+  const el=document.getElementById(id);
+  if(miles!=null){el.textContent=miles+' mi';el.classList.remove('dim');}
+  else{el.textContent='—';el.classList.add('dim');}
 }
 
-function computeTotalMiles() {
-  let t = 0;
-  if (primarySite && primarySite.miles != null) t += primarySite.miles * 2;
-  if (secondSite && secondSite.miles != null) t += secondSite.miles;
-  return t ? r1(t) : '—';
-}
+/* Site card tap */
+document.getElementById('site-card').addEventListener('click',()=>showSitePicker(false));
 
-function monthMilesTotal(iso) {
-  const pfx = iso.slice(0,7);
-  let t = 0;
-  Object.keys(savedLogs).forEach(k => { if (k.startsWith(pfx) && savedLogs[k].total) t += savedLogs[k].total; });
-  return t ? r1(t) : null;
-}
-
-// ── Site card interactions ──
-let _longPressTimer = null;
-
-document.getElementById('site-card').addEventListener('click', () => {
-  showSiteSelector(false);
+/* Long press → second site */
+let _lp=null;
+['touchstart','mousedown'].forEach(ev=>{
+  document.getElementById('site-card').addEventListener(ev,()=>{
+    if(!primary)return;
+    _lp=setTimeout(()=>{_lp=null;showSitePicker(true);},650);
+  },{passive:true});
+});
+['touchend','touchcancel','mouseup','mouseleave'].forEach(ev=>{
+  document.getElementById('site-card').addEventListener(ev,()=>{clearTimeout(_lp);_lp=null;});
 });
 
-// Long press → add second site
-['touchstart','mousedown'].forEach(ev => {
-  document.getElementById('site-card').addEventListener(ev, e => {
-    if (!primarySite) return;
-    _longPressTimer = setTimeout(() => {
-      _longPressTimer = null;
-      document.getElementById('site-card').classList.add('pressing');
-      setTimeout(() => document.getElementById('site-card').classList.remove('pressing'), 700);
-      showSiteSelector(true);
-    }, 600);
-  }, { passive: true });
-});
-['touchend','touchcancel','mouseup','mouseleave'].forEach(ev => {
-  document.getElementById('site-card').addEventListener(ev, () => {
-    clearTimeout(_longPressTimer); _longPressTimer = null;
-  });
-});
+document.getElementById('add-second-btn').addEventListener('click',()=>{if(primary)showSitePicker(true);});
+document.getElementById('second-site-del').addEventListener('click',async()=>{second=null;renderDay();await autoSave();});
+document.getElementById('second-site-chip').addEventListener('click',()=>showSitePicker(true));
 
-document.getElementById('second-site-remove').addEventListener('click', () => {
-  secondSite = null;
-  renderDayView();
-});
-
-// ── Site selector sheet ──
-function showSiteSelector(isSecond) {
-  const title = isSecond ? 'Add second site' : 'Select site';
-
-  const listHtml = () => {
-    const q = document.getElementById('site-search-inp')?.value?.trim().toLowerCase() || '';
-    const filtered = q ? sites.filter(s => s.name.toLowerCase().includes(q) || s.postcode.toLowerCase().includes(q)) : sites;
-    return filtered.map(s => `
-      <div class="site-list-item" data-id="${s.id}">
-        <div class="site-list-dot"></div>
-        <div class="site-list-name">${s.name}</div>
-        <div class="site-list-mi">${s.miles != null ? s.miles+' mi' : ''}</div>
-      </div>
-    `).join('');
+/* Site picker */
+function showSitePicker(isSecond){
+  const listHtml=()=>{
+    const q=(document.getElementById('sp-search')?.value||'').trim().toLowerCase();
+    const f=q?sites.filter(s=>s.name.toLowerCase().includes(q)||s.postcode.toLowerCase().includes(q)):sites;
+    return f.map(s=>`<div class="site-list-item" data-id="${s.id}">
+      <div class="site-list-dot"></div>
+      <div class="site-list-name">${s.name}</div>
+      <div class="site-list-mi">${s.miles!=null?s.miles+' mi':''}</div>
+    </div>`).join('');
   };
-
   openSheet(`
     <div class="sheet-handle"></div>
-    <div class="sheet-title">${title}</div>
-    <div class="site-search-list">
-      <div class="site-search-input-row">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A09A93" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-        <input id="site-search-inp" class="site-search-inp" placeholder="Search…" autocomplete="off">
+    <div class="sheet-title">${isSecond?'Second site':'Select site'}</div>
+    <div class="site-search-wrap">
+      <div class="site-search-bar">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#504A46" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        <input id="sp-search" placeholder="Search…" autocomplete="off">
       </div>
-      <div class="site-list-scroll" id="site-list-scroll">${listHtml()}</div>
+      <div class="site-list-scroll" id="sp-list">${listHtml()}</div>
     </div>
-    <button class="sheet-cancel" id="sheet-close">Cancel</button>
+    <button class="sheet-cancel" id="sp-cancel">Cancel</button>
   `);
-
-  setTimeout(() => {
-    document.getElementById('sheet-close')?.addEventListener('click', closeSheet);
-    document.getElementById('site-search-inp')?.addEventListener('input', () => {
-      document.getElementById('site-list-scroll').innerHTML = listHtml();
-      bindItems();
-    });
-    document.getElementById('site-search-inp')?.focus();
+  setTimeout(()=>{
+    document.getElementById('sp-cancel')?.addEventListener('click',closeSheet);
+    document.getElementById('sp-search')?.addEventListener('input',()=>{document.getElementById('sp-list').innerHTML=listHtml();bindItems();});
+    document.getElementById('sp-search')?.focus();
     bindItems();
-  }, 60);
-
-  function bindItems() {
-    document.querySelectorAll('.site-list-item').forEach(el => {
-      el.addEventListener('click', async () => {
-        const s = sites.find(x => x.id === el.dataset.id);
-        if (!s) return;
+  },50);
+  function bindItems(){
+    document.querySelectorAll('.site-list-item').forEach(el=>{
+      el.addEventListener('click',async()=>{
+        const s=sites.find(x=>x.id===el.dataset.id);
+        if(!s)return;
         closeSheet();
-        if (isSecond) {
-          secondSite = { id: s.id, name: s.name, postcode: s.postcode, miles: s.miles };
-          renderDayView();
-          if (secondSite.miles == null) {
-            const m = await getMiles(primarySite.postcode, s.postcode);
-            if (m != null) { secondSite.miles = m; updateMilesBadge('miles-out2', m); }
+        if(isSecond){
+          second={id:s.id,name:s.name,postcode:s.postcode,miles:s.miles};
+          renderDay();
+          await autoSave();
+          if(second.miles==null&&primary){
+            const m=await getMiles(primary.postcode,s.postcode);
+            if(m!=null){second.miles=m;s.miles=m;renderDay();await autoSave();await saveCloud({sites});}
           }
         } else {
-          primarySite = { id: s.id, name: s.name, postcode: s.postcode, miles: s.miles };
-          renderDayView();
-          if (primarySite.miles == null) {
-            const m = await getMiles(homePostcode, s.postcode);
-            if (m != null) {
-              primarySite.miles = m;
-              s.miles = m; // cache on site object
-              updateMilesBadge('miles-out', m);
-              updateMilesBadge('miles-ret', m);
-              document.getElementById('stat-today').textContent = computeTotalMiles();
-              await saveCloud({ sites });
-            }
+          primary={id:s.id,name:s.name,postcode:s.postcode,miles:s.miles};
+          second=null;
+          renderDay();
+          await autoSave();
+          if(primary.miles==null){
+            const m=await getMiles(homePC,s.postcode);
+            if(m!=null){primary.miles=m;s.miles=m;renderDay();await autoSave();await saveCloud({sites});}
           }
         }
       });
@@ -1144,281 +916,156 @@ function showSiteSelector(isSecond) {
   }
 }
 
-// ── Save day ──
-document.getElementById('save-day-btn').addEventListener('click', async () => {
-  const iso = isoDate(viewDate);
-  const total = typeof computeTotalMiles() === 'number' ? computeTotalMiles() : 0;
-  const log = { primarySite, secondSite, notes: dayNotes, total, date: iso, saved: new Date().toISOString() };
-  savedLogs[iso] = log;
-  await saveCloud({ logs: savedLogs });
-  toast('Day saved ✓');
-  renderExportView();
-  // Update stats
-  document.getElementById('stat-month').textContent = monthMilesTotal(iso) || '—';
-});
-
-document.getElementById('clear-day-btn').addEventListener('click', () => {
-  if (!confirm('Clear this day?')) return;
-  primarySite = null; secondSite = null; dayNotes = '';
-  renderDayView();
-});
-
-// ── Prefetch site miles in background ──
-async function prefetchMiles() {
-  for (const s of sites) {
-    if (s.miles == null) {
-      const m = await getMiles(homePostcode, s.postcode);
-      if (m != null) s.miles = m;
-    }
+/* Prefetch */
+async function prefetch(){
+  for(const s of sites){
+    if(s.miles==null){const m=await getMiles(homePC,s.postcode);if(m!=null)s.miles=m;}
   }
-  await saveCloud({ sites });
-  renderSettingsSites();
+  await saveCloud({sites});
+  renderSites();
 }
 
-// ── Log view ──
-function renderLogView() {
-  const y = logMonth.getFullYear(), m = logMonth.getMonth();
-  document.getElementById('log-month-label').textContent =
-    logMonth.toLocaleDateString('en-GB', { month:'long', year:'numeric' });
-  const pfx = y+'-'+pad(m+1);
-  const keys = Object.keys(savedLogs).filter(k => k.startsWith(pfx)).sort((a,b) => b.localeCompare(a));
-  const list = document.getElementById('log-list');
-  if (!keys.length) {
-    list.innerHTML = `<div class="log-empty"><div class="log-empty-icon">🗺️</div><div class="log-empty-text">No journeys logged this month</div></div>`;
-    return;
-  }
-  list.innerHTML = keys.map(iso => {
-    const log = savedLogs[iso];
-    const stops = [];
-    stops.push({ type:'home', name:'Home' });
-    if (log.primarySite) stops.push({ type:'site', name:log.primarySite.name, miles: log.primarySite.miles ? log.primarySite.miles+' mi' : '' });
-    if (log.secondSite) stops.push({ type:'site', name:log.secondSite.name, miles: log.secondSite.miles ? log.secondSite.miles+' mi' : '' });
-    stops.push({ type:'home', name:'Home' });
-    return `<div class="log-entry">
-      <div class="log-entry-head">
-        <span class="log-entry-date">${formatDate(iso)}</span>
-        <span class="log-entry-miles">${log.total || 0} mi</span>
-      </div>
-      <div class="log-entry-body">
-        ${stops.map(s=>`<div class="log-stop-row"><div class="log-dot ${s.type}"></div><div class="log-stop-name">${s.name}</div><div class="log-stop-mi">${s.miles||''}</div></div>`).join('')}
-        ${log.notes ? `<div style="font-size:0.72rem;color:var(--ink2);padding:0.4rem 0 0;border-top:1px solid var(--line);margin-top:0.2rem;">${log.notes}</div>` : ''}
-        <div class="log-entry-actions">
-          <button class="log-act-btn" data-edit="${iso}">✏ Edit</button>
-          <button class="log-act-btn danger" data-del="${iso}">✕ Delete</button>
+/* Log */
+function renderLog(){
+  const y=logMonth.getFullYear(),m=logMonth.getMonth();
+  document.getElementById('log-month-label').textContent=logMonth.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+  const pfx=y+'-'+pad(m+1);
+  const keys=Object.keys(logs).filter(k=>k.startsWith(pfx)).sort((a,b)=>b.localeCompare(a));
+  const el=document.getElementById('log-list');
+  if(!keys.length){el.innerHTML='<div class="log-empty">No journeys logged this month</div>';return;}
+  el.innerHTML=keys.map(iso=>{
+    const log=logs[iso];
+    const stops=[
+      {t:'h',name:'Home'},
+      ...(log.primary?[{t:'s',name:log.primary.name,mi:log.primary.miles?log.primary.miles*2+' mi return':''}]:[]),
+      ...(log.second?[{t:'s',name:log.second.name,mi:log.second.miles?log.second.miles+' mi':''}]:[]),
+      {t:'h',name:'Home'}
+    ];
+    return `<div class="log-card">
+      <div class="log-card-head"><span class="log-card-date">${fmtDate(iso)}</span><span class="log-card-mi">${log.total||0} mi</span></div>
+      <div class="log-card-body">
+        ${stops.map(s=>`<div class="log-stop"><div class="log-dot ${s.t}"></div><div class="log-stop-name">${s.name}</div><div class="log-stop-mi">${s.mi||''}</div></div>`).join('')}
+        <div class="log-actions">
+          <button class="log-act" data-edit="${iso}">✏ Edit</button>
+          <button class="log-act del" data-del="${iso}">✕ Delete</button>
         </div>
       </div>
     </div>`;
   }).join('');
-
-  list.querySelectorAll('[data-edit]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const iso = btn.dataset.edit;
-      viewDate = new Date(iso+'T00:00');
-      loadDayData(iso);
-      updateTopbarDate();
+  el.querySelectorAll('[data-edit]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const iso=btn.dataset.edit;
+      viewDate=new Date(iso+'T00:00');
+      loadDay(iso);
+      updateDate();
       switchTab('day');
     });
   });
-  list.querySelectorAll('[data-del]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      if (!confirm('Delete this day?')) return;
-      delete savedLogs[btn.dataset.del];
-      await saveCloud({ logs: savedLogs });
-      renderLogView(); renderExportView(); toast('Deleted');
+  el.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click',async()=>{
+      if(!confirm('Delete this day?'))return;
+      delete logs[btn.dataset.del];
+      await saveCloud({logs});
+      renderLog();renderExport();toast('Deleted');
     });
   });
 }
-document.getElementById('log-prev').addEventListener('click', () => { logMonth.setMonth(logMonth.getMonth()-1); renderLogView(); });
-document.getElementById('log-next').addEventListener('click', () => { logMonth.setMonth(logMonth.getMonth()+1); renderLogView(); });
+document.getElementById('log-prev').addEventListener('click',()=>{logMonth.setMonth(logMonth.getMonth()-1);renderLog();});
+document.getElementById('log-next').addEventListener('click',()=>{logMonth.setMonth(logMonth.getMonth()+1);renderLog();});
 
-// ── Export ──
-function getMonthKeys() {
-  const now = new Date();
-  const pfx = now.getFullYear()+'-'+pad(now.getMonth()+1);
-  return Object.keys(savedLogs).filter(k=>k.startsWith(pfx)).sort();
+/* Export */
+function getWeekKeys(){
+  const now=new Date(),ws=new Date(now);ws.setDate(now.getDate()-((now.getDay()+6)%7));
+  const k=[];for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);const iso=isoDate(d);if(logs[iso])k.push(iso);}
+  return k;
 }
-function getWeekKeys() {
-  const now = new Date();
-  const wStart = new Date(now); wStart.setDate(now.getDate() - ((now.getDay()+6)%7));
-  const keys = [];
-  for (let i=0;i<7;i++) { const d=new Date(wStart); d.setDate(d.getDate()+i); const k=isoDate(d); if(savedLogs[k]) keys.push(k); }
-  return keys;
+function getMonthKeys(){const now=new Date();const pfx=now.getFullYear()+'-'+pad(now.getMonth()+1);return Object.keys(logs).filter(k=>k.startsWith(pfx)).sort();}
+function renderExport(){
+  const wk=getWeekKeys(),mk=getMonthKeys();
+  let wm=0,mm=0;wk.forEach(k=>wm+=logs[k].total||0);mk.forEach(k=>mm+=logs[k].total||0);
+  document.getElementById('es-wmi').textContent=r1(wm)||'—';
+  document.getElementById('es-wdays').textContent=wk.length||'—';
+  document.getElementById('es-mmi').textContent=r1(mm)||'—';
+  document.getElementById('es-mdays').textContent=mk.length||'—';
 }
-function renderExportView() {
-  const mKeys = getMonthKeys(), wKeys = getWeekKeys();
-  let mTotal=0; mKeys.forEach(k => mTotal += (savedLogs[k].total||0));
-  let wTotal=0; wKeys.forEach(k => wTotal += (savedLogs[k].total||0));
-  document.getElementById('exp-month-mi').textContent = r1(mTotal) || '—';
-  document.getElementById('exp-month-days').textContent = mKeys.length || '—';
-  document.getElementById('exp-week-mi').textContent = r1(wTotal) || '—';
-  document.getElementById('exp-week-days').textContent = wKeys.length || '—';
+function buildCSV(keys){
+  const rows=[['Date','Site 1','Postcode 1','Site 2','Postcode 2','Return Miles','Extra Miles','Total Miles']];
+  keys.forEach(iso=>{const log=logs[iso];if(!log)return;const s1=log.primary,s2=log.second;rows.push([iso,s1?s1.name:'',s1?s1.postcode:'',s2?s2.name:'',s2?s2.postcode:'',s1&&s1.miles?s1.miles*2:'',s2&&s2.miles?s2.miles:'',log.total||'']);});
+  return rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
 }
-function buildCSV(keys) {
-  const rows = [['Date','Site 1','Site 1 Postcode','Site 2','Return Miles (×2)','Extra Miles','Total Miles','Notes']];
-  keys.forEach(iso => {
-    const log = savedLogs[iso];
-    if (!log) return;
-    const s1 = log.primarySite;
-    const s2 = log.secondSite;
-    rows.push([
-      iso,
-      s1 ? s1.name : '',
-      s1 ? s1.postcode : '',
-      s2 ? s2.name : '',
-      s1 && s1.miles ? s1.miles * 2 : '',
-      s2 && s2.miles ? s2.miles : '',
-      log.total || '',
-      (log.notes||'').replace(/\n/g,' ')
-    ]);
-  });
-  return rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-}
-function dl(text, name) {
-  const a = document.createElement('a');
-  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
-  a.download = name; a.click();
-}
-function buildTxt(keys) {
-  return keys.map(iso => {
-    const log = savedLogs[iso]; if (!log) return '';
-    const s1 = log.primarySite, s2 = log.secondSite;
-    return [
-      formatDate(iso),
-      'Home → ' + (s1 ? s1.name : '?') + (s2 ? ' → ' + s2.name : '') + ' → Home',
-      'Total: ' + (log.total||0) + ' miles',
-      log.notes ? 'Notes: ' + log.notes : ''
-    ].filter(Boolean).join('\n');
-  }).join('\n\n');
-}
-document.getElementById('exp-week-csv').addEventListener('click', () => { const k=getWeekKeys(); if(!k.length){toast('No data this week');return;} dl(buildCSV(k),'TRVL_week.csv'); });
-document.getElementById('exp-month-csv').addEventListener('click', () => { const k=getMonthKeys(); if(!k.length){toast('No data this month');return;} dl(buildCSV(k),'TRVL_month.csv'); });
-document.getElementById('exp-week-txt').addEventListener('click', async () => { const k=getWeekKeys(); if(!k.length){toast('No data this week');return;} try{await navigator.clipboard.writeText(buildTxt(k));toast('Week copied!');}catch(e){dl(buildTxt(k),'TRVL_week.txt');} });
-document.getElementById('exp-month-txt').addEventListener('click', async () => { const k=getMonthKeys(); if(!k.length){toast('No data this month');return;} try{await navigator.clipboard.writeText(buildTxt(k));toast('Month copied!');}catch(e){dl(buildTxt(k),'TRVL_month.txt');} });
+function buildTxt(keys){return keys.map(iso=>{const log=logs[iso];if(!log)return'';return[fmtDate(iso),'Home → '+(log.primary?log.primary.name:'?')+(log.second?' → '+log.second.name:'')+' → Home','Total: '+(log.total||0)+' miles'].join('\n');}).join('\n\n');}
+function dl(text,name){const a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(text);a.download=name;a.click();}
+document.getElementById('ex-wcsv').addEventListener('click',()=>{const k=getWeekKeys();if(!k.length){toast('No data this week');return;}dl(buildCSV(k),'Journeys_week.csv');});
+document.getElementById('ex-mcsv').addEventListener('click',()=>{const k=getMonthKeys();if(!k.length){toast('No data this month');return;}dl(buildCSV(k),'Journeys_month.csv');});
+document.getElementById('ex-wtxt').addEventListener('click',async()=>{const k=getWeekKeys();if(!k.length){toast('No data this week');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Week copied!');}catch(e){dl(buildTxt(k),'week.txt');}});
+document.getElementById('ex-mtxt').addEventListener('click',async()=>{const k=getMonthKeys();if(!k.length){toast('No data this month');return;}try{await navigator.clipboard.writeText(buildTxt(k));toast('Month copied!');}catch(e){dl(buildTxt(k),'month.txt');}});
 
-// ── Settings ──
-function renderSettingsSites() {
-  const el = document.getElementById('sites-settings-list');
-  if (!el) return;
-  el.innerHTML = sites.map((s,i) => `
-    <div class="site-manage-row">
-      <div class="site-dot"></div>
-      <div class="site-manage-name">
-        <div class="site-manage-name-txt">${s.name}</div>
-        <div class="site-manage-pc">${s.postcode}</div>
-      </div>
-      <div class="site-manage-mi">${s.miles != null ? s.miles+' mi' : '···'}</div>
-      <button class="site-del-btn" data-idx="${i}">✕</button>
-    </div>
-  `).join('');
-  el.querySelectorAll('.site-del-btn').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const i = parseInt(btn.dataset.idx);
-      if (!confirm(`Remove "${sites[i].name}"?`)) return;
-      sites.splice(i,1); await saveCloud({sites}); renderSettingsSites();
+/* Settings */
+function renderSites(){
+  const el=document.getElementById('sites-list');
+  if(!el)return;
+  el.innerHTML=sites.map((s,i)=>`<div class="site-row"><div class="site-dot"></div><div class="site-row-name"><div class="site-row-title">${s.name}</div><div class="site-row-pc">${s.postcode}</div></div><div class="site-row-mi">${s.miles!=null?s.miles+' mi':'···'}</div><button class="site-row-del" data-i="${i}">✕</button></div>`).join('');
+  el.querySelectorAll('[data-i]').forEach(btn=>{btn.addEventListener('click',async()=>{const i=parseInt(btn.dataset.i);if(!confirm('Remove "'+sites[i].name+'"?'))return;sites.splice(i,1);await saveCloud({sites});renderSites();});});
+}
+document.getElementById('add-site-btn').addEventListener('click',()=>{
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Add site</div><div><div class="sheet-lbl" style="margin-bottom:0.35rem">Site name</div><input id="ns-name" class="sheet-input" placeholder="e.g. Royal Bolton Hospital"></div><div><div class="sheet-lbl" style="margin-bottom:0.35rem">Postcode</div><input id="ns-pc" class="sheet-input" placeholder="e.g. BL4 0JR" style="text-transform:uppercase"></div><div class="sheet-row"><button class="sheet-cancel" id="ns-cancel">Cancel</button><button class="sheet-confirm" id="ns-ok">Add</button></div>`);
+  setTimeout(()=>{
+    document.getElementById('ns-cancel')?.addEventListener('click',closeSheet);
+    document.getElementById('ns-ok')?.addEventListener('click',async()=>{
+      const nm=document.getElementById('ns-name').value.trim();
+      const pc=document.getElementById('ns-pc').value.trim().toUpperCase();
+      if(!nm||!pc){toast('Enter name and postcode');return;}
+      const ns={id:'c_'+Date.now(),name:nm,postcode:pc,miles:null};
+      sites.push(ns);closeSheet();renderSites();
+      const m=await getMiles(homePC,pc);if(m!=null)ns.miles=m;
+      await saveCloud({sites});renderSites();toast('Site added');
     });
-  });
-}
-document.getElementById('add-site-btn').addEventListener('click', () => showAddSiteSheet());
-document.getElementById('edit-home-btn').addEventListener('click', () => showEditHomeSheet());
-
-function showAddSiteSheet() {
-  openSheet(`
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">Add site</div>
-    <div>
-      <div class="sheet-field-label">Site name</div>
-      <input id="new-name" class="sheet-input" placeholder="e.g. Royal Bolton Hospital">
-    </div>
-    <div>
-      <div class="sheet-field-label">Postcode</div>
-      <input id="new-pc" class="sheet-input" placeholder="e.g. BL4 0JR" style="text-transform:uppercase">
-    </div>
-    <div class="sheet-btn-row">
-      <button class="sheet-cancel" id="s-cancel">Cancel</button>
-      <button class="sheet-confirm" id="s-confirm">Add site</button>
-    </div>
-  `);
-  setTimeout(() => {
-    document.getElementById('s-cancel')?.addEventListener('click', closeSheet);
-    document.getElementById('s-confirm')?.addEventListener('click', async () => {
-      const name = document.getElementById('new-name').value.trim();
-      const pc = document.getElementById('new-pc').value.trim().toUpperCase();
-      if (!name || !pc) { toast('Enter name and postcode'); return; }
-      const ns = { id:'custom_'+Date.now(), name, postcode:pc, miles:null };
-      sites.push(ns); closeSheet(); renderSettingsSites();
-      const m = await getMiles(homePostcode, pc);
-      if (m != null) ns.miles = m;
-      await saveCloud({sites}); renderSettingsSites(); toast('Site added');
+    document.getElementById('ns-name')?.focus();
+  },50);
+});
+document.getElementById('edit-home-btn').addEventListener('click',()=>{
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Home postcode</div><input id="hp-inp" class="sheet-input" value="${homePC}" style="text-transform:uppercase"><div class="sheet-row"><button class="sheet-cancel" id="hp-cancel">Cancel</button><button class="sheet-confirm" id="hp-ok">Save</button></div>`);
+  setTimeout(()=>{
+    document.getElementById('hp-cancel')?.addEventListener('click',closeSheet);
+    document.getElementById('hp-ok')?.addEventListener('click',async()=>{
+      const p=document.getElementById('hp-inp').value.trim().toUpperCase();
+      if(!p)return;
+      homePC=p;sites.forEach(s=>s.miles=null);
+      document.getElementById('s-home-pc').textContent=homePC;
+      document.getElementById('home-pc-label').textContent=homePC;
+      await saveCloud({homePC,sites});closeSheet();prefetch();toast('Home updated — recalculating…');
     });
-    document.getElementById('new-name')?.focus();
-  }, 60);
-}
+    document.getElementById('hp-inp')?.select();
+  },50);
+});
 
-function showEditHomeSheet() {
-  openSheet(`
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">Home postcode</div>
-    <div>
-      <div class="sheet-field-label">Postcode</div>
-      <input id="edit-home-inp" class="sheet-input" value="${homePostcode}" style="text-transform:uppercase">
-    </div>
-    <div class="sheet-btn-row">
-      <button class="sheet-cancel" id="h-cancel">Cancel</button>
-      <button class="sheet-confirm" id="h-confirm">Save</button>
-    </div>
-  `);
-  setTimeout(() => {
-    document.getElementById('h-cancel')?.addEventListener('click', closeSheet);
-    document.getElementById('h-confirm')?.addEventListener('click', async () => {
-      const p = document.getElementById('edit-home-inp').value.trim().toUpperCase();
-      if (!p) return;
-      homePostcode = p;
-      sites.forEach(s => s.miles = null);
-      await saveCloud({ homePostcode, sites });
-      document.getElementById('home-pc-display').textContent = homePostcode;
-      closeSheet(); prefetchMiles(); toast('Home updated — recalculating…');
+/* Date picker */
+function showDatePicker(){
+  const iso=isoDate(viewDate);
+  openSheet(`<div class="sheet-handle"></div><div class="sheet-title">Go to date</div><input id="dp-inp" class="sheet-input" type="date" value="${iso}" max="${isoDate(new Date())}"><div class="sheet-row"><button class="sheet-cancel" id="dp-cancel">Cancel</button><button class="sheet-confirm" id="dp-ok">Go</button></div>`);
+  setTimeout(()=>{
+    document.getElementById('dp-cancel')?.addEventListener('click',closeSheet);
+    document.getElementById('dp-ok')?.addEventListener('click',()=>{
+      const v=document.getElementById('dp-inp').value;if(!v)return;
+      viewDate=new Date(v+'T00:00');
+      loadDay(isoDate(viewDate));
+      updateDate();
+      closeSheet();
+      switchTab('day');
     });
-    document.getElementById('edit-home-inp')?.select();
-  }, 60);
+  },50);
 }
 
-// ── Date picker ──
-function showDatePicker() {
-  const iso = isoDate(viewDate);
-  openSheet(`
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">Go to date</div>
-    <input id="dp-inp" class="sheet-input" type="date" value="${iso}" max="${isoDate(new Date())}">
-    <div class="sheet-btn-row">
-      <button class="sheet-cancel" id="dp-cancel">Cancel</button>
-      <button class="sheet-confirm" id="dp-confirm">Go</button>
-    </div>
-  `);
-  setTimeout(() => {
-    document.getElementById('dp-cancel')?.addEventListener('click', closeSheet);
-    document.getElementById('dp-confirm')?.addEventListener('click', () => {
-      const v = document.getElementById('dp-inp').value;
-      if (!v) return;
-      viewDate = new Date(v+'T00:00');
-      loadDayData(isoDate(viewDate));
-      updateTopbarDate(); closeSheet(); switchTab('day');
-    });
-  }, 60);
-}
-
-// ── Sheet helpers ──
-function openSheet(html) {
-  document.getElementById('sheet').innerHTML = html;
+/* Sheet */
+function openSheet(html){
+  document.getElementById('sheet').innerHTML=html;
   document.getElementById('overlay').classList.add('open');
-  document.getElementById('overlay').onclick = e => { if (e.target === document.getElementById('overlay')) closeSheet(); };
+  document.getElementById('overlay').onclick=e=>{if(e.target===document.getElementById('overlay'))closeSheet();};
 }
-function closeSheet() {
+function closeSheet(){
   document.getElementById('overlay').classList.remove('open');
-  document.getElementById('sheet').innerHTML = '';
+  document.getElementById('sheet').innerHTML='';
 }
-
-// ── Resize: redraw track ──
-window.addEventListener('resize', () => { if (currentTab === 'day') requestAnimationFrame(drawTrack); });
 </script>
 </body>
 </html>
