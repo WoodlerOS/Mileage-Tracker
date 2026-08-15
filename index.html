@@ -4,577 +4,672 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0D0D0D">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F2EDE4">
 <title>TRVL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0D0D0D;
-  --surface: #161616;
-  --surface2: #1E1E1E;
-  --surface3: #272727;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --text: #F0F0F0;
-  --text2: #A0A0A0;
-  --text3: #606060;
-  --accent: #E8FF47;
-  --accent-dim: rgba(232,255,71,0.12);
-  --accent-dim2: rgba(232,255,71,0.06);
-  --red: #FF4545;
-  --green: #3DFF9A;
-  --track: rgba(255,255,255,0.06);
-  --home-color: #E8FF47;
-  --site-color: #3DFF9A;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-xs: 6px;
+  --cream: #F2EDE4;
+  --cream2: #E8E2D8;
+  --cream3: #DDD7CC;
+  --ink: #1A1A1A;
+  --ink2: #5A5550;
+  --ink3: #A09A93;
+  --red: #D94F3D;
+  --red-dim: rgba(217,79,61,0.10);
+  --line: rgba(26,26,26,0.10);
+  --line2: rgba(26,26,26,0.18);
+  --white: #FAFAF8;
 }
 html, body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--cream);
+  color: var(--ink);
   font-family: 'Inter', -apple-system, sans-serif;
   min-height: 100vh;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
 }
-input, select, textarea, button { font-family: inherit; }
+input, select, textarea, button { font-family: inherit; -webkit-appearance: none; }
 button { cursor: pointer; border: none; background: none; }
-input, select { border: none; outline: none; background: none; color: var(--text); }
+input, select { border: none; outline: none; background: none; color: var(--ink); }
 
-/* ── Layout ── */
 #app { min-height: 100vh; display: flex; flex-direction: column; }
 .screen { display: none; flex-direction: column; min-height: 100vh; }
 .screen.active { display: flex; }
 
-/* ── Auth Screen ── */
+/* ── AUTH ── */
 #auth-screen {
-  align-items: center; justify-content: center;
-  padding: 2rem 1.5rem;
-  background: var(--bg);
+  background: var(--cream); align-items: center; justify-content: center; padding: 2.5rem 2rem;
 }
-.auth-box {
-  width: 100%; max-width: 360px;
-  display: flex; flex-direction: column; gap: 1.5rem;
+.auth-box { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 2rem; }
+.auth-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3.5rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1;
 }
-.auth-wordmark {
-  font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em;
-  color: var(--accent); text-align: center;
-  font-variant-numeric: tabular-nums;
-}
-.auth-sub { text-align: center; color: var(--text2); font-size: 0.82rem; font-weight: 500; margin-top: -1rem; }
+.auth-logo span { color: var(--red); }
+.auth-tagline { font-size: 0.8rem; font-weight: 500; color: var(--ink2); margin-top: -1.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
 .auth-fields { display: flex; flex-direction: column; gap: 0.65rem; }
 .auth-field {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 0.85rem 1rem;
-  font-size: 0.9rem; color: var(--text); width: 100%;
+  background: var(--white); border: 1.5px solid var(--line2);
+  border-radius: 12px; padding: 0.9rem 1rem;
+  font-size: 0.9rem; color: var(--ink); width: 100%;
   transition: border-color 0.15s;
 }
-.auth-field:focus { border-color: var(--accent); }
-.auth-field::placeholder { color: var(--text3); }
-.btn-primary {
-  background: var(--accent); color: #0D0D0D;
-  font-weight: 700; font-size: 0.9rem; letter-spacing: 0.01em;
-  padding: 0.9rem; border-radius: var(--radius-sm);
-  border: none; transition: opacity 0.15s, transform 0.1s;
+.auth-field:focus { border-color: var(--ink); outline: none; }
+.auth-field::placeholder { color: var(--ink3); }
+.btn-ink {
+  background: var(--ink); color: var(--cream);
+  font-weight: 700; font-size: 0.88rem; letter-spacing: 0.02em;
+  padding: 0.95rem; border-radius: 12px; border: none;
+  transition: opacity 0.15s, transform 0.1s;
 }
-.btn-primary:active { transform: scale(0.97); opacity: 0.85; }
-.auth-error { color: var(--red); font-size: 0.78rem; text-align: center; min-height: 1rem; }
+.btn-ink:active { transform: scale(0.97); opacity: 0.85; }
+.auth-error { color: var(--red); font-size: 0.75rem; text-align: center; min-height: 1rem; }
 
-/* ── App Shell ── */
-#main-screen { background: var(--bg); }
+/* ── MAIN SHELL ── */
+#main-screen { background: var(--cream); }
+
+/* ── TOPBAR ── */
 .topbar {
-  position: sticky; top: 0; z-index: 50;
-  background: var(--bg); border-bottom: 1px solid var(--border);
-  padding: calc(env(safe-area-inset-top) + 0.75rem) 1rem 0.75rem;
-  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
-}
-.topbar-wordmark { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.04em; color: var(--accent); }
-.topbar-date { font-size: 0.78rem; font-weight: 600; color: var(--text2); cursor: pointer; padding: 0.4rem 0.75rem; background: var(--surface); border-radius: 20px; border: 1px solid var(--border); }
-.topbar-date:hover { border-color: var(--border2); }
-.icon-btn {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--surface); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, border-color 0.15s;
-}
-.icon-btn:hover { background: var(--surface2); border-color: var(--border2); }
-.icon-btn svg { display: block; }
-
-/* ── Nav tabs ── */
-.nav-tabs {
-  display: flex; background: var(--surface); border-bottom: 1px solid var(--border);
-  padding: 0 1rem;
-}
-.nav-tab {
-  flex: 1; padding: 0.75rem 0.5rem; text-align: center;
-  font-size: 0.75rem; font-weight: 600; color: var(--text3);
-  letter-spacing: 0.05em; text-transform: uppercase;
-  border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s;
-}
-.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-/* ── Day View ── */
-.day-content { flex: 1; overflow-y: auto; padding: 1.25rem 1rem 7rem; display: flex; flex-direction: column; gap: 1.25rem; }
-
-/* Train journey */
-.journey-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.journey-stop { display: flex; align-items: center; gap: 1rem; width: 100%; padding: 0 0.5rem; }
-.stop-dot-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-.stop-dot {
-  width: 48px; height: 48px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; font-weight: 700; flex-shrink: 0;
-  border: 2.5px solid;
-}
-.stop-dot.home { background: rgba(232,255,71,0.1); border-color: var(--home-color); color: var(--home-color); }
-.stop-dot.site { background: rgba(61,255,154,0.1); border-color: var(--site-color); color: var(--site-color); }
-.stop-dot.custom { background: rgba(255,255,255,0.06); border-color: var(--border2); color: var(--text2); }
-.stop-line {
-  width: 2px; min-height: 48px; background: var(--border2);
-  position: relative; display: flex; align-items: center; justify-content: center;
-  margin: 4px 0;
-}
-.stop-line-inner { position: relative; height: 100%; width: 100%; }
-.stop-line-track {
-  position: absolute; left: 0; top: 0; bottom: 0; width: 100%;
-  background: linear-gradient(180deg, var(--border2) 0%, var(--accent) 50%, var(--border2) 100%);
-  opacity: 0.5;
-}
-.miles-badge {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  background: var(--surface2); border: 1.5px solid var(--border2);
-  border-radius: 20px; padding: 0.25rem 0.6rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem; font-weight: 600; color: var(--accent);
-  white-space: nowrap; z-index: 2;
-}
-.miles-badge.loading { color: var(--text3); }
-.stop-info { flex: 1; min-width: 0; }
-.stop-name { font-size: 0.95rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
-.stop-time { font-size: 0.72rem; color: var(--text2); font-weight: 500; margin-top: 2px; }
-.stop-remove {
-  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
-  background: var(--surface); display: flex; align-items: center; justify-content: center;
-  color: var(--text3); font-size: 0.9rem; flex-shrink: 0;
-  transition: background 0.12s, color 0.12s, border-color 0.12s;
-}
-.stop-remove:hover { background: rgba(255,69,69,0.12); border-color: var(--red); color: var(--red); }
-
-/* Add stop button */
-.add-stop-row { display: flex; align-items: center; gap: 1rem; width: 100%; padding: 0 0.5rem; }
-.add-stop-dot {
-  width: 48px; height: 48px; border-radius: 50%;
-  background: var(--surface2); border: 2px dashed var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text3); font-size: 1.3rem; flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-}
-.add-stop-row:hover .add-stop-dot { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
-.add-stop-label { font-size: 0.82rem; font-weight: 600; color: var(--text3); }
-.add-stop-row:hover .add-stop-label { color: var(--accent); }
-
-/* Site selector */
-.site-selector-wrap {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); overflow: hidden;
-}
-.site-search-row {
-  display: flex; align-items: center; gap: 0.6rem;
-  padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
-}
-.site-search-input {
-  flex: 1; font-size: 0.88rem; color: var(--text); background: none;
-  font-weight: 500;
-}
-.site-search-input::placeholder { color: var(--text3); }
-.site-list { max-height: 240px; overflow-y: auto; }
-.site-item {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
-  cursor: pointer; transition: background 0.12s;
-}
-.site-item:last-child { border-bottom: none; }
-.site-item:hover { background: var(--surface2); }
-.site-item-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--site-color); flex-shrink: 0; }
-.site-item-name { font-size: 0.85rem; font-weight: 600; color: var(--text); flex: 1; }
-.site-item-miles {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem; color: var(--text2); font-weight: 500;
-}
-.site-item-add { font-size: 0.72rem; color: var(--accent); font-weight: 700; }
-
-/* Stats bar */
-.stats-bar {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); padding: 1rem;
-  display: flex; align-items: center; gap: 0;
-}
-.stat-item { flex: 1; text-align: center; }
-.stat-item + .stat-item { border-left: 1px solid var(--border); }
-.stat-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 1.4rem; font-weight: 600; color: var(--accent); letter-spacing: -0.02em;
-}
-.stat-lbl { font-size: 0.62rem; font-weight: 600; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
-
-/* Notes */
-.notes-field {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); padding: 0.9rem 1rem;
-  font-size: 0.85rem; color: var(--text); resize: none; width: 100%;
-  min-height: 80px; line-height: 1.55; transition: border-color 0.15s;
-}
-.notes-field::placeholder { color: var(--text3); }
-.notes-field:focus { border-color: var(--border2); outline: none; }
-
-/* Save row */
-.save-row {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--bg) 70%, transparent);
-  display: flex; gap: 0.75rem; z-index: 40;
-}
-.btn-save {
-  flex: 1; background: var(--accent); color: #0D0D0D;
-  font-weight: 700; font-size: 0.9rem; border-radius: var(--radius-sm);
-  padding: 0.9rem; border: none; transition: opacity 0.15s, transform 0.1s;
-}
-.btn-save:active { transform: scale(0.97); opacity: 0.85; }
-.btn-save:disabled { opacity: 0.35; pointer-events: none; }
-.btn-secondary {
-  background: var(--surface); border: 1.5px solid var(--border);
-  color: var(--text2); font-weight: 600; font-size: 0.85rem;
-  border-radius: var(--radius-sm); padding: 0.9rem 1.2rem;
-  transition: background 0.15s, border-color 0.15s;
-}
-.btn-secondary:hover { background: var(--surface2); }
-
-/* ── Calendar/Log View ── */
-.log-content { flex: 1; overflow-y: auto; padding: 1rem 1rem 5rem; }
-.month-header {
+  padding: calc(env(safe-area-inset-top) + 1rem) 1.25rem 0.85rem;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0.5rem 0 1rem; gap: 0.5rem;
+  background: var(--cream);
 }
-.month-label { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
-.month-nav { display: flex; gap: 0.4rem; }
-.month-nav-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--surface); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text2); transition: background 0.12s;
+.topbar-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1;
 }
-.month-nav-btn:hover { background: var(--surface2); color: var(--text); }
-
-.log-day {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); margin-bottom: 0.75rem; overflow: hidden;
-  transition: border-color 0.15s;
-}
-.log-day:hover { border-color: var(--border2); }
-.log-day-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.75rem 1rem; cursor: pointer;
-}
-.log-day-date { font-size: 0.78rem; font-weight: 700; color: var(--text2); letter-spacing: 0.04em; text-transform: uppercase; }
-.log-day-miles {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.88rem; font-weight: 600; color: var(--accent);
-}
-.log-day-body { padding: 0 1rem 1rem; border-top: 1px solid var(--border); }
-.log-stop-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
-.log-stop-row:last-child { border-bottom: none; }
-.log-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.log-dot.home { background: var(--home-color); }
-.log-dot.site { background: var(--site-color); }
-.log-stop-name { font-size: 0.82rem; font-weight: 600; color: var(--text); flex: 1; }
-.log-stop-miles { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text2); }
-.log-day-actions { display: flex; gap: 0.5rem; padding-top: 0.75rem; }
-.log-action-btn {
-  font-size: 0.72rem; font-weight: 600; color: var(--text2);
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--radius-xs); padding: 0.4rem 0.75rem;
-  transition: background 0.12s, color 0.12s;
-}
-.log-action-btn:hover { color: var(--text); border-color: var(--border2); }
-.log-action-btn.danger:hover { color: var(--red); border-color: var(--red); }
-
-/* Empty state */
-.empty-state { text-align: center; padding: 3rem 1rem; color: var(--text3); }
-.empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
-.empty-text { font-size: 0.85rem; font-weight: 500; }
-
-/* ── Export View ── */
-.export-content { flex: 1; overflow-y: auto; padding: 1.25rem 1rem 5rem; display: flex; flex-direction: column; gap: 1rem; }
-.export-section { display: flex; flex-direction: column; gap: 0.5rem; }
-.export-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0 0.1rem; }
-.export-card {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); padding: 1rem; display: flex; align-items: center; gap: 1rem; cursor: pointer;
+.topbar-logo span { color: var(--red); }
+.topbar-date-btn {
+  font-size: 0.72rem; font-weight: 700; color: var(--ink2);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.45rem 0.9rem; border-radius: 20px;
+  border: 1.5px solid var(--line2); background: var(--white);
   transition: background 0.12s, border-color 0.12s;
 }
-.export-card:hover { background: var(--surface2); border-color: var(--border2); }
-.export-icon {
-  width: 44px; height: 44px; border-radius: var(--radius-sm);
-  background: var(--surface2); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;
+.topbar-date-btn:active { background: var(--cream2); }
+.topbar-settings {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid var(--line2); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
 }
-.export-card-text { flex: 1; }
-.export-card-title { font-size: 0.88rem; font-weight: 700; color: var(--text); }
-.export-card-sub { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
-.export-summary {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); padding: 1rem;
-}
-.export-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
-.export-summary-row:last-child { border-bottom: none; }
-.export-summary-lbl { font-size: 0.8rem; color: var(--text2); font-weight: 500; }
-.export-summary-val { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; font-weight: 600; color: var(--accent); }
 
-/* ── Settings View ── */
-.settings-content { flex: 1; overflow-y: auto; padding: 1.25rem 1rem 5rem; display: flex; flex-direction: column; gap: 1.25rem; }
-.settings-section { display: flex; flex-direction: column; gap: 0.5rem; }
-.settings-section-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0 0.1rem; }
-.settings-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+/* ── TABS ── */
+.nav-tabs {
+  display: flex; padding: 0 1.25rem;
+  border-bottom: 1px solid var(--line2); background: var(--cream);
+}
+.nav-tab {
+  flex: 1; padding: 0.7rem 0.25rem; text-align: center;
+  font-size: 0.7rem; font-weight: 700; color: var(--ink3);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nav-tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+/* ── DAY TAB ── */
+#tab-day {
+  flex: 1; display: flex; flex-direction: column;
+  overflow: hidden; position: relative;
+}
+
+/* Stats row */
+.stats-strip {
+  display: flex; padding: 1rem 1.25rem 0;
+  gap: 0; border-bottom: 1px solid var(--line);
+  background: var(--cream);
+}
+.stat-pill {
+  flex: 1; text-align: center; padding: 0.6rem 0 0.75rem;
+  border-right: 1px solid var(--line);
+}
+.stat-pill:last-child { border-right: none; }
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem; line-height: 1; color: var(--ink); letter-spacing: -0.02em;
+  display: block;
+}
+.stat-num.red { color: var(--red); }
+.stat-lbl {
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink3); margin-top: 2px; display: block;
+}
+
+/* ── CURVED JOURNEY CANVAS ── */
+.journey-canvas {
+  flex: 1; position: relative; overflow: hidden;
+  min-height: 0;
+}
+.journey-canvas svg.track-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* Home icons — fixed positions */
+.home-node {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.home-node.top-left { top: 1.5rem; left: 1.5rem; }
+.home-node.bottom-right { bottom: 5rem; right: 1.5rem; }
+
+.home-icon {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.home-label-txt {
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink2);
+}
+
+/* Miles badge on curve */
+.miles-pill {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  background: var(--ink); color: var(--cream);
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
+  padding: 0.3rem 0.75rem; border-radius: 20px;
+  white-space: nowrap; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.miles-pill.faint { background: var(--cream3); color: var(--ink3); }
+
+/* Site card — centred */
+.site-card-wrap {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 5rem);
+  max-width: 280px;
+  z-index: 10;
+}
+.site-card {
+  background: var(--white);
+  border: 1.5px solid var(--line2);
+  border-radius: 20px;
+  padding: 1.25rem 1.2rem 1rem;
+  box-shadow: 0 4px 24px rgba(26,26,26,0.08), 0 1px 4px rgba(26,26,26,0.06);
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.site-card:active { transform: scale(0.98); }
+.site-card.selected { border-color: var(--ink); }
+.site-card-eyebrow {
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 0.4rem;
+}
+.site-card-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.35rem; line-height: 1.2; color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.site-card-postcode {
+  font-size: 0.72rem; font-weight: 600; color: var(--ink2);
+  margin-top: 0.5rem; letter-spacing: 0.04em;
+}
+.site-card-hint {
+  font-size: 0.62rem; color: var(--ink3); margin-top: 0.65rem;
+  font-style: italic;
+}
+.site-card-empty {
+  text-align: center; padding: 0.5rem 0 0.25rem;
+}
+.site-card-empty-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+.site-card-empty-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem; color: var(--ink2); line-height: 1.3;
+}
+.site-card-empty-sub { font-size: 0.7rem; color: var(--ink3); margin-top: 0.3rem; }
+
+/* Second site tag (when two sites) */
+.second-site-tag {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 5rem); max-width: 280px;
+  background: var(--cream2); border: 1.5px solid var(--line2);
+  border-radius: 14px; padding: 0.7rem 1rem;
+  z-index: 9; cursor: pointer;
+}
+.second-site-tag-name { font-size: 0.82rem; font-weight: 700; color: var(--ink); }
+.second-site-tag-remove {
+  position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--cream3); border: 1px solid var(--line2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; color: var(--ink2);
+}
+
+/* Save bar */
+.save-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--cream) 65%, transparent);
+  display: flex; gap: 0.65rem;
+  z-index: 20;
+}
+.btn-save {
+  flex: 1; background: var(--ink); color: var(--cream);
+  font-weight: 700; font-size: 0.85rem; border-radius: 12px;
+  padding: 0.85rem; letter-spacing: 0.02em;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn-save:active { transform: scale(0.97); opacity: 0.85; }
+.btn-save:disabled { opacity: 0.25; pointer-events: none; }
+.btn-outline {
+  background: var(--white); color: var(--ink2);
+  font-weight: 600; font-size: 0.82rem; border-radius: 12px;
+  padding: 0.85rem 1.1rem; border: 1.5px solid var(--line2);
+  transition: background 0.12s;
+}
+.btn-outline:active { background: var(--cream2); }
+
+/* ── LOG TAB ── */
+#tab-log { display: none; flex: 1; overflow-y: auto; padding: 1rem 1.25rem 4rem; background: var(--cream); }
+.month-nav-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0 1rem; }
+.month-nav-label {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem; color: var(--ink); letter-spacing: -0.01em;
+}
+.month-nav-btns { display: flex; gap: 0.4rem; }
+.mnav-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid var(--line2); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; color: var(--ink2);
+}
+.log-entry {
+  background: var(--white); border: 1.5px solid var(--line);
+  border-radius: 16px; margin-bottom: 0.65rem; overflow: hidden;
+  transition: border-color 0.12s;
+}
+.log-entry-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.85rem 1rem; cursor: pointer;
+}
+.log-entry-date { font-size: 0.72rem; font-weight: 700; color: var(--ink2); letter-spacing: 0.04em; text-transform: uppercase; }
+.log-entry-miles { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--red); }
+.log-entry-body { padding: 0 1rem 0.85rem; border-top: 1px solid var(--line); }
+.log-stop-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0; border-bottom: 1px solid var(--line); }
+.log-stop-row:last-child { border-bottom: none; }
+.log-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.log-dot.home { background: var(--ink); }
+.log-dot.site { background: var(--red); }
+.log-stop-name { font-size: 0.8rem; font-weight: 600; color: var(--ink); flex: 1; }
+.log-stop-mi { font-size: 0.7rem; color: var(--ink2); font-weight: 500; }
+.log-entry-actions { display: flex; gap: 0.5rem; padding-top: 0.65rem; }
+.log-act-btn {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 0.4rem 0.75rem; border-radius: 8px;
+  border: 1.5px solid var(--line2); background: var(--cream);
+  color: var(--ink2); transition: background 0.12s;
+}
+.log-act-btn.danger { color: var(--red); border-color: var(--red-dim); }
+.log-empty { text-align: center; padding: 3rem 1rem; color: var(--ink3); }
+.log-empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.log-empty-text { font-size: 0.82rem; font-weight: 500; }
+
+/* ── EXPORT TAB ── */
+#tab-export { display: none; flex: 1; overflow-y: auto; padding: 1.25rem 1.25rem 4rem; background: var(--cream); }
+.export-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 1.25rem;
+}
+.export-summary-card {
+  background: var(--ink); border-radius: 20px; padding: 1.25rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;
+}
+.escard-item {}
+.escard-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem; color: var(--cream); line-height: 1;
+}
+.escard-lbl { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(242,237,228,0.5); margin-top: 3px; }
+.export-section-label {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 0.5rem; padding: 0 0.1rem;
+}
+.export-btn-row { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+.export-item {
+  background: var(--white); border: 1.5px solid var(--line);
+  border-radius: 14px; padding: 0.9rem 1rem;
+  display: flex; align-items: center; gap: 0.85rem; cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+.export-item:active { background: var(--cream2); }
+.export-item-icon { font-size: 1.3rem; width: 38px; text-align: center; flex-shrink: 0; }
+.export-item-text { flex: 1; }
+.export-item-title { font-size: 0.85rem; font-weight: 700; color: var(--ink); }
+.export-item-sub { font-size: 0.68rem; color: var(--ink2); margin-top: 1px; }
+.export-arrow { color: var(--ink3); font-size: 0.9rem; }
+
+/* ── SETTINGS PANEL ── */
+#settings-panel {
+  display: none; flex: 1; overflow-y: auto;
+  padding: 1.25rem 1.25rem 4rem; background: var(--cream);
+  flex-direction: column; gap: 1.25rem;
+}
+.settings-back {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.75rem; font-weight: 700; color: var(--ink2);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  margin-bottom: 0.25rem; width: fit-content;
+}
+.settings-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 0.5rem;
+}
+.settings-section { display: flex; flex-direction: column; gap: 0.4rem; }
+.settings-section-label {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink3); padding: 0 0.1rem;
+}
+.settings-card { background: var(--white); border: 1.5px solid var(--line); border-radius: 16px; overflow: hidden; }
 .settings-row {
   display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.85rem 1rem; border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1rem; border-bottom: 1px solid var(--line);
 }
 .settings-row:last-child { border-bottom: none; }
-.settings-row-icon { width: 32px; height: 32px; border-radius: var(--radius-xs); background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-.settings-row-text { flex: 1; min-width: 0; }
-.settings-row-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-.settings-row-sub { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
-.settings-row-action { font-size: 0.75rem; color: var(--accent); font-weight: 600; flex-shrink: 0; }
-.settings-row-chev { color: var(--text3); flex-shrink: 0; }
-
-/* Site management */
-.site-manage-item {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.85rem 1rem; border-bottom: 1px solid var(--border);
+.settings-row-icon { font-size: 1.1rem; width: 28px; text-align: center; flex-shrink: 0; }
+.settings-row-body { flex: 1; min-width: 0; }
+.settings-row-title { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
+.settings-row-sub { font-size: 0.68rem; color: var(--ink2); margin-top: 1px; }
+.settings-row-action { font-size: 0.72rem; font-weight: 700; color: var(--red); flex-shrink: 0; }
+.site-manage-row {
+  display: flex; align-items: center; gap: 0.65rem;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line);
 }
-.site-manage-item:last-child { border-bottom: none; }
-.site-manage-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--site-color); flex-shrink: 0; }
+.site-manage-row:last-child { border-bottom: none; }
+.site-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
 .site-manage-name { flex: 1; min-width: 0; }
-.site-manage-name-text { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-.site-manage-postcode { font-size: 0.7rem; color: var(--text2); margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
-.site-manage-miles {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem; font-weight: 600; color: var(--accent); width: 52px; text-align: right;
+.site-manage-name-txt { font-size: 0.82rem; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.site-manage-pc { font-size: 0.65rem; color: var(--ink2); font-weight: 500; margin-top: 1px; }
+.site-manage-mi { font-size: 0.72rem; font-weight: 700; color: var(--ink2); width: 44px; text-align: right; flex-shrink: 0; }
+.site-del-btn {
+  width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line2);
+  background: var(--cream); display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; color: var(--ink3); flex-shrink: 0;
 }
-.site-manage-del {
-  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
-  background: none; display: flex; align-items: center; justify-content: center;
-  color: var(--text3); font-size: 0.75rem;
-  transition: background 0.12s, color 0.12s;
-}
-.site-manage-del:hover { background: rgba(255,69,69,0.12); color: var(--red); border-color: var(--red); }
 
-/* ── Modal / Sheet ── */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: flex; align-items: flex-end; animation: fadeIn 0.18s ease; }
+/* ── OVERLAY / SHEET ── */
+.overlay { position: fixed; inset: 0; background: rgba(26,26,26,0.45); z-index: 100; display: none; align-items: flex-end; animation: fadeIn 0.18s ease; }
+.overlay.open { display: flex; }
 .sheet {
-  width: 100%; background: var(--surface);
-  border-radius: 24px 24px 0 0; padding: 0.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; gap: 0.75rem;
-  animation: slideUp 0.3s cubic-bezier(0.22, 0.9, 0.3, 1);
-  max-height: 90vh; overflow-y: auto;
+  width: 100%; background: var(--white);
+  border-radius: 24px 24px 0 0;
+  padding: 0 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+  animation: slideUp 0.3s cubic-bezier(0.22,0.9,0.3,1);
+  max-height: 88vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 0.85rem;
 }
-.sheet-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border2); margin: 0.6rem auto 0.25rem; }
-.sheet-title { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; padding: 0.25rem 0 0.1rem; }
-.sheet-field-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); }
+.sheet-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--line2); margin: 0.75rem auto 0.25rem; flex-shrink: 0; }
+.sheet-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--ink); letter-spacing: -0.01em; }
+.sheet-field-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 0.35rem; }
 .sheet-input {
-  background: var(--surface2); border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 0.8rem 1rem;
-  font-size: 0.9rem; color: var(--text); width: 100%;
+  background: var(--cream); border: 1.5px solid var(--line2);
+  border-radius: 12px; padding: 0.82rem 1rem;
+  font-size: 0.9rem; color: var(--ink); width: 100%;
   transition: border-color 0.15s;
 }
-.sheet-input:focus { border-color: var(--accent); outline: none; }
-.sheet-input::placeholder { color: var(--text3); }
+.sheet-input:focus { border-color: var(--ink); outline: none; }
+.sheet-input::placeholder { color: var(--ink3); }
+.site-search-list { border: 1.5px solid var(--line2); border-radius: 14px; overflow: hidden; background: var(--cream); }
+.site-search-input-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--line2); background: var(--white); }
+.site-search-inp { flex: 1; font-size: 0.88rem; color: var(--ink); background: none; }
+.site-search-inp::placeholder { color: var(--ink3); }
+.site-list-scroll { max-height: 220px; overflow-y: auto; }
+.site-list-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line); cursor: pointer;
+  background: var(--white); transition: background 0.1s;
+}
+.site-list-item:last-child { border-bottom: none; }
+.site-list-item:active { background: var(--cream2); }
+.site-list-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.site-list-name { flex: 1; font-size: 0.84rem; font-weight: 600; color: var(--ink); }
+.site-list-mi { font-size: 0.7rem; color: var(--ink2); font-weight: 500; }
+.sheet-btn-row { display: flex; gap: 0.65rem; }
+.sheet-cancel { flex: 1; background: var(--cream2); border: 1.5px solid var(--line2); color: var(--ink2); font-weight: 600; font-size: 0.85rem; border-radius: 12px; padding: 0.85rem; }
+.sheet-confirm { flex: 2; background: var(--ink); color: var(--cream); font-weight: 700; font-size: 0.85rem; border-radius: 12px; padding: 0.85rem; }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-/* ── Toast ── */
+/* ── TOAST ── */
 .toast {
-  position: fixed; bottom: calc(5rem + env(safe-area-inset-bottom));
-  left: 50%; transform: translateX(-50%);
-  background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: 20px; padding: 0.6rem 1.1rem;
-  font-size: 0.82rem; font-weight: 600; color: var(--text);
-  z-index: 200; white-space: nowrap;
+  position: fixed; bottom: calc(5.5rem + env(safe-area-inset-bottom)); left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink); color: var(--cream);
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
+  padding: 0.55rem 1.1rem; border-radius: 20px;
+  z-index: 300; white-space: nowrap; pointer-events: none;
   animation: toastIn 0.22s cubic-bezier(0.22,0.9,0.3,1);
+  display: none;
 }
-@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-/* ── Home/site icon labels ── */
-.stop-type-label {
-  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em;
-  text-transform: uppercase; margin-top: 3px;
+/* ── LONG PRESS PULSE ── */
+@keyframes longPressRing {
+  0% { box-shadow: 0 0 0 0 rgba(217,79,61,0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(217,79,61,0); }
+  100% { box-shadow: 0 0 0 0 rgba(217,79,61,0); }
 }
-.home-label { color: var(--home-color); }
-.site-label { color: var(--site-color); }
+.site-card.pressing { animation: longPressRing 0.7s ease; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+@keyframes toastIn { from { opacity:0; transform:translate(-50%,10px); } to { opacity:1; transform:translate(-50%,0); } }
+
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 2px; }
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- AUTH -->
-  <div id="auth-screen" class="screen active">
-    <div class="auth-box">
-      <div class="auth-wordmark">TRVL</div>
-      <div class="auth-sub">Mileage tracker</div>
-      <div class="auth-fields">
-        <input id="auth-email" class="auth-field" type="email" placeholder="Email" autocomplete="username">
-        <input id="auth-pass" class="auth-field" type="password" placeholder="Password" autocomplete="current-password">
+<!-- AUTH -->
+<div id="auth-screen" class="screen active">
+  <div class="auth-box">
+    <div>
+      <div class="auth-logo">TRV<span>L</span></div>
+      <div class="auth-tagline">Mileage Tracker</div>
+    </div>
+    <div class="auth-fields">
+      <input id="auth-email" class="auth-field" type="email" placeholder="Email" autocomplete="username">
+      <input id="auth-pass" class="auth-field" type="password" placeholder="Password" autocomplete="current-password">
+    </div>
+    <div>
+      <div id="auth-error" class="auth-error" style="margin-bottom:0.5rem"></div>
+      <button class="btn-ink" id="auth-btn" style="width:100%">Sign in</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main-screen" class="screen">
+
+  <div class="topbar">
+    <div class="topbar-logo">TRV<span>L</span></div>
+    <button class="topbar-date-btn" id="topbar-date-btn">Today</button>
+    <button class="topbar-settings" id="settings-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5A5550" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="day">Today</button>
+    <button class="nav-tab" data-tab="log">Log</button>
+    <button class="nav-tab" data-tab="export">Export</button>
+  </div>
+
+  <!-- DAY TAB -->
+  <div id="tab-day">
+    <div class="stats-strip" id="stats-strip">
+      <div class="stat-pill">
+        <span class="stat-num red" id="stat-today">—</span>
+        <span class="stat-lbl">Miles today</span>
       </div>
-      <div id="auth-error" class="auth-error"></div>
-      <button class="btn-primary" id="auth-btn">Sign in</button>
+      <div class="stat-pill">
+        <span class="stat-num" id="stat-sites">0</span>
+        <span class="stat-lbl">Sites visited</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-num" id="stat-month">—</span>
+        <span class="stat-lbl">Month total</span>
+      </div>
+    </div>
+
+    <div class="journey-canvas" id="journey-canvas">
+      <!-- SVG track drawn by JS -->
+      <svg class="track-svg" id="track-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+      <!-- Home top-left -->
+      <div class="home-node top-left">
+        <div class="home-icon">🏠</div>
+        <div class="home-label-txt">Home</div>
+      </div>
+
+      <!-- Home bottom-right -->
+      <div class="home-node bottom-right">
+        <div class="home-icon">🏠</div>
+        <div class="home-label-txt">Home</div>
+      </div>
+
+      <!-- Miles outbound badge -->
+      <div class="miles-pill faint" id="miles-out" style="top:28%">···</div>
+
+      <!-- Miles return badge -->
+      <div class="miles-pill faint" id="miles-ret" style="top:65%">···</div>
+
+      <!-- Site card (primary) -->
+      <div class="site-card-wrap" id="site-card-wrap">
+        <div class="site-card" id="site-card" tabindex="0">
+          <div class="site-card-empty" id="site-card-inner">
+            <div class="site-card-empty-icon">🏥</div>
+            <div class="site-card-empty-text">Tap to select<br>your site</div>
+            <div class="site-card-empty-sub">Long-press to add a second site</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second site card (shown when added) -->
+      <div class="second-site-tag" id="second-site-tag" style="display:none;top:calc(50% + 100px)">
+        <div class="site-manage-name-txt second-site-name" id="second-site-name">—</div>
+        <button class="second-site-tag-remove" id="second-site-remove">✕</button>
+      </div>
+
+      <!-- Second site miles badge -->
+      <div class="miles-pill faint" id="miles-out2" style="display:none;top:calc(50% + 62px)">···</div>
+
+      <!-- Save bar -->
+      <div class="save-bar">
+        <button class="btn-outline" id="clear-day-btn">Clear</button>
+        <button class="btn-save" id="save-day-btn" disabled>Save day</button>
+      </div>
     </div>
   </div>
 
-  <!-- MAIN -->
-  <div id="main-screen" class="screen">
-
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <span class="topbar-wordmark">TRVL</span>
-      <button class="topbar-date" id="topbar-date-btn">Today</button>
-      <button class="icon-btn" id="settings-btn" title="Settings">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color="#A0A0A0">
-          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-        </svg>
-      </button>
-    </div>
-
-    <!-- TABS -->
-    <div class="nav-tabs">
-      <button class="nav-tab active" data-tab="day">Today</button>
-      <button class="nav-tab" data-tab="log">Log</button>
-      <button class="nav-tab" data-tab="export">Export</button>
-    </div>
-
-    <!-- DAY TAB -->
-    <div id="tab-day" class="day-content">
-      <!-- Dynamically rendered -->
-    </div>
-
-    <!-- LOG TAB -->
-    <div id="tab-log" class="log-content" style="display:none">
-      <div class="month-header">
-        <span class="month-label" id="log-month-label"></span>
-        <div class="month-nav">
-          <button class="month-nav-btn" id="log-prev">&#8249;</button>
-          <button class="month-nav-btn" id="log-next">&#8250;</button>
-        </div>
+  <!-- LOG TAB -->
+  <div id="tab-log">
+    <div class="month-nav-row">
+      <div class="month-nav-label" id="log-month-label">August 2026</div>
+      <div class="month-nav-btns">
+        <button class="mnav-btn" id="log-prev">‹</button>
+        <button class="mnav-btn" id="log-next">›</button>
       </div>
-      <div id="log-list"></div>
     </div>
+    <div id="log-list"></div>
+  </div>
 
-    <!-- EXPORT TAB -->
-    <div id="tab-export" class="export-content" style="display:none">
-      <div class="export-section">
-        <span class="export-label">This month</span>
-        <div id="export-summary" class="export-summary"></div>
+  <!-- EXPORT TAB -->
+  <div id="tab-export">
+    <div class="export-heading">Export</div>
+    <div class="export-summary-card" id="export-summary-card">
+      <div class="escard-item">
+        <div class="escard-num" id="exp-month-mi">—</div>
+        <div class="escard-lbl">Month miles</div>
       </div>
-      <div class="export-section">
-        <span class="export-label">Download</span>
-        <div class="export-card" id="export-week-csv">
-          <div class="export-icon">📊</div>
-          <div class="export-card-text">
-            <div class="export-card-title">Weekly CSV</div>
-            <div class="export-card-sub">Current week, grouped by day</div>
+      <div class="escard-item">
+        <div class="escard-num" id="exp-month-days">—</div>
+        <div class="escard-lbl">Days logged</div>
+      </div>
+      <div class="escard-item">
+        <div class="escard-num" id="exp-week-mi">—</div>
+        <div class="escard-lbl">Week miles</div>
+      </div>
+      <div class="escard-item">
+        <div class="escard-num" id="exp-week-days">—</div>
+        <div class="escard-lbl">Week days</div>
+      </div>
+    </div>
+    <div class="export-section-label">Download / Copy</div>
+    <div class="export-btn-row">
+      <div class="export-item" id="exp-week-csv"><div class="export-item-icon">📊</div><div class="export-item-text"><div class="export-item-title">Weekly CSV</div><div class="export-item-sub">Current week, one row per day</div></div><div class="export-arrow">→</div></div>
+      <div class="export-item" id="exp-month-csv"><div class="export-item-icon">📅</div><div class="export-item-text"><div class="export-item-title">Monthly CSV</div><div class="export-item-sub">Full month summary</div></div><div class="export-arrow">→</div></div>
+      <div class="export-item" id="exp-week-txt"><div class="export-item-icon">📋</div><div class="export-item-text"><div class="export-item-title">Copy week as text</div><div class="export-item-sub">Paste into email or expenses form</div></div><div class="export-arrow">→</div></div>
+      <div class="export-item" id="exp-month-txt"><div class="export-item-icon">📝</div><div class="export-item-text"><div class="export-item-title">Copy month as text</div><div class="export-item-sub">Full month, plain text</div></div><div class="export-arrow">→</div></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div id="settings-panel">
+    <button class="settings-back" id="settings-back-btn">← Back</button>
+    <div class="settings-heading">Settings</div>
+    <div class="settings-section">
+      <div class="settings-section-label">Account</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-icon">👤</div>
+          <div class="settings-row-body">
+            <div class="settings-row-title" id="settings-email-txt">—</div>
+            <div class="settings-row-sub">Signed in</div>
           </div>
-        </div>
-        <div class="export-card" id="export-month-csv">
-          <div class="export-icon">📅</div>
-          <div class="export-card-text">
-            <div class="export-card-title">Monthly CSV</div>
-            <div class="export-card-sub">Full month summary</div>
-          </div>
-        </div>
-        <div class="export-card" id="export-week-txt">
-          <div class="export-icon">📋</div>
-          <div class="export-card-text">
-            <div class="export-card-title">Copy week as text</div>
-            <div class="export-card-sub">Paste into email or expenses form</div>
-          </div>
-        </div>
-        <div class="export-card" id="export-month-txt">
-          <div class="export-icon">📝</div>
-          <div class="export-card-text">
-            <div class="export-card-title">Copy month as text</div>
-            <div class="export-card-sub">Full month, plain text</div>
-          </div>
+          <button class="settings-row-action" id="signout-btn">Sign out</button>
         </div>
       </div>
     </div>
-
-    <!-- SETTINGS TAB (hidden panel) -->
-    <div id="settings-panel" style="display:none; flex:1; overflow-y:auto;" class="settings-content">
-      <div class="settings-section">
-        <span class="settings-section-label">Account</span>
-        <div class="settings-card">
-          <div class="settings-row">
-            <div class="settings-row-icon">👤</div>
-            <div class="settings-row-text">
-              <div class="settings-row-title" id="settings-email">—</div>
-              <div class="settings-row-sub">Signed in</div>
-            </div>
-            <button class="settings-row-action" id="signout-btn">Sign out</button>
+    <div class="settings-section">
+      <div class="settings-section-label">Home postcode</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="settings-row-icon">🏠</div>
+          <div class="settings-row-body">
+            <div class="settings-row-title" id="home-pc-display">BL5 2RX</div>
+            <div class="settings-row-sub">Journey start &amp; end</div>
           </div>
+          <button class="settings-row-action" id="edit-home-btn">Edit</button>
         </div>
       </div>
-      <div class="settings-section">
-        <span class="settings-section-label">Home location</span>
-        <div class="settings-card">
-          <div class="settings-row">
-            <div class="settings-row-icon">🏠</div>
-            <div class="settings-row-text">
-              <div class="settings-row-title" id="home-postcode-display">BL5 2RX</div>
-              <div class="settings-row-sub">Your home postcode — used as journey start</div>
-            </div>
-            <button class="settings-row-action" id="edit-home-btn">Edit</button>
-          </div>
-        </div>
-      </div>
-      <div class="settings-section">
-        <span class="settings-section-label">Sites</span>
-        <div class="settings-card" id="sites-list-settings"><!-- rendered --></div>
-        <button class="btn-secondary" id="add-site-btn" style="margin-top:0.25rem">+ Add site</button>
-      </div>
     </div>
-
-    <!-- Save row (day tab only) -->
-    <div class="save-row" id="save-row">
-      <button class="btn-secondary" id="clear-day-btn">Clear</button>
-      <button class="btn-save" id="save-day-btn">Save day</button>
+    <div class="settings-section">
+      <div class="settings-section-label">Sites</div>
+      <div class="settings-card" id="sites-settings-list"></div>
+      <button class="btn-outline" id="add-site-btn" style="margin-top:0.4rem;width:100%;">+ Add site</button>
     </div>
+  </div>
 
-  </div><!-- /main-screen -->
+</div><!-- /main-screen -->
 </div><!-- /app -->
 
-<!-- SHEETS -->
-<div id="overlay" class="overlay" style="display:none">
-  <div class="sheet" id="sheet-content"></div>
+<!-- OVERLAY -->
+<div id="overlay" class="overlay">
+  <div class="sheet" id="sheet"></div>
 </div>
 
-<div id="toast" class="toast" style="display:none"></div>
+<div id="toast" class="toast"></div>
 
 <script>
-// ─── Firebase ───
+// ── Firebase ──
 const firebaseConfig = {
   apiKey: "AIzaSyBPVj8TRblvCM4yeJVHL_EFUd71yiow9PI",
   authDomain: "mileage-tracker-d0d31.firebaseapp.com",
@@ -588,520 +683,528 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch(e) {}
 
-// ─── ORS API ───
 const ORS_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImYzZjEzMzA4MzcyZTRmYWFhZGQxMDA2NWVhZTdjNmQ2IiwiaCI6Im11cm11cjY0In0=';
-const HOME_POSTCODE = 'BL5 2RX';
 
-// ─── Default sites ───
 const DEFAULT_SITES = [
-  { id: 'rluh',   name: 'Royal Liverpool University Hospital', postcode: 'L7 8YE',   miles: null },
-  { id: 'lhch',   name: 'Liverpool Heart & Chest Hospital',   postcode: 'L14 3PE',  miles: null },
-  { id: 'coch',   name: 'Countess of Chester Hospital',       postcode: 'CH2 1UL',  miles: null },
-  { id: 'arrowe', name: 'Arrowe Park Hospital',               postcode: 'CH49 5PE', miles: null },
-  { id: 'whiston',name: 'Whiston Hospital',                   postcode: 'L35 5DR',  miles: null },
-  { id: 'mri',    name: 'Manchester Royal Infirmary',         postcode: 'M13 9WL',  miles: null },
-  { id: 'nmgh',   name: 'North Manchester General Hospital',  postcode: 'M8 5RB',   miles: null },
-  { id: 'oldham', name: 'Royal Oldham Hospital',              postcode: 'OL1 2JH',  miles: null },
-  { id: 'stepping',name: 'Stepping Hill Hospital',            postcode: 'SK2 7JE',  miles: null },
-  { id: 'tameside',name: 'Tameside General Hospital',         postcode: 'OL6 9RW',  miles: null },
-  { id: 'christie',name: 'The Christie',                      postcode: 'M20 4BX',  miles: null },
-  { id: 'spireliv',name: 'Spire Liverpool',                   postcode: 'L18 1HQ',  miles: null },
-  { id: 'lgi',    name: 'Leeds General Infirmary',            postcode: 'LS1 3EX',  miles: null },
-  { id: 'barnsley',name: 'Barnsley Hospital',                 postcode: 'S75 2EP',  miles: null },
-  { id: 'leicester',name: 'Leicester Royal Infirmary',        postcode: 'LE1 5WW',  miles: null },
-  { id: 'spirehull',name: 'Spire Hull & East Riding',         postcode: 'HU10 7AZ', miles: null },
-  { id: 'hudds',  name: 'Huddersfield Royal Infirmary',       postcode: 'HD3 3EA',  miles: null },
-  { id: 'sthelens',name: "St Helens Hospital",                postcode: 'WA9 3DA',  miles: null },
+  { id:'rluh',    name:'Royal Liverpool University Hospital', postcode:'L7 8YE',   miles:null },
+  { id:'lhch',    name:'Liverpool Heart & Chest Hospital',   postcode:'L14 3PE',  miles:null },
+  { id:'coch',    name:'Countess of Chester Hospital',       postcode:'CH2 1UL',  miles:null },
+  { id:'arrowe',  name:'Arrowe Park Hospital',               postcode:'CH49 5PE', miles:null },
+  { id:'whiston', name:'Whiston Hospital',                   postcode:'L35 5DR',  miles:null },
+  { id:'mri',     name:'Manchester Royal Infirmary',         postcode:'M13 9WL',  miles:null },
+  { id:'nmgh',    name:'North Manchester General Hospital',  postcode:'M8 5RB',   miles:null },
+  { id:'oldham',  name:'Royal Oldham Hospital',              postcode:'OL1 2JH',  miles:null },
+  { id:'stepping',name:'Stepping Hill Hospital',             postcode:'SK2 7JE',  miles:null },
+  { id:'tameside',name:'Tameside General Hospital',          postcode:'OL6 9RW',  miles:null },
+  { id:'christie',name:'The Christie',                       postcode:'M20 4BX',  miles:null },
+  { id:'spireliv',name:'Spire Liverpool',                    postcode:'L18 1HQ',  miles:null },
+  { id:'lgi',     name:'Leeds General Infirmary',            postcode:'LS1 3EX',  miles:null },
+  { id:'barnsley',name:'Barnsley Hospital',                  postcode:'S75 2EP',  miles:null },
+  { id:'leicester',name:'Leicester Royal Infirmary',         postcode:'LE1 5WW',  miles:null },
+  { id:'spirehull',name:'Spire Hull & East Riding',          postcode:'HU10 7AZ', miles:null },
+  { id:'hudds',   name:'Huddersfield Royal Infirmary',       postcode:'HD3 3EA',  miles:null },
+  { id:'sthelens',name:'St Helens Hospital',                 postcode:'WA9 3DA',  miles:null },
 ];
 
-// ─── State ───
+// ── State ──
 let currentUser = null;
-let userDoc = null;
 let sites = [];
-let homePostcode = HOME_POSTCODE;
-let todayISO = isoDate(new Date());
+let homePostcode = 'BL5 2RX';
+let savedLogs = {};
 let viewDate = new Date();
 let logMonth = new Date();
 let currentTab = 'day';
 
-// day journey: array of stops { type:'home'|'site'|'custom', id, name, postcode, miles }
-let dayStops = [];
+// Day state
+let primarySite = null;   // { id, name, postcode, miles }
+let secondSite = null;    // { id, name, postcode, miles }
 let dayNotes = '';
-let savedLogs = {}; // keyed by ISO date
 
-// ─── Helpers ───
-function isoDate(d) {
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-function formatDate(iso) {
-  const d = new Date(iso + 'T00:00');
-  return d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
-}
-function formatDateShort(iso) {
-  const d = new Date(iso + 'T00:00');
-  return d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
-}
-function round1(n) { return Math.round(n * 10) / 10; }
+// ── Utils ──
+const pad = n => String(n).padStart(2,'0');
+function isoDate(d) { return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function formatDate(iso) { return new Date(iso+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); }
+function formatDateShort(iso) { return new Date(iso+'T00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); }
+function r1(n) { return Math.round(n*10)/10; }
 
-// ─── Toast ───
-let toastTimer = null;
-function showToast(msg) {
+// ── Toast ──
+let _toastT = null;
+function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.style.display = 'block';
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2500);
+  el.textContent = msg; el.style.display = 'block';
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => el.style.display = 'none', 2400);
 }
 
-// ─── ORS distance lookup ───
-const distCache = {};
-async function postcodeToCoords(postcode) {
-  const key = postcode.trim().toUpperCase();
-  if (distCache['coords_'+key]) return distCache['coords_'+key];
-  const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(key)}`);
-  const j = await res.json();
-  if (j.status === 200) {
-    const c = [j.result.longitude, j.result.latitude];
-    distCache['coords_'+key] = c;
-    return c;
-  }
+// ── Distance via ORS ──
+const _distCache = {};
+async function pcToCoords(pc) {
+  const k = pc.trim().toUpperCase();
+  if (_distCache['c:'+k]) return _distCache['c:'+k];
+  try {
+    const r = await fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(k));
+    const j = await r.json();
+    if (j.status === 200) {
+      const c = [j.result.longitude, j.result.latitude];
+      _distCache['c:'+k] = c; return c;
+    }
+  } catch(e) {}
   return null;
 }
-
-async function getDrivingMiles(postcodeA, postcodeB) {
-  const cacheKey = postcodeA+'|'+postcodeB;
-  if (distCache[cacheKey] != null) return distCache[cacheKey];
+async function getMiles(pcA, pcB) {
+  const key = pcA+'|'+pcB;
+  if (_distCache[key] != null) return _distCache[key];
   try {
-    const [ca, cb] = await Promise.all([postcodeToCoords(postcodeA), postcodeToCoords(postcodeB)]);
+    const [ca, cb] = await Promise.all([pcToCoords(pcA), pcToCoords(pcB)]);
     if (!ca || !cb) return null;
-    const body = { coordinates: [ca, cb] };
-    const res = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json', {
-      method: 'POST',
-      headers: { 'Authorization': ORS_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+    const r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json', {
+      method:'POST',
+      headers:{'Authorization':ORS_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({coordinates:[ca,cb]})
     });
-    const j = await res.json();
+    const j = await r.json();
     if (j.routes && j.routes[0]) {
-      const metres = j.routes[0].summary.distance;
-      const miles = round1(metres / 1609.344);
-      distCache[cacheKey] = miles;
-      distCache[postcodeB+'|'+postcodeA] = miles; // symmetric
-      return miles;
+      const m = r1(j.routes[0].summary.distance / 1609.344);
+      _distCache[key] = m; _distCache[pcB+'|'+pcA] = m; return m;
     }
   } catch(e) {}
   return null;
 }
 
-// ─── Firestore save/load ───
-async function saveToCloud(data) {
+// ── Firestore ──
+async function saveCloud(data) {
   if (!currentUser) return;
-  try {
-    await db.collection('users').doc(currentUser.uid).set(data, { merge: true });
-  } catch(e) {}
+  try { await db.collection('users').doc(currentUser.uid).set(data,{merge:true}); } catch(e){}
 }
-
-async function loadFromCloud() {
+async function loadCloud() {
   if (!currentUser) return;
   try {
     const snap = await db.collection('users').doc(currentUser.uid).get();
     if (snap.exists) {
-      userDoc = snap.data();
-      sites = (userDoc.sites && userDoc.sites.length) ? userDoc.sites : DEFAULT_SITES.map(s => ({...s}));
-      homePostcode = userDoc.homePostcode || HOME_POSTCODE;
-      savedLogs = userDoc.logs || {};
+      const d = snap.data();
+      sites = (d.sites && d.sites.length) ? d.sites : DEFAULT_SITES.map(s=>({...s}));
+      homePostcode = d.homePostcode || 'BL5 2RX';
+      savedLogs = d.logs || {};
     } else {
-      sites = DEFAULT_SITES.map(s => ({...s}));
-      homePostcode = HOME_POSTCODE;
-      savedLogs = {};
-      await saveToCloud({ sites, homePostcode, logs: {} });
+      sites = DEFAULT_SITES.map(s=>({...s}));
+      homePostcode = 'BL5 2RX'; savedLogs = {};
+      await saveCloud({sites, homePostcode, logs:{}});
     }
-  } catch(e) {
-    sites = DEFAULT_SITES.map(s => ({...s}));
-    homePostcode = HOME_POSTCODE;
-    savedLogs = {};
-  }
+  } catch(e) { sites = DEFAULT_SITES.map(s=>({...s})); homePostcode='BL5 2RX'; savedLogs={}; }
 }
 
-// ─── Auth ───
+// ── Auth ──
 document.getElementById('auth-btn').addEventListener('click', async () => {
-  const email = document.getElementById('auth-email').value.trim();
-  const pass = document.getElementById('auth-pass').value;
-  const errEl = document.getElementById('auth-error');
-  errEl.textContent = '';
-  if (!email || !pass) { errEl.textContent = 'Enter email and password.'; return; }
-  try {
-    await auth.signInWithEmailAndPassword(email, pass);
-  } catch(e) {
-    // Try sign up
-    try {
-      await auth.createUserWithEmailAndPassword(email, pass);
-    } catch(e2) {
-      errEl.textContent = e2.message || 'Could not sign in.';
-    }
+  const em = document.getElementById('auth-email').value.trim();
+  const pw = document.getElementById('auth-pass').value;
+  const err = document.getElementById('auth-error');
+  err.textContent = '';
+  if (!em || !pw) { err.textContent = 'Enter email and password.'; return; }
+  try { await auth.signInWithEmailAndPassword(em, pw); }
+  catch(e) {
+    try { await auth.createUserWithEmailAndPassword(em, pw); }
+    catch(e2) { err.textContent = e2.message || 'Could not sign in.'; }
   }
 });
-
-document.getElementById('auth-email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('auth-pass').focus(); });
-document.getElementById('auth-pass').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('auth-btn').click(); });
+['auth-email','auth-pass'].forEach((id,i,arr) => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (i < arr.length-1) document.getElementById(arr[i+1]).focus();
+      else document.getElementById('auth-btn').click();
+    }
+  });
+});
 
 auth.onAuthStateChanged(async user => {
   currentUser = user;
   if (user) {
     document.getElementById('auth-screen').classList.remove('active');
     document.getElementById('main-screen').classList.add('active');
-    document.getElementById('settings-email').textContent = user.email || '';
-    await loadFromCloud();
-    // Pre-fetch miles for all sites in background
-    prefetchSiteMiles();
+    document.getElementById('settings-email-txt').textContent = user.email || '';
+    await loadCloud();
     updateTopbarDate();
-    loadDayData(isoDate(new Date()));
+    loadDayData(isoDate(viewDate));
     renderDayView();
-    renderLogView();
-    renderExportView();
-    renderSettingsSites();
+    prefetchMiles();
   } else {
     document.getElementById('auth-screen').classList.add('active');
     document.getElementById('main-screen').classList.remove('active');
   }
 });
-
 document.getElementById('signout-btn').addEventListener('click', () => auth.signOut());
 
-// ─── Tabs ───
+// ── Tabs ──
 document.querySelectorAll('.nav-tab').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentTab = btn.dataset.tab;
-    document.getElementById('tab-day').style.display = currentTab === 'day' ? 'flex' : 'none';
-    document.getElementById('tab-log').style.display = currentTab === 'log' ? 'block' : 'none';
-    document.getElementById('tab-export').style.display = currentTab === 'export' ? 'flex' : 'none';
-    document.getElementById('settings-panel').style.display = 'none';
-    document.getElementById('save-row').style.display = currentTab === 'day' ? 'flex' : 'none';
-    if (currentTab === 'log') renderLogView();
-    if (currentTab === 'export') renderExportView();
+    const t = btn.dataset.tab;
+    switchTab(t);
   });
 });
+function switchTab(t) {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-tab="${t}"]`)?.classList.add('active');
+  document.getElementById('tab-day').style.display = t === 'day' ? 'flex' : 'none';
+  document.getElementById('tab-log').style.display = t === 'log' ? 'block' : 'none';
+  document.getElementById('tab-export').style.display = t === 'export' ? 'flex' : 'none';
+  document.getElementById('settings-panel').style.display = 'none';
+  currentTab = t;
+  if (t === 'log') renderLogView();
+  if (t === 'export') renderExportView();
+  if (t === 'day') renderDayView();
+}
+document.getElementById('tab-day').style.display = 'flex';
+document.getElementById('tab-log').style.display = 'none';
+document.getElementById('tab-export').style.display = 'none';
 
 document.getElementById('settings-btn').addEventListener('click', () => {
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   ['tab-day','tab-log','tab-export'].forEach(id => document.getElementById(id).style.display = 'none');
-  document.getElementById('save-row').style.display = 'none';
   document.getElementById('settings-panel').style.display = 'flex';
   currentTab = 'settings';
   renderSettingsSites();
-  document.getElementById('home-postcode-display').textContent = homePostcode;
+  document.getElementById('home-pc-display').textContent = homePostcode;
+});
+document.getElementById('settings-back-btn').addEventListener('click', () => {
+  switchTab('day');
 });
 
-// ─── Topbar date ───
+// ── Topbar date ──
 function updateTopbarDate() {
-  const btn = document.getElementById('topbar-date-btn');
   const iso = isoDate(viewDate);
-  const today = isoDate(new Date());
-  btn.textContent = iso === today ? 'Today' : formatDateShort(iso);
+  const todayIso = isoDate(new Date());
+  document.getElementById('topbar-date-btn').textContent = iso === todayIso ? 'Today' : formatDateShort(iso);
 }
+document.getElementById('topbar-date-btn').addEventListener('click', showDatePicker);
 
-document.getElementById('topbar-date-btn').addEventListener('click', () => showDatePicker());
-
-// ─── Day data ───
+// ── Day data ──
 function loadDayData(iso) {
   const log = savedLogs[iso];
   if (log) {
-    dayStops = log.stops ? JSON.parse(JSON.stringify(log.stops)) : [];
+    primarySite = log.primarySite || null;
+    secondSite = log.secondSite || null;
     dayNotes = log.notes || '';
   } else {
-    // Default: Home → Home
-    dayStops = [
-      { type:'home', id:'home', name:'Home', postcode: homePostcode, miles: null },
-      { type:'home', id:'home2', name:'Home', postcode: homePostcode, miles: null }
-    ];
-    dayNotes = '';
+    primarySite = null; secondSite = null; dayNotes = '';
   }
 }
 
-// ─── Prefetch miles in background ───
-async function prefetchSiteMiles() {
-  for (const site of sites) {
-    if (site.miles == null) {
-      const m = await getDrivingMiles(homePostcode, site.postcode);
-      if (m != null) {
-        site.miles = m;
-      }
-    }
+// ── Draw curved SVG track ──
+function drawTrack() {
+  const canvas = document.getElementById('journey-canvas');
+  const svg = document.getElementById('track-svg');
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+  if (!W || !H) return;
+
+  // Home TL dot centre
+  const x1 = 46, y1 = 46;
+  // Home BR dot centre
+  const x2 = W - 46, y2 = H - 105;
+  // Site card centre
+  const cx = W / 2, cy = H / 2 - 20;
+
+  // Bezier: Home TL → site card top, curving through left side
+  const cp1x = x1 + 20, cp1y = cy - 60;
+  const cp2x = cx - 60, cp2y = cy - 20;
+
+  // Bezier: site card bottom → Home BR, curving through right side
+  const cp3x = cx + 60, cp3y = cy + 20;
+  const cp4x = x2 - 20, cp4y = cy + 60;
+
+  const pathD1 = `M ${x1} ${y1} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${cx} ${cy - 52}`;
+  const pathD2 = `M ${cx} ${cy + 52} C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${x2} ${y2}`;
+
+  svg.innerHTML = `
+    <defs>
+      <marker id="dot1" markerWidth="6" markerHeight="6" refX="3" refY="3">
+        <circle cx="3" cy="3" r="2.5" fill="rgba(26,26,26,0.25)"/>
+      </marker>
+    </defs>
+    <path d="${pathD1}" fill="none" stroke="rgba(26,26,26,0.15)" stroke-width="2" stroke-dasharray="5,4"/>
+    <path d="${pathD2}" fill="none" stroke="rgba(26,26,26,0.15)" stroke-width="2" stroke-dasharray="5,4"/>
+  `;
+
+  // Position badges at midpoint of each bezier
+  const mid1x = bezierPoint(x1, cp1x, cp2x, cx, 0.5);
+  const mid1y = bezierPoint(y1, cp1y, cp2y, cy - 52, 0.5);
+  const mid2x = bezierPoint(cx, cp3x, cp4x, x2, 0.5);
+  const mid2y = bezierPoint(cy + 52, cp3y, cp4y, y2, 0.5);
+
+  const outEl = document.getElementById('miles-out');
+  const retEl = document.getElementById('miles-ret');
+  outEl.style.top = (mid1y - 12) + 'px';
+  outEl.style.left = (mid1x) + 'px';
+  outEl.style.transform = 'translateX(-50%)';
+  retEl.style.top = (mid2y - 12) + 'px';
+  retEl.style.left = (mid2x) + 'px';
+  retEl.style.transform = 'translateX(-50%)';
+
+  // Second site line (straight drop below card)
+  if (secondSite) {
+    const siteCardEl = document.getElementById('site-card-wrap');
+    const cardBottom = canvas.offsetHeight / 2 + 20;
+    const tag = document.getElementById('second-site-tag');
+    tag.style.top = (cardBottom + 40) + 'px';
+    const mi2 = document.getElementById('miles-out2');
+    mi2.style.top = (cardBottom + 12) + 'px';
+    mi2.style.left = '50%';
+    mi2.style.transform = 'translateX(-50%)';
+    // Draw connecting line segment
+    const extraLine = `<line x1="${cx}" y1="${cy+52}" x2="${cx}" y2="${cardBottom+40}" stroke="rgba(26,26,26,0.15)" stroke-width="2" stroke-dasharray="5,4"/>`;
+    svg.innerHTML += extraLine;
   }
-  await saveToCloud({ sites });
-  renderSettingsSites();
 }
 
-// ─── Compute leg miles ───
-async function computeLegMiles(stopA, stopB) {
-  return getDrivingMiles(stopA.postcode, stopB.postcode);
+function bezierPoint(p0, p1, p2, p3, t) {
+  return Math.pow(1-t,3)*p0 + 3*Math.pow(1-t,2)*t*p1 + 3*(1-t)*Math.pow(t,2)*p2 + Math.pow(t,3)*p3;
 }
 
-// ─── Total miles ───
-function totalMiles() {
-  let total = 0;
-  for (let i = 1; i < dayStops.length; i++) {
-    const m = dayStops[i].miles;
-    if (m != null) total += m;
-  }
-  return round1(total);
-}
-
-// ─── Render day view ───
+// ── Render day view ──
 function renderDayView() {
-  const wrap = document.getElementById('tab-day');
-  if (currentTab !== 'day') return;
+  if (currentTab !== 'day' && currentTab !== 'settings') {
+    if (document.getElementById('tab-day').style.display !== 'flex') return;
+  }
 
+  // Stats
   const iso = isoDate(viewDate);
-  const totalM = totalMiles();
+  const todayTotal = primarySite ? computeTotalMiles() : '—';
+  const mTotal = monthMilesTotal(iso);
+  document.getElementById('stat-today').textContent = typeof todayTotal === 'number' ? todayTotal : '—';
+  document.getElementById('stat-sites').textContent = (primarySite ? 1 : 0) + (secondSite ? 1 : 0);
+  document.getElementById('stat-month').textContent = mTotal || '—';
 
-  let html = '';
-
-  // Stats bar
-  html += `<div class="stats-bar">
-    <div class="stat-item">
-      <div class="stat-val">${totalM || '—'}</div>
-      <div class="stat-lbl">Miles today</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">${dayStops.filter(s=>s.type==='site').length}</div>
-      <div class="stat-lbl">Sites visited</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">${monthMiles(iso)}</div>
-      <div class="stat-lbl">Month total</div>
-    </div>
-  </div>`;
-
-  // Journey
-  html += `<div class="journey-wrap" id="journey-wrap">`;
-
-  for (let i = 0; i < dayStops.length; i++) {
-    const stop = dayStops[i];
-    const isHome = stop.type === 'home';
-    const dotClass = isHome ? 'home' : (stop.type === 'site' ? 'site' : 'custom');
-    const icon = isHome ? '🏠' : (stop.type === 'site' ? '🏥' : '📍');
-    const typeLabel = isHome
-      ? `<div class="stop-type-label home-label">HOME</div>`
-      : `<div class="stop-type-label site-label">SITE</div>`;
-
-    html += `<div class="journey-stop">
-      <div class="stop-dot-wrap">
-        <div class="stop-dot ${dotClass}">${icon}</div>
-        ${typeLabel}
+  // Site card
+  const cardEl = document.getElementById('site-card-inner');
+  if (primarySite) {
+    document.getElementById('site-card').classList.add('selected');
+    cardEl.innerHTML = `
+      <div class="site-card-eyebrow">Site visited</div>
+      <div class="site-card-name">${primarySite.name}</div>
+      <div class="site-card-postcode">${primarySite.postcode}</div>
+      <div class="site-card-hint">Tap to change · Long-press to add 2nd site</div>
+    `;
+  } else {
+    document.getElementById('site-card').classList.remove('selected');
+    cardEl.innerHTML = `
+      <div class="site-card-empty">
+        <div class="site-card-empty-icon">🏥</div>
+        <div class="site-card-empty-text">Tap to select<br>your site</div>
+        <div class="site-card-empty-sub">Long-press to add a second site</div>
       </div>
-      <div class="stop-info">
-        <div class="stop-name">${stop.name}</div>
-        <div class="stop-time">${stop.postcode}</div>
-      </div>
-      ${i > 0 && i < dayStops.length - 1 ? `<button class="stop-remove" data-idx="${i}" title="Remove stop">✕</button>` : ''}
-    </div>`;
-
-    // Line between stops
-    if (i < dayStops.length - 1) {
-      const nextStop = dayStops[i+1];
-      const legMiles = nextStop.miles;
-      const badgeClass = legMiles == null ? 'loading' : '';
-      const badgeText = legMiles != null ? `${legMiles} mi` : '···';
-      html += `<div class="stop-dot-wrap" style="margin-left:24px">
-        <div class="stop-line" style="height:64px; width:2px; position:relative;">
-          <div class="stop-line-track"></div>
-          <div class="miles-badge ${badgeClass}" id="miles-leg-${i}">${badgeText}</div>
-        </div>
-      </div>`;
-    }
+    `;
   }
 
-  html += `</div>`; // /journey-wrap
+  // Second site
+  const tag = document.getElementById('second-site-tag');
+  const mi2 = document.getElementById('miles-out2');
+  if (secondSite) {
+    tag.style.display = 'block';
+    document.getElementById('second-site-name').textContent = secondSite.name;
+    mi2.style.display = 'block';
+    updateMilesBadge('miles-out2', secondSite.miles);
+  } else {
+    tag.style.display = 'none';
+    mi2.style.display = 'none';
+  }
 
-  // Add stop row
-  html += `<button class="add-stop-row" id="add-stop-btn">
-    <div class="add-stop-dot">+</div>
-    <div class="add-stop-label">Add a stop</div>
-  </button>`;
+  // Miles badges
+  updateMilesBadge('miles-out', primarySite ? primarySite.miles : null);
+  updateMilesBadge('miles-ret', primarySite ? primarySite.miles : null);
 
-  // Notes
-  html += `<textarea class="notes-field" id="day-notes" placeholder="Notes (optional)…" rows="3">${dayNotes}</textarea>`;
+  // Save button
+  document.getElementById('save-day-btn').disabled = !primarySite;
 
-  wrap.innerHTML = html;
+  // Draw curve
+  requestAnimationFrame(drawTrack);
+}
 
-  // Events
-  wrap.querySelectorAll('.stop-remove').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.idx);
-      dayStops.splice(idx, 1);
-      renderDayView();
-    });
+function updateMilesBadge(id, miles) {
+  const el = document.getElementById(id);
+  if (miles != null) {
+    el.textContent = miles + ' mi';
+    el.classList.remove('faint');
+  } else {
+    el.textContent = primarySite ? '···' : '—';
+    el.classList.add('faint');
+  }
+}
+
+function computeTotalMiles() {
+  let t = 0;
+  if (primarySite && primarySite.miles != null) t += primarySite.miles * 2;
+  if (secondSite && secondSite.miles != null) t += secondSite.miles;
+  return t ? r1(t) : '—';
+}
+
+function monthMilesTotal(iso) {
+  const pfx = iso.slice(0,7);
+  let t = 0;
+  Object.keys(savedLogs).forEach(k => { if (k.startsWith(pfx) && savedLogs[k].total) t += savedLogs[k].total; });
+  return t ? r1(t) : null;
+}
+
+// ── Site card interactions ──
+let _longPressTimer = null;
+
+document.getElementById('site-card').addEventListener('click', () => {
+  showSiteSelector(false);
+});
+
+// Long press → add second site
+['touchstart','mousedown'].forEach(ev => {
+  document.getElementById('site-card').addEventListener(ev, e => {
+    if (!primarySite) return;
+    _longPressTimer = setTimeout(() => {
+      _longPressTimer = null;
+      document.getElementById('site-card').classList.add('pressing');
+      setTimeout(() => document.getElementById('site-card').classList.remove('pressing'), 700);
+      showSiteSelector(true);
+    }, 600);
+  }, { passive: true });
+});
+['touchend','touchcancel','mouseup','mouseleave'].forEach(ev => {
+  document.getElementById('site-card').addEventListener(ev, () => {
+    clearTimeout(_longPressTimer); _longPressTimer = null;
   });
+});
 
-  document.getElementById('add-stop-btn')?.addEventListener('click', () => showSiteSelector());
-  document.getElementById('day-notes')?.addEventListener('input', e => { dayNotes = e.target.value; });
+document.getElementById('second-site-remove').addEventListener('click', () => {
+  secondSite = null;
+  renderDayView();
+});
 
-  // Fetch missing leg miles
-  fetchMissingLegMiles();
-}
+// ── Site selector sheet ──
+function showSiteSelector(isSecond) {
+  const title = isSecond ? 'Add second site' : 'Select site';
 
-async function fetchMissingLegMiles() {
-  for (let i = 1; i < dayStops.length; i++) {
-    const stop = dayStops[i];
-    if (stop.miles == null) {
-      const prev = dayStops[i-1];
-      const m = await getDrivingMiles(prev.postcode, stop.postcode);
-      if (m != null) {
-        stop.miles = m;
-        const badge = document.getElementById(`miles-leg-${i-1}`);
-        if (badge) {
-          badge.textContent = `${m} mi`;
-          badge.classList.remove('loading');
-        }
-        // Update stats
-        const statEl = document.querySelector('.stat-val');
-        if (statEl) statEl.textContent = totalMiles() || '—';
-      }
-    }
-  }
-}
-
-// ─── Site selector sheet ───
-function showSiteSelector() {
-  const filtered = () => {
-    const q = document.getElementById('site-search')?.value.trim().toLowerCase() || '';
-    return q ? sites.filter(s => s.name.toLowerCase().includes(q) || s.postcode.toLowerCase().includes(q)) : sites;
-  };
-
-  const renderList = () => {
-    const list = filtered();
-    return list.map(s => `
-      <div class="site-item" data-site-id="${s.id}">
-        <div class="site-item-dot"></div>
-        <div class="site-item-name">${s.name}</div>
-        <span class="site-item-miles">${s.miles != null ? s.miles+' mi' : ''}</span>
-        <span class="site-item-add">Add →</span>
+  const listHtml = () => {
+    const q = document.getElementById('site-search-inp')?.value?.trim().toLowerCase() || '';
+    const filtered = q ? sites.filter(s => s.name.toLowerCase().includes(q) || s.postcode.toLowerCase().includes(q)) : sites;
+    return filtered.map(s => `
+      <div class="site-list-item" data-id="${s.id}">
+        <div class="site-list-dot"></div>
+        <div class="site-list-name">${s.name}</div>
+        <div class="site-list-mi">${s.miles != null ? s.miles+' mi' : ''}</div>
       </div>
     `).join('');
   };
 
-  const content = `
+  openSheet(`
     <div class="sheet-handle"></div>
-    <div class="sheet-title">Add stop</div>
-    <div class="site-selector-wrap">
-      <div class="site-search-row">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#606060" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-        <input id="site-search" class="site-search-input" placeholder="Search sites…" autocomplete="off">
+    <div class="sheet-title">${title}</div>
+    <div class="site-search-list">
+      <div class="site-search-input-row">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A09A93" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        <input id="site-search-inp" class="site-search-inp" placeholder="Search…" autocomplete="off">
       </div>
-      <div class="site-list" id="site-list-inner">${renderList()}</div>
+      <div class="site-list-scroll" id="site-list-scroll">${listHtml()}</div>
     </div>
-    <button class="btn-secondary" id="close-sheet-btn">Cancel</button>
-  `;
-
-  openSheet(content, () => {});
+    <button class="sheet-cancel" id="sheet-close">Cancel</button>
+  `);
 
   setTimeout(() => {
-    document.getElementById('site-search')?.addEventListener('input', () => {
-      document.getElementById('site-list-inner').innerHTML = renderList();
-      bindSiteItems();
+    document.getElementById('sheet-close')?.addEventListener('click', closeSheet);
+    document.getElementById('site-search-inp')?.addEventListener('input', () => {
+      document.getElementById('site-list-scroll').innerHTML = listHtml();
+      bindItems();
     });
-    document.getElementById('close-sheet-btn')?.addEventListener('click', closeSheet);
-    bindSiteItems();
-    document.getElementById('site-search')?.focus();
-  }, 50);
+    document.getElementById('site-search-inp')?.focus();
+    bindItems();
+  }, 60);
 
-  function bindSiteItems() {
-    document.querySelectorAll('.site-item').forEach(el => {
-      el.addEventListener('click', () => {
-        const siteId = el.dataset.siteId;
-        const site = sites.find(s => s.id === siteId);
-        if (!site) return;
-        // Insert before last Home stop
-        const insertIdx = dayStops.length - 1;
-        dayStops.splice(insertIdx, 0, {
-          type: 'site',
-          id: site.id + '_' + Date.now(),
-          name: site.name,
-          postcode: site.postcode,
-          miles: null
-        });
+  function bindItems() {
+    document.querySelectorAll('.site-list-item').forEach(el => {
+      el.addEventListener('click', async () => {
+        const s = sites.find(x => x.id === el.dataset.id);
+        if (!s) return;
         closeSheet();
-        renderDayView();
+        if (isSecond) {
+          secondSite = { id: s.id, name: s.name, postcode: s.postcode, miles: s.miles };
+          renderDayView();
+          if (secondSite.miles == null) {
+            const m = await getMiles(primarySite.postcode, s.postcode);
+            if (m != null) { secondSite.miles = m; updateMilesBadge('miles-out2', m); }
+          }
+        } else {
+          primarySite = { id: s.id, name: s.name, postcode: s.postcode, miles: s.miles };
+          renderDayView();
+          if (primarySite.miles == null) {
+            const m = await getMiles(homePostcode, s.postcode);
+            if (m != null) {
+              primarySite.miles = m;
+              s.miles = m; // cache on site object
+              updateMilesBadge('miles-out', m);
+              updateMilesBadge('miles-ret', m);
+              document.getElementById('stat-today').textContent = computeTotalMiles();
+              await saveCloud({ sites });
+            }
+          }
+        }
       });
     });
   }
 }
 
-// ─── Save day ───
+// ── Save day ──
 document.getElementById('save-day-btn').addEventListener('click', async () => {
   const iso = isoDate(viewDate);
-  const log = { stops: dayStops, notes: dayNotes, total: totalMiles(), date: iso, saved: new Date().toISOString() };
+  const total = typeof computeTotalMiles() === 'number' ? computeTotalMiles() : 0;
+  const log = { primarySite, secondSite, notes: dayNotes, total, date: iso, saved: new Date().toISOString() };
   savedLogs[iso] = log;
-  await saveToCloud({ logs: savedLogs });
-  showToast('Day saved ✓');
-  renderLogView();
+  await saveCloud({ logs: savedLogs });
+  toast('Day saved ✓');
   renderExportView();
+  // Update stats
+  document.getElementById('stat-month').textContent = monthMilesTotal(iso) || '—';
 });
 
 document.getElementById('clear-day-btn').addEventListener('click', () => {
-  if (!confirm('Clear today\'s journey?')) return;
-  dayStops = [
-    { type:'home', id:'home', name:'Home', postcode: homePostcode, miles: null },
-    { type:'home', id:'home2', name:'Home', postcode: homePostcode, miles: null }
-  ];
-  dayNotes = '';
+  if (!confirm('Clear this day?')) return;
+  primarySite = null; secondSite = null; dayNotes = '';
   renderDayView();
 });
 
-// ─── Month miles helper ───
-function monthMiles(iso) {
-  const prefix = iso.slice(0, 7);
-  let total = 0;
-  Object.keys(savedLogs).forEach(k => {
-    if (k.startsWith(prefix)) {
-      const log = savedLogs[k];
-      if (log.total) total += log.total;
+// ── Prefetch site miles in background ──
+async function prefetchMiles() {
+  for (const s of sites) {
+    if (s.miles == null) {
+      const m = await getMiles(homePostcode, s.postcode);
+      if (m != null) s.miles = m;
     }
-  });
-  return round1(total) || '—';
+  }
+  await saveCloud({ sites });
+  renderSettingsSites();
 }
 
-// ─── Log view ───
+// ── Log view ──
 function renderLogView() {
   const y = logMonth.getFullYear(), m = logMonth.getMonth();
   document.getElementById('log-month-label').textContent =
     logMonth.toLocaleDateString('en-GB', { month:'long', year:'numeric' });
-
-  const prefix = y + '-' + String(m+1).padStart(2,'0');
-  const entries = Object.keys(savedLogs)
-    .filter(k => k.startsWith(prefix))
-    .sort((a,b) => b.localeCompare(a));
-
+  const pfx = y+'-'+pad(m+1);
+  const keys = Object.keys(savedLogs).filter(k => k.startsWith(pfx)).sort((a,b) => b.localeCompare(a));
   const list = document.getElementById('log-list');
-  if (!entries.length) {
-    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🗺️</div><div class="empty-text">No journeys logged this month</div></div>`;
+  if (!keys.length) {
+    list.innerHTML = `<div class="log-empty"><div class="log-empty-icon">🗺️</div><div class="log-empty-text">No journeys logged this month</div></div>`;
     return;
   }
-
-  list.innerHTML = entries.map(iso => {
+  list.innerHTML = keys.map(iso => {
     const log = savedLogs[iso];
-    const stops = log.stops || [];
-    const siteStops = stops.filter(s => s.type === 'site');
-    return `<div class="log-day" data-iso="${iso}">
-      <div class="log-day-header">
-        <span class="log-day-date">${formatDate(iso)}</span>
-        <span class="log-day-miles">${log.total || 0} mi</span>
+    const stops = [];
+    stops.push({ type:'home', name:'Home' });
+    if (log.primarySite) stops.push({ type:'site', name:log.primarySite.name, miles: log.primarySite.miles ? log.primarySite.miles+' mi' : '' });
+    if (log.secondSite) stops.push({ type:'site', name:log.secondSite.name, miles: log.secondSite.miles ? log.secondSite.miles+' mi' : '' });
+    stops.push({ type:'home', name:'Home' });
+    return `<div class="log-entry">
+      <div class="log-entry-head">
+        <span class="log-entry-date">${formatDate(iso)}</span>
+        <span class="log-entry-miles">${log.total || 0} mi</span>
       </div>
-      <div class="log-day-body">
-        ${stops.map((s, i) => {
-          const legMiles = i > 0 && stops[i].miles != null ? stops[i].miles + ' mi' : '';
-          return `<div class="log-stop-row">
-            <div class="log-dot ${s.type === 'home' ? 'home' : 'site'}"></div>
-            <div class="log-stop-name">${s.name}</div>
-            <div class="log-stop-miles">${legMiles}</div>
-          </div>`;
-        }).join('')}
-        ${log.notes ? `<div style="font-size:0.75rem;color:var(--text2);padding:0.5rem 0 0;border-top:1px solid var(--border);margin-top:0.25rem;">${log.notes}</div>` : ''}
-        <div class="log-day-actions">
-          <button class="log-action-btn" data-edit="${iso}">✏️ Edit</button>
-          <button class="log-action-btn danger" data-delete="${iso}">🗑 Delete</button>
+      <div class="log-entry-body">
+        ${stops.map(s=>`<div class="log-stop-row"><div class="log-dot ${s.type}"></div><div class="log-stop-name">${s.name}</div><div class="log-stop-mi">${s.miles||''}</div></div>`).join('')}
+        ${log.notes ? `<div style="font-size:0.72rem;color:var(--ink2);padding:0.4rem 0 0;border-top:1px solid var(--line);margin-top:0.2rem;">${log.notes}</div>` : ''}
+        <div class="log-entry-actions">
+          <button class="log-act-btn" data-edit="${iso}">✏ Edit</button>
+          <button class="log-act-btn danger" data-del="${iso}">✕ Delete</button>
         </div>
       </div>
     </div>`;
@@ -1110,284 +1213,212 @@ function renderLogView() {
   list.querySelectorAll('[data-edit]').forEach(btn => {
     btn.addEventListener('click', () => {
       const iso = btn.dataset.edit;
-      viewDate = new Date(iso + 'T00:00');
+      viewDate = new Date(iso+'T00:00');
       loadDayData(iso);
-      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-      document.querySelector('[data-tab="day"]').classList.add('active');
-      document.getElementById('tab-day').style.display = 'flex';
-      document.getElementById('tab-log').style.display = 'none';
-      document.getElementById('save-row').style.display = 'flex';
-      currentTab = 'day';
       updateTopbarDate();
-      renderDayView();
+      switchTab('day');
     });
   });
-
-  list.querySelectorAll('[data-delete]').forEach(btn => {
+  list.querySelectorAll('[data-del]').forEach(btn => {
     btn.addEventListener('click', async () => {
-      if (!confirm('Delete this journey log?')) return;
-      delete savedLogs[btn.dataset.delete];
-      await saveToCloud({ logs: savedLogs });
-      renderLogView();
-      renderExportView();
-      showToast('Deleted');
+      if (!confirm('Delete this day?')) return;
+      delete savedLogs[btn.dataset.del];
+      await saveCloud({ logs: savedLogs });
+      renderLogView(); renderExportView(); toast('Deleted');
     });
   });
 }
-
 document.getElementById('log-prev').addEventListener('click', () => { logMonth.setMonth(logMonth.getMonth()-1); renderLogView(); });
 document.getElementById('log-next').addEventListener('click', () => { logMonth.setMonth(logMonth.getMonth()+1); renderLogView(); });
 
-// ─── Export view ───
-function renderExportView() {
+// ── Export ──
+function getMonthKeys() {
   const now = new Date();
-  const prefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-  const monthEntries = Object.keys(savedLogs).filter(k => k.startsWith(prefix));
-  let monthTotal = 0, monthDays = monthEntries.length;
-  monthEntries.forEach(k => { monthTotal += (savedLogs[k].total || 0); });
-
-  // Week
-  const wStart = new Date(now); wStart.setDate(now.getDate() - ((now.getDay()+6)%7));
-  let weekTotal = 0, weekDays = 0;
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(wStart); d.setDate(wStart.getDate() + i);
-    const k = isoDate(d);
-    if (savedLogs[k]) { weekTotal += (savedLogs[k].total || 0); weekDays++; }
-  }
-
-  document.getElementById('export-summary').innerHTML = `
-    <div class="export-summary-row"><span class="export-summary-lbl">Month total miles</span><span class="export-summary-val">${round1(monthTotal)} mi</span></div>
-    <div class="export-summary-row"><span class="export-summary-lbl">Days logged this month</span><span class="export-summary-val">${monthDays}</span></div>
-    <div class="export-summary-row"><span class="export-summary-lbl">Week total miles</span><span class="export-summary-val">${round1(weekTotal)} mi</span></div>
-    <div class="export-summary-row"><span class="export-summary-lbl">Days logged this week</span><span class="export-summary-val">${weekDays}</span></div>
-  `;
+  const pfx = now.getFullYear()+'-'+pad(now.getMonth()+1);
+  return Object.keys(savedLogs).filter(k=>k.startsWith(pfx)).sort();
 }
-
-function buildCSV(entries) {
-  const rows = [['Date','Stops','Total Miles','Notes']];
-  entries.forEach(iso => {
-    const log = savedLogs[iso];
-    if (!log) return;
-    const stops = (log.stops || []).map(s => s.name).join(' → ');
-    rows.push([iso, stops, log.total || 0, (log.notes || '').replace(/\n/g,' ')]);
-  });
-  return rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-}
-
-function downloadText(text, filename) {
-  const a = document.createElement('a');
-  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
-  a.download = filename;
-  a.click();
-}
-
-function getWeekEntries() {
+function getWeekKeys() {
   const now = new Date();
   const wStart = new Date(now); wStart.setDate(now.getDate() - ((now.getDay()+6)%7));
   const keys = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(wStart); d.setDate(wStart.getDate() + i);
-    const k = isoDate(d);
-    if (savedLogs[k]) keys.push(k);
-  }
+  for (let i=0;i<7;i++) { const d=new Date(wStart); d.setDate(d.getDate()+i); const k=isoDate(d); if(savedLogs[k]) keys.push(k); }
   return keys;
 }
-
-function getMonthEntries() {
-  const now = new Date();
-  const prefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-  return Object.keys(savedLogs).filter(k => k.startsWith(prefix)).sort();
+function renderExportView() {
+  const mKeys = getMonthKeys(), wKeys = getWeekKeys();
+  let mTotal=0; mKeys.forEach(k => mTotal += (savedLogs[k].total||0));
+  let wTotal=0; wKeys.forEach(k => wTotal += (savedLogs[k].total||0));
+  document.getElementById('exp-month-mi').textContent = r1(mTotal) || '—';
+  document.getElementById('exp-month-days').textContent = mKeys.length || '—';
+  document.getElementById('exp-week-mi').textContent = r1(wTotal) || '—';
+  document.getElementById('exp-week-days').textContent = wKeys.length || '—';
 }
-
-document.getElementById('export-week-csv').addEventListener('click', () => {
-  const keys = getWeekEntries();
-  if (!keys.length) { showToast('No data for this week'); return; }
-  downloadText(buildCSV(keys), `TRVL_week_${isoDate(new Date())}.csv`);
-});
-
-document.getElementById('export-month-csv').addEventListener('click', () => {
-  const keys = getMonthEntries();
-  if (!keys.length) { showToast('No data for this month'); return; }
-  downloadText(buildCSV(keys), `TRVL_month_${new Date().toLocaleDateString('en-GB',{month:'short',year:'numeric'}).replace(' ','_')}.csv`);
-});
-
-function buildText(entries) {
-  return entries.map(iso => {
+function buildCSV(keys) {
+  const rows = [['Date','Site 1','Site 1 Postcode','Site 2','Return Miles (×2)','Extra Miles','Total Miles','Notes']];
+  keys.forEach(iso => {
     const log = savedLogs[iso];
-    if (!log) return '';
-    const stops = (log.stops || []).map(s => s.name).join(' → ');
-    return `${formatDate(iso)}\n${stops}\nTotal: ${log.total || 0} miles${log.notes ? '\nNotes: '+log.notes : ''}`;
+    if (!log) return;
+    const s1 = log.primarySite;
+    const s2 = log.secondSite;
+    rows.push([
+      iso,
+      s1 ? s1.name : '',
+      s1 ? s1.postcode : '',
+      s2 ? s2.name : '',
+      s1 && s1.miles ? s1.miles * 2 : '',
+      s2 && s2.miles ? s2.miles : '',
+      log.total || '',
+      (log.notes||'').replace(/\n/g,' ')
+    ]);
+  });
+  return rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+}
+function dl(text, name) {
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+  a.download = name; a.click();
+}
+function buildTxt(keys) {
+  return keys.map(iso => {
+    const log = savedLogs[iso]; if (!log) return '';
+    const s1 = log.primarySite, s2 = log.secondSite;
+    return [
+      formatDate(iso),
+      'Home → ' + (s1 ? s1.name : '?') + (s2 ? ' → ' + s2.name : '') + ' → Home',
+      'Total: ' + (log.total||0) + ' miles',
+      log.notes ? 'Notes: ' + log.notes : ''
+    ].filter(Boolean).join('\n');
   }).join('\n\n');
 }
+document.getElementById('exp-week-csv').addEventListener('click', () => { const k=getWeekKeys(); if(!k.length){toast('No data this week');return;} dl(buildCSV(k),'TRVL_week.csv'); });
+document.getElementById('exp-month-csv').addEventListener('click', () => { const k=getMonthKeys(); if(!k.length){toast('No data this month');return;} dl(buildCSV(k),'TRVL_month.csv'); });
+document.getElementById('exp-week-txt').addEventListener('click', async () => { const k=getWeekKeys(); if(!k.length){toast('No data this week');return;} try{await navigator.clipboard.writeText(buildTxt(k));toast('Week copied!');}catch(e){dl(buildTxt(k),'TRVL_week.txt');} });
+document.getElementById('exp-month-txt').addEventListener('click', async () => { const k=getMonthKeys(); if(!k.length){toast('No data this month');return;} try{await navigator.clipboard.writeText(buildTxt(k));toast('Month copied!');}catch(e){dl(buildTxt(k),'TRVL_month.txt');} });
 
-document.getElementById('export-week-txt').addEventListener('click', async () => {
-  const keys = getWeekEntries();
-  if (!keys.length) { showToast('No data for this week'); return; }
-  const text = buildText(keys);
-  try { await navigator.clipboard.writeText(text); showToast('Week copied to clipboard'); }
-  catch(e) { downloadText(text, 'TRVL_week.txt'); }
-});
-
-document.getElementById('export-month-txt').addEventListener('click', async () => {
-  const keys = getMonthEntries();
-  if (!keys.length) { showToast('No data for this month'); return; }
-  const text = buildText(keys);
-  try { await navigator.clipboard.writeText(text); showToast('Month copied to clipboard'); }
-  catch(e) { downloadText(text, 'TRVL_month.txt'); }
-});
-
-// ─── Settings ───
+// ── Settings ──
 function renderSettingsSites() {
-  const list = document.getElementById('sites-list-settings');
-  if (!list) return;
-  list.innerHTML = sites.map((s, idx) => `
-    <div class="site-manage-item">
-      <div class="site-manage-dot"></div>
+  const el = document.getElementById('sites-settings-list');
+  if (!el) return;
+  el.innerHTML = sites.map((s,i) => `
+    <div class="site-manage-row">
+      <div class="site-dot"></div>
       <div class="site-manage-name">
-        <div class="site-manage-name-text">${s.name}</div>
-        <div class="site-manage-postcode">${s.postcode}</div>
+        <div class="site-manage-name-txt">${s.name}</div>
+        <div class="site-manage-pc">${s.postcode}</div>
       </div>
-      <div class="site-manage-miles">${s.miles != null ? s.miles+' mi' : '···'}</div>
-      <button class="site-manage-del" data-idx="${idx}">✕</button>
+      <div class="site-manage-mi">${s.miles != null ? s.miles+' mi' : '···'}</div>
+      <button class="site-del-btn" data-idx="${i}">✕</button>
     </div>
   `).join('');
-
-  list.querySelectorAll('.site-manage-del').forEach(btn => {
+  el.querySelectorAll('.site-del-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const idx = parseInt(btn.dataset.idx);
-      if (!confirm(`Remove "${sites[idx].name}"?`)) return;
-      sites.splice(idx, 1);
-      await saveToCloud({ sites });
-      renderSettingsSites();
+      const i = parseInt(btn.dataset.idx);
+      if (!confirm(`Remove "${sites[i].name}"?`)) return;
+      sites.splice(i,1); await saveCloud({sites}); renderSettingsSites();
     });
   });
-
-  document.getElementById('home-postcode-display').textContent = homePostcode;
 }
-
-document.getElementById('add-site-btn')?.addEventListener('click', () => showAddSiteSheet());
-document.getElementById('edit-home-btn')?.addEventListener('click', () => showEditHomeSheet());
+document.getElementById('add-site-btn').addEventListener('click', () => showAddSiteSheet());
+document.getElementById('edit-home-btn').addEventListener('click', () => showEditHomeSheet());
 
 function showAddSiteSheet() {
-  const content = `
+  openSheet(`
     <div class="sheet-handle"></div>
     <div class="sheet-title">Add site</div>
-    <div style="display:flex;flex-direction:column;gap:0.65rem;">
-      <div>
-        <div class="sheet-field-label" style="margin-bottom:0.35rem;">Site name</div>
-        <input id="new-site-name" class="sheet-input" placeholder="e.g. Royal Bolton Hospital" autocomplete="off">
-      </div>
-      <div>
-        <div class="sheet-field-label" style="margin-bottom:0.35rem;">Postcode</div>
-        <input id="new-site-postcode" class="sheet-input" placeholder="e.g. BL4 0JR" autocomplete="off" style="text-transform:uppercase;">
-      </div>
+    <div>
+      <div class="sheet-field-label">Site name</div>
+      <input id="new-name" class="sheet-input" placeholder="e.g. Royal Bolton Hospital">
     </div>
-    <div style="display:flex;gap:0.65rem;margin-top:0.25rem;">
-      <button class="btn-secondary" id="cancel-add-site" style="flex:1;">Cancel</button>
-      <button class="btn-primary" id="confirm-add-site" style="flex:2;">Add site</button>
+    <div>
+      <div class="sheet-field-label">Postcode</div>
+      <input id="new-pc" class="sheet-input" placeholder="e.g. BL4 0JR" style="text-transform:uppercase">
     </div>
-  `;
-  openSheet(content);
+    <div class="sheet-btn-row">
+      <button class="sheet-cancel" id="s-cancel">Cancel</button>
+      <button class="sheet-confirm" id="s-confirm">Add site</button>
+    </div>
+  `);
   setTimeout(() => {
-    document.getElementById('cancel-add-site')?.addEventListener('click', closeSheet);
-    document.getElementById('confirm-add-site')?.addEventListener('click', async () => {
-      const name = document.getElementById('new-site-name').value.trim();
-      const postcode = document.getElementById('new-site-postcode').value.trim().toUpperCase();
-      if (!name || !postcode) { showToast('Enter name and postcode'); return; }
-      const newSite = { id: 'custom_'+Date.now(), name, postcode, miles: null };
-      sites.push(newSite);
-      closeSheet();
-      renderSettingsSites();
-      // Fetch miles in background
-      const m = await getDrivingMiles(homePostcode, postcode);
-      if (m != null) { newSite.miles = m; }
-      await saveToCloud({ sites });
-      renderSettingsSites();
-      showToast('Site added');
+    document.getElementById('s-cancel')?.addEventListener('click', closeSheet);
+    document.getElementById('s-confirm')?.addEventListener('click', async () => {
+      const name = document.getElementById('new-name').value.trim();
+      const pc = document.getElementById('new-pc').value.trim().toUpperCase();
+      if (!name || !pc) { toast('Enter name and postcode'); return; }
+      const ns = { id:'custom_'+Date.now(), name, postcode:pc, miles:null };
+      sites.push(ns); closeSheet(); renderSettingsSites();
+      const m = await getMiles(homePostcode, pc);
+      if (m != null) ns.miles = m;
+      await saveCloud({sites}); renderSettingsSites(); toast('Site added');
     });
-    document.getElementById('new-site-name')?.focus();
-  }, 50);
+    document.getElementById('new-name')?.focus();
+  }, 60);
 }
 
 function showEditHomeSheet() {
-  const content = `
+  openSheet(`
     <div class="sheet-handle"></div>
     <div class="sheet-title">Home postcode</div>
     <div>
-      <div class="sheet-field-label" style="margin-bottom:0.35rem;">Postcode</div>
-      <input id="edit-home-postcode" class="sheet-input" value="${homePostcode}" placeholder="BL5 2RX" style="text-transform:uppercase;">
+      <div class="sheet-field-label">Postcode</div>
+      <input id="edit-home-inp" class="sheet-input" value="${homePostcode}" style="text-transform:uppercase">
     </div>
-    <div style="display:flex;gap:0.65rem;margin-top:0.25rem;">
-      <button class="btn-secondary" id="cancel-home" style="flex:1;">Cancel</button>
-      <button class="btn-primary" id="confirm-home" style="flex:2;">Save</button>
+    <div class="sheet-btn-row">
+      <button class="sheet-cancel" id="h-cancel">Cancel</button>
+      <button class="sheet-confirm" id="h-confirm">Save</button>
     </div>
-  `;
-  openSheet(content);
+  `);
   setTimeout(() => {
-    document.getElementById('cancel-home')?.addEventListener('click', closeSheet);
-    document.getElementById('confirm-home')?.addEventListener('click', async () => {
-      const p = document.getElementById('edit-home-postcode').value.trim().toUpperCase();
+    document.getElementById('h-cancel')?.addEventListener('click', closeSheet);
+    document.getElementById('h-confirm')?.addEventListener('click', async () => {
+      const p = document.getElementById('edit-home-inp').value.trim().toUpperCase();
       if (!p) return;
       homePostcode = p;
-      // Recalculate all site miles
       sites.forEach(s => s.miles = null);
-      await saveToCloud({ homePostcode, sites });
-      renderSettingsSites();
-      closeSheet();
-      prefetchSiteMiles();
-      showToast('Home updated — recalculating distances…');
+      await saveCloud({ homePostcode, sites });
+      document.getElementById('home-pc-display').textContent = homePostcode;
+      closeSheet(); prefetchMiles(); toast('Home updated — recalculating…');
     });
-    document.getElementById('edit-home-postcode')?.select();
-  }, 50);
+    document.getElementById('edit-home-inp')?.select();
+  }, 60);
 }
 
-// ─── Date picker ───
+// ── Date picker ──
 function showDatePicker() {
   const iso = isoDate(viewDate);
-  const content = `
+  openSheet(`
     <div class="sheet-handle"></div>
-    <div class="sheet-title">Select date</div>
-    <input id="date-picker-input" class="sheet-input" type="date" value="${iso}" max="${isoDate(new Date())}">
-    <div style="display:flex;gap:0.65rem;">
-      <button class="btn-secondary" id="dp-cancel" style="flex:1;">Cancel</button>
-      <button class="btn-primary" id="dp-confirm" style="flex:2;">Go to date</button>
+    <div class="sheet-title">Go to date</div>
+    <input id="dp-inp" class="sheet-input" type="date" value="${iso}" max="${isoDate(new Date())}">
+    <div class="sheet-btn-row">
+      <button class="sheet-cancel" id="dp-cancel">Cancel</button>
+      <button class="sheet-confirm" id="dp-confirm">Go</button>
     </div>
-  `;
-  openSheet(content);
+  `);
   setTimeout(() => {
     document.getElementById('dp-cancel')?.addEventListener('click', closeSheet);
     document.getElementById('dp-confirm')?.addEventListener('click', () => {
-      const val = document.getElementById('date-picker-input').value;
-      if (!val) return;
-      viewDate = new Date(val + 'T00:00');
-      closeSheet();
+      const v = document.getElementById('dp-inp').value;
+      if (!v) return;
+      viewDate = new Date(v+'T00:00');
       loadDayData(isoDate(viewDate));
-      updateTopbarDate();
-      renderDayView();
+      updateTopbarDate(); closeSheet(); switchTab('day');
     });
-  }, 50);
+  }, 60);
 }
 
-// ─── Sheet helpers ───
+// ── Sheet helpers ──
 function openSheet(html) {
-  document.getElementById('sheet-content').innerHTML = html;
-  document.getElementById('overlay').style.display = 'flex';
-  document.getElementById('overlay').onclick = (e) => { if (e.target === document.getElementById('overlay')) closeSheet(); };
+  document.getElementById('sheet').innerHTML = html;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('overlay').onclick = e => { if (e.target === document.getElementById('overlay')) closeSheet(); };
 }
 function closeSheet() {
-  document.getElementById('overlay').style.display = 'none';
-  document.getElementById('sheet-content').innerHTML = '';
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('sheet').innerHTML = '';
 }
 
-// ─── Init topbar date on day change ───
-setInterval(() => {
-  const newToday = isoDate(new Date());
-  if (newToday !== todayISO) {
-    todayISO = newToday;
-    if (isoDate(viewDate) === todayISO) updateTopbarDate();
-  }
-}, 30000);
+// ── Resize: redraw track ──
+window.addEventListener('resize', () => { if (currentTab === 'day') requestAnimationFrame(drawTrack); });
 </script>
 </body>
 </html>
-
